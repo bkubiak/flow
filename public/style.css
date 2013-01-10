@@ -1,3 +1,48 @@
+html {
+  height: 100%; }
+
 body {
-  background-color: #333333;
-  color: #dddddd; }
+  height: 100%;
+  color: #c2c2c2;
+  font-family: "Lucida Grande", Arial, sans-serif;
+  background: #333333 url("/img/bg.png") repeat 0 0;
+  margin: 0;
+  padding: 0; }
+  body #flow {
+    height: 100%; }
+    body #flow a,
+    body #flow a:visited {
+      color: #c2c2c2;
+      text-decoration: none; }
+    body #flow a:hover {
+      color: #eeeeee; }
+    body #flow ul {
+      margin: 0;
+      padding: 0; }
+    body #flow #menu {
+      width: 100%;
+      line-height: 50px;
+      background-color: #222222;
+      background-color: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid #2f2f2f;
+      -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
+      -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
+      text-shadow: 0 0 10px #c2c2c2; }
+      body #flow #menu ul {
+        width: 960px;
+        margin: 0 auto; }
+        body #flow #menu ul li {
+          display: inline-block; }
+          body #flow #menu ul li a {
+            padding: 0 30px;
+            display: inline-block; }
+            body #flow #menu ul li a:first-child {
+              padding: 0 30px 0 0; }
+    body #flow #content {
+      width: 960px;
+      margin: 0 auto;
+      text-shadow: 0px 1px 1px #3a3a3a;
+      color: #1a1a1a;
+      font: 70px "LeagueGothicRegular";
+      text-transform: uppercase; }

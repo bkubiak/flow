@@ -11,6 +11,7 @@ App =
 		@serv.set 'view engine', 'jade'
 		
 		@serv.use '/static', express.static __dirname + '/public'
+		@serv.use '/img', express.static __dirname + '/images'
 		
 		@serv.get '/', (req, res) -> res.render 'index', title: config.title
 		@serv.get '*', (req, res) -> res.render 'index', title: config.title
