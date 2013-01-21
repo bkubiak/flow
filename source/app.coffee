@@ -1,22 +1,12 @@
-# The application
-App =
-	views: {}
-	models: {}
-	collections: {}
-	routers: {}
-
-# class definitions
-Klass =
-	views: {}
-	models: {}
-	collections: {}
-	routers: {}
-
+#= require setup
+#= require_tree routers models views collections
 App.templates = (name) ->
 	jade.templates[name]
 
 App.initModels = ->
 	@models.menu = new Klass.models.Menu {}
+	
+	@collections.users = new Klass.collections.Users()
 
 App.init = ->
 	@initModels()
@@ -24,6 +14,7 @@ App.init = ->
 	@views.main = new Klass.views.Main
 		el: 'body'
 		menu: @models.menu
+		views: @views
 	
 	@routers.main = new Klass.routers.Main @views, @models, @collections
 	
@@ -33,8 +24,4 @@ App.init = ->
 
 # Start the app, poor bastard! :)
 $ ->
-	#export App variable
-	window['App'] = App
-	
-	# Start the app
 	App.init()

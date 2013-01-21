@@ -189,10 +189,10 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<!DOCTYPE html><html><head><meta charset="utf-8"/><title>');
+buf.push('<!DOCTYPE html><html><head><meta charset="utf-8"><title>');
 var __val__ = title
 buf.push(escape(null == __val__ ? "" : __val__));
-buf.push('</title><link rel="stylesheet" href="/static/style.css"/></head><body>');
+buf.push('</title><link rel="stylesheet" href="/static/style.css"></head><body>');
 var __val__ = body
 buf.push(null == __val__ ? "" : __val__);
 buf.push('<script src="/static/lib.js"></script><script src="/static/app.js"></script></body></html>');

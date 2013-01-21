@@ -189,7 +189,7 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div class="section"><p>This is sample content of dashboard</p></div>');
+buf.push('<div id="dashboard" class="section"><p>Dashboard</p></div>');
 }
 return buf.join("");
 }
@@ -211,21 +211,29 @@ buf.push('<ul>');
 // iterate menu
 ;(function(){
   if ('number' == typeof menu.length) {
+
     for (var key = 0, $$l = menu.length; key < $$l; key++) {
       var val = menu[key];
 
-buf.push('<li><a');
+buf.push('<li');
+buf.push(attrs({ 'data-section':('' + (key) + '') }, {"data-section":true}));
+buf.push('><a');
 buf.push(attrs({ 'href':('/' + (key) + '') }, {"href":true}));
 buf.push('>' + escape((interp = val.label) == null ? '' : interp) + '</a></li>');
     }
-  } else {
-    for (var key in menu) {
-      var val = menu[key];
 
-buf.push('<li><a');
+  } else {
+    var $$l = 0;
+    for (var key in menu) {
+      $$l++;      var val = menu[key];
+
+buf.push('<li');
+buf.push(attrs({ 'data-section':('' + (key) + '') }, {"data-section":true}));
+buf.push('><a');
 buf.push(attrs({ 'href':('/' + (key) + '') }, {"href":true}));
 buf.push('>' + escape((interp = val.label) == null ? '' : interp) + '</a></li>');
-   }
+    }
+
   }
 }).call(this);
 
@@ -238,7 +246,7 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div class="section"><p>This is sample content of section 1</p></div>');
+buf.push('<div id="section1" class="section"><p>This is sample content of section 1</p></div>');
 }
 return buf.join("");
 }
@@ -247,16 +255,60 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div class="section"><p>This is sample content of section 2</p></div>');
+buf.push('<div id="section2" class="section"><p>This is sample content of section 2</p></div>');
 }
 return buf.join("");
 }
-jade.templates["section3"] = function(locals, attrs, escape, rethrow, merge) {
+jade.templates["users"] = function(locals, attrs, escape, rethrow, merge) {
 attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div class="section"><p>This is sample content of section 3</p></div>');
+buf.push('<div id="users" class="section"><h2>Users</h2><div class="tile"></div><a href="/users" class="back">back to users</a></div>');
+}
+return buf.join("");
+}
+jade.templates["usersViewAll"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div class="users-list"><p>Users list</p><ul>');
+// iterate users
+;(function(){
+  if ('number' == typeof users.length) {
+
+    for (var $index = 0, $$l = users.length; $index < $$l; $index++) {
+      var user = users[$index];
+
+buf.push('<li><a');
+buf.push(attrs({ 'href':('/users/' + (user.id) + '') }, {"href":true}));
+buf.push('>' + escape((interp = user.id) == null ? '' : interp) + '</a></li>');
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in users) {
+      $$l++;      var user = users[$index];
+
+buf.push('<li><a');
+buf.push(attrs({ 'href':('/users/' + (user.id) + '') }, {"href":true}));
+buf.push('>' + escape((interp = user.id) == null ? '' : interp) + '</a></li>');
+    }
+
+  }
+}).call(this);
+
+buf.push('</ul></div>');
+}
+return buf.join("");
+}
+jade.templates["usersViewOne"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div class="user"><p>User</p><p>id: ' + escape((interp = id) == null ? '' : interp) + '</p><p>country: ' + escape((interp = country) == null ? '' : interp) + '</p><p>browser: ' + escape((interp = browser) == null ? '' : interp) + '</p><p>os: ' + escape((interp = os) == null ? '' : interp) + '</p></div>');
 }
 return buf.join("");
 }

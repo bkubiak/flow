@@ -10,5 +10,5 @@ Klass.models.Menu = Backbone.Model.extend
 		'section2':
 			label: 'Section 2'
 			
-		'section3':
-			label: 'Section 3'
+		'users':
+			label: 'Users'

@@ -6,8 +6,7 @@ Klass.views.Main = Backbone.View.extend
 		'click a': 'navigate'
 	
 	initialize: (opts) ->
-		{@menu} = opts
-		@views = {}
+		{@menu, @views} = opts
 		
 		@render()
 	
@@ -30,11 +29,12 @@ Klass.views.Main = Backbone.View.extend
 		@views.section2 = new Klass.views.Section2
 			el: @$ '#content'
 				
-		@views.section3 = new Klass.views.Section3
+		@views.users = new Klass.views.Users
 			el: @$ '#content'
 	
 	hideAllSections: ->
 		@$('#content > .section').hide()
 		
-	showSection: (section) ->
-		@views[section].show()
+	showSection: (section, opts) ->
+		@menu.set 'active', section
+		@views[section].show opts

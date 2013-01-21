@@ -3,8 +3,13 @@
 # Copyright 2012 by Bartek Kubiak
 
 {spawn} = require 'child_process'
+CoffeeScript = require 'coffee-script'
 fs = require 'fs'
 watch = require 'watch'
+Snockets = require 'snockets'
+
+snockets = new Snockets
+	async: false
 
 libraries = [
 	'jquery-1.8.3'
@@ -38,7 +43,7 @@ task 'run-server', 'Run the server', ->
 task 'watch-src', 'Watch jade and coffee files for changes', ->
 	watch.watchTree 'source/libraries', {interval: 3000}, () ->
 		invoke 'build-lib'
-		
+	
 	watch.watchTree 'source/templates', {interval: 3000}, () ->
 		invoke 'build-templates'
 	
@@ -53,22 +58,31 @@ task 'watch-src', 'Watch jade and coffee files for changes', ->
 	
 	watch.watchTree 'source/models', {interval: 3000}, () ->
 		invoke 'build-app'
+	
+	watch.watchTree 'source/collections', {interval: 3000}, () ->
+		invoke 'build-app'
 
 task 'build-app', 'Watch coffee files for changes to rebuild the app', ->
 	now = +new Date()
 	if now - lastBuildAppTime < 1000
 		return false
 	
-	coffee = spawn 'coffee', ['-c', '-j', 'app.js', '-o', 'public/', 'source/']
-	coffee.stderr.on 'data', (data) -> console.log data.toString()
-	coffee.stdout.on 'data', (data) -> console.log data.toString()
+	js = snockets.getConcatenation './source/app.coffee'
+	fs.writeFileSync 'public/app.js', js
+	
+	# coffee = spawn 'coffee', ['-c', '-j', 'app.js', '-o', 'public/', 'source/']
+	# coffee.stderr.on 'data', (data) -> console.log data.toString()
+	# coffee.stdout.on 'data', (data) -> console.log data.toString()
+	
 	lastBuildAppTime = now
 	console.log "App has been built - #{helpers.formatTime(new Date(now))}"
 
 task 'build-templates', 'Rebuild templates', ->	
+	templatesBuffer = ''
 	clientjade = spawn 'clientjade', ['source/templates']
 	clientjade.stderr.on 'data', (data) -> console.log data.toString()
-	clientjade.stdout.on 'data', (data) -> fs.writeFileSync 'public/templates.js', data
+	clientjade.stdout.on 'data', (data) -> templatesBuffer += data
+	clientjade.on 'exit', (code, signal) -> fs.writeFileSync 'public/templates.js', templatesBuffer
 	console.log "Templates have been built - #{helpers.formatTime(new Date())}"
 
 task 'build-styles', 'Rebuild styles', ->	
