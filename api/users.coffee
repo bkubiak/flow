@@ -8,6 +8,7 @@ config =
 #getOne
 #remove
 #update
+#add
 
 exports.getAll = (req, res) ->
 	MongoClient.connect config.url, (err, db) ->

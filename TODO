@@ -1,0 +1,11 @@
+[*] rozważyć pomijanie: 'http:domain.com' i 'http:domain.com/'
+[*] co z plikami po protokole http? np. .zip lub .pdf - opcje:
+	- pomijać zakończone .zip, .pdf itd
+	- sprawdzać czy to text/html
+[*] zastanowić się co z wielokrotnymi linkami? powinny być a obecnie ich nie ma
+
+[ ] zapis do bazy
+[ ] jak sprawdzić czy wszystkie callbacki zostały wywołane
+[ ] dodać wsparcie dla https
+
+
