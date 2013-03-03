@@ -1,0 +1,9 @@
+div
+	ul.menu
+		each val, key in menu
+			li(data-section='#{key}')
+				a(href='/#{key}') #{val.label}
+	.domain
+		p #{domain}
+			a.delete(href='#') ×
+

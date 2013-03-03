@@ -1,10 +1,7 @@
-http = require 'http'
+httpLib = require 'http'
 urlLib = require 'url'
-mongo = require 'mongodb'
-MongoClient = mongo.MongoClient
-
-config =
-	url: "mongodb://localhost:27017/flow"
+asyncLib = require 'async'
+pagelinksLib = require './pagelinks'
 
 regexes =
 	url: /^((http:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/i
@@ -17,29 +14,34 @@ regexes =
 scannedUrls = []
 
 exports.run = (req, res) ->
-	res.send 200
-	getLinks 'http://www.restauracja-laura.pl'
-	# getLinks 'http://www.livechatinc.com'
+	getLinksQueue.push 'http://www.restauracja-laura.pl'
+	# getLinksQueue.push 'http://www.livechatinc.com'
+	
+	getLinksQueue.drain = ->
+		setTimeout =>
+			if getLinksQueue.length() is 0
+				res.json {scannedUrls:scannedUrls.length}
+		, 1000
 
-getLinks = (url, callback) ->
+getLinksQueue = asyncLib.queue (baseUrl, callback) ->
 	# don't scan url for the second time
-	if scannedUrls.indexOf(url) >= 0
-		return false
-	scannedUrls.push url
+	if scannedUrls.indexOf(baseUrl) >= 0
+		return callback()
+	scannedUrls.push baseUrl
 	
 	# don't make a request if url has wrong format
-	unless regexes.url.test url
-		return false
+	unless regexes.url.test baseUrl
+		return callback()
 		
-	http.get url, (res) ->
+	httpLib.get baseUrl, (res) ->
 		# follow redirection
 		if (res.statusCode is 301 or res.statusCode is 302) and res.headers.location.length
-			getLinks res.headers.location
-			return true
+			getLinksQueue.push res.headers.location
+			return callback()
 		
 		# stop scanning page due to invalid status code or content type
 		unless res.statusCode is 200 and res.headers['content-type'].length and regexes.contentType.test res.headers['content-type']
-			return false
+			return callback()
 		
 		html = ''
 		
@@ -54,46 +56,45 @@ getLinks = (url, callback) ->
 			# get links from <a> tag within a body tag
 			while matches = regexes.aTag.exec(body)
 				links.push matches[1]
-				
-			urlObj = urlLib.parse url
+			
+			pagelinks = buildPagelinks baseUrl, links
+			
+			pagelinksLib.add pagelinks
+			
+			
+			for pagelink in pagelinks
+				getLinksQueue.push pagelink.dest_url
+			
+			# console.log 'scanned url: ' + baseUrl
+			callback()
+, 10
 
-			collectedChildUrls = []
-			pagelinks = for link in links
-				# build the url
-				childUrl = urlLib.resolve(url, link)
-				
-				# format urls properly
-				childUrl = childUrl.replace(regexes.hashPart, '').replace(regexes.trailingSlash, '').toLowerCase()
-				url = url.replace(regexes.trailingSlash, '').toLowerCase()
-				
-				# drop link that:
-				# - is the same as the url being scanned or
-				# - appears for the second time
-				# - is external link
-				if childUrl is url or collectedChildUrls.indexOf(childUrl) >= 0 or
-				childUrl.indexOf("http://#{urlObj.hostname}") is -1
-					continue
-				
-				collectedChildUrls.push childUrl
-				
-				domain: urlObj.hostname
-				source_url: url
-				dest_url: childUrl
-			
-			# addLinks pagelinks
-			
-			console.log 'scanned url: ' + url
-			console.log 'added pagelinks: ' + pagelinks.length
-			
-			# recursive call
-			for childUrl in collectedChildUrls
-				getLinks childUrl
+buildPagelinks = (baseUrl, links) ->
+	baseUrlObj = urlLib.parse baseUrl
 	
-
-addLinks = (pagelinks) ->
-	MongoClient.connect config.url, (err, db) ->
-		if err then return console.log err
+	collectedChildUrls = []
 	
-	collection = db.collection 'pagelinks'
-	# collection.update pagelinks, {$inc: count: 1}, {upsert: yes}, (err, result) ->
-	# 	if err then return console.log err
+	for link in links
+		# build the url
+		childUrl = urlLib.resolve(baseUrl, link)
+		
+		# format urls properly
+		childUrl = childUrl.replace(regexes.hashPart, '').replace(regexes.trailingSlash, '').toLowerCase()
+		baseUrl = baseUrl.replace(regexes.trailingSlash, '').toLowerCase()
+		
+		# drop link that:
+		# - is the same as the url being scanned or
+		# - appears for the second time
+		# - is external link
+		if childUrl is baseUrl or collectedChildUrls.indexOf(childUrl) >= 0 or
+		childUrl.indexOf("http://#{baseUrlObj.hostname}") is -1
+			continue
+		
+		collectedChildUrls.push childUrl
+		
+		domain: baseUrlObj.hostname
+		source_url: baseUrl
+		dest_url: childUrl
+	
+	
+	

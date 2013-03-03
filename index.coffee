@@ -16,6 +16,8 @@ Flow =
 		@app.use '/static', express.static __dirname + '/public'
 		@app.use '/img', express.static __dirname + '/images'
 		
+		@app.use express.bodyParser()
+		
 		api.addRoutes @app
 		
 		@app.get '/', (req, res) -> res.render 'index', title: config.title

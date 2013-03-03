@@ -30,39 +30,140 @@ body
 			padding: 0
 			list-style-position: inside
 			list-style-type: circle
-	
-		#menu
+		
+		#domain
+			position: relative
+			width: 960px
+			margin: 0 auto
+			padding: 150px 0 0
+			text-align: center
+			
+			p
+				margin: 0 0 10px 0
+				text-shadow: 0px 1px 1px #555
+				color: #333
+				font: 50px 'LeagueGothicRegular'
+				text-transform: uppercase
+			
+			.i
+				margin-bottom: 20px
+				
+				input[type=text]
+					width: 280px
+					height: 30px
+					font-size: 18px
+					padding: 2px 10px
+					border-radius: 3px
+					background: rgba(255,255,255,0.85)
+					box-shadow: inset 0 0 10px #888
+					border: 1px solid #555
+					color: #555
+					
+					&:focus
+						outline-color: #59c
+						box-shadow: none
+					
+					&.error
+						outline-color: #833
+				
+					&::-webkit-input-placeholder
+						color: #bbb
+						text-shadow: 1px 1px 1px #fff
+			
+			button
+				width: 300px
+				padding: 0
+				border-radius: 3px
+				background: #abc
+				border: 1px solid #888
+				height: 36px
+				
+				&:hover
+					background: #bcd
+					cursor: pointer
+					
+					span
+						box-shadow: inset 0 2px 0 #cde
+					
+				span
+					display: block
+					margin: 0 auto
+					font-size: 18px
+					color: #555
+					height: 32px
+					line-height: 32px
+					width: 296px
+					border-radius: 2px
+					box-shadow: inset 0 2px 0 #bcd
+		
+		#top
 			width: 100%
 			line-height: 50px
 			background-color: #4d4d52
 			background-color: rgba(125,125,125,0.2)
 			border-bottom: 1px solid #555
 			+box-shadow(0px, 2px, 2px, rgba(0,0,0,.1))
-		
-			ul
+			
+			> div
 				width: 960px
 				margin: 0 auto
-			
-				li
-					display: inline-block
+				overflow: auto
 				
-					a
-						padding: 0 30px
+				ul.menu
+					float: left
+			
+					li
 						display: inline-block
-						color: #3a3a3a
-						text-shadow: 0px 1px 1px #666
-						font-weight: bold
-						font-size: 18px
-						
-						&:first-child
-							padding: 0 30px 0 0
-						
-						&:hover
-							color: #222
-						
-					&.active
+				
 						a
-							color: #222
+							padding: 0 30px
+							display: inline-block
+							color: #3a3a3a
+							text-shadow: 0px 1px 1px #666
+							font-weight: bold
+							font-size: 18px
+						
+							&:first-child
+								padding: 0 30px 0 0
+						
+							&:hover
+								color: #222
+						
+						&.active
+							a
+								color: #222
+			
+				.domain
+					float: right
+					
+					p
+						position: relative
+						margin: 7px 0
+						line-height: 20px
+						padding: 8px 20px
+						cursor: default
+						border-radius: 3px
+						border: 1px solid #585858
+						background: rgba(125,125,125,0.15)
+					
+						.delete
+							position: absolute
+							line-height: normal
+							right: 0
+							top: 0
+							font-size: 12px
+							width: 15px
+							height: 15px
+							padding: 1px
+							text-align: center
+							color: #888
+						
+							&:hover
+								border-radius: 3px
+								border: 1px solid #c2c2c2
+								background: rgba(255,0,0,0.4)
+								padding: 0px
+								color: #ccc
 		
 		#content
 			width: 960px

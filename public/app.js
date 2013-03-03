@@ -25,11 +25,12 @@
 
   Klass.routers.Main = Backbone.Router.extend({
     routes: {
+      "domain": "showDomain",
       "dashboard": "showDashboard",
       "section1": "showSection1",
       "section2": "showSection2",
-      "users": "showUsers",
-      "users/*userId": "showUser",
+      "pagelinks": "showPagelinks",
+      "pagelinks/*baseUrl": "showPagelinksDetails",
       "*notFound": "e404"
     },
     initialize: function(views, models, collections) {
@@ -42,38 +43,72 @@
         trigger: true
       });
     },
+    _navigateToDomain: function() {
+      return this.navigate('/domain', {
+        trigger: true
+      });
+    },
+    showDomain: function() {
+      if (!this.models.domain.has('domain')) {
+        this.setTitle('Domain');
+        return this.views.main.showDomainForm();
+      } else {
+        return this.navigate('/dashboard', {
+          trigger: true
+        });
+      }
+    },
     showDashboard: function() {
+      if (!this.models.domain.has('domain')) {
+        return this._navigateToDomain();
+      }
       this.setTitle('Dashboard');
-      this.views.main.hideAllSections();
       return this.views.main.showSection('dashboard');
     },
     showSection1: function() {
+      if (!this.models.domain.has('domain')) {
+        return this._navigateToDomain();
+      }
       this.setTitle('Section 1');
-      this.views.main.hideAllSections();
       return this.views.main.showSection('section1');
     },
     showSection2: function(userId) {
+      if (!this.models.domain.has('domain')) {
+        return this._navigateToDomain();
+      }
       this.setTitle('Section 2');
-      this.views.main.hideAllSections();
       return this.views.main.showSection('section2');
     },
-    showUsers: function() {
-      this.setTitle('Users');
-      this.views.main.hideAllSections();
-      this.views.main.showSection('users');
-      return this.views.users.displayAction('viewAll', {
-        model: this.collections.users
+    showPagelinks: function() {
+      if (!this.models.domain.has('domain')) {
+        return this._navigateToDomain();
+      }
+      this.setTitle('Pagelinks');
+      this.views.main.showSection('pagelinks');
+      return this.views.pagelinks.displayAction('viewBasic', {
+        model: this.collections.pagelinks
       });
     },
-    showUser: function(userId) {
-      this.setTitle('Users');
-      this.views.main.hideAllSections();
-      this.views.main.showSection('users');
-      return this.views.users.displayAction('viewOne', {
-        model: this.collections.users,
-        userId: userId
+    showPagelinksDetails: function(baseUrl) {
+      if (!this.models.domain.has('domain')) {
+        return this._navigateToDomain();
+      }
+      this.setTitle('Pagelinks - details');
+      this.views.main.showSection('pagelinks');
+      return this.views.pagelinks.displayAction('viewDetails', {
+        model: this.collections.pagelinks,
+        baseUrl: baseUrl
       });
     }
+  });
+
+}).call(this);
+
+(function() {
+
+  Klass.models.Domain = Backbone.Model.extend({
+    url: '/api/domain',
+    idAttribute: '_id'
   });
 
 }).call(this);
@@ -91,8 +126,8 @@
       'section2': {
         label: 'Section 2'
       },
-      'users': {
-        label: 'Users'
+      'pagelinks': {
+        label: 'Pagelinks'
       }
     }
   });
@@ -101,8 +136,9 @@
 
 (function() {
 
-  Klass.models.User = Backbone.Model.extend({
-    urlRoot: '/api/users'
+  Klass.models.Pagelink = Backbone.Model.extend({
+    urlRoot: '/api/pagelinks/www.restauracja-laura.pl',
+    idAttribute: 'url'
   });
 
 }).call(this);
@@ -112,7 +148,55 @@
   Klass.views.Dashboard = Backbone.View.extend({
     templateName: 'dashboard',
     initialize: function(opts) {
+      this.render();
+      return this.bindSlider();
+    },
+    bindSlider: function() {
+      var _this = this;
+      return this.$('.slider').slider({
+        range: 'min',
+        animate: true,
+        value: 0.50,
+        min: 0.01,
+        max: 0.99,
+        step: 0.01,
+        slide: function(event, ui) {
+          return _this.$('.slider-result .value').html(ui.value);
+        }
+      });
+    }
+  });
+
+}).call(this);
+
+(function() {
+
+  Klass.views.Domain = Backbone.View.extend({
+    templateName: 'domain',
+    events: {
+      'submit': 'setDomain'
+    },
+    initialize: function(opts) {
       return this.render();
+    },
+    setDomain: function(e) {
+      var $input, domain,
+        _this = this;
+      e.preventDefault();
+      $input = this.$('input[type=text]');
+      domain = $input.val();
+      if (!domain.length) {
+        $input.addClass('error').focus();
+        return;
+      }
+      return this.model.save({
+        domain: $.trim($input.val())
+      }, {
+        success: function() {
+          $input.val('');
+          return _this.navigate('/dashboard');
+        }
+      });
     }
   });
 
@@ -126,16 +210,21 @@
       'click a': 'navigate'
     },
     initialize: function(opts) {
-      this.menu = opts.menu, this.views = opts.views;
+      this.menu = opts.menu, this.domain = opts.domain, this.views = opts.views;
       return this.render();
     },
     render: function() {
       Backbone.View.prototype.render.call(this);
-      this.views.top = new Klass.views.Menu({
-        el: this.$('#menu'),
-        model: this.menu
+      this.views.top = new Klass.views.Top({
+        el: this.$('#top'),
+        model: this.menu,
+        domain: this.domain
       });
-      return this.renderSections();
+      this.renderSections();
+      return this.views.domain = new Klass.views.Domain({
+        el: this.$('#domain'),
+        model: this.domain
+      });
     },
     renderSections: function() {
       this.views.dashboard = new Klass.views.Dashboard({
@@ -147,16 +236,24 @@
       this.views.section2 = new Klass.views.Section2({
         el: this.$('#content')
       });
-      return this.views.users = new Klass.views.Users({
+      return this.views.pagelinks = new Klass.views.Pagelinks({
         el: this.$('#content')
       });
     },
-    hideAllSections: function() {
-      return this.$('#content > .section').hide();
-    },
     showSection: function(section, opts) {
+      this.views.domain.hide();
+      this._hideAllSections();
+      this.$('#top').show();
       this.menu.set('active', section);
-      return this.views[section].show(opts);
+      return this.views[section].show();
+    },
+    showDomainForm: function() {
+      this._hideAllSections();
+      this.$('#top').hide();
+      return this.views.domain.show();
+    },
+    _hideAllSections: function() {
+      return this.$('#content > .section').hide();
     }
   });
 
@@ -164,22 +261,95 @@
 
 (function() {
 
-  Klass.views.Menu = Backbone.View.extend({
-    templateName: 'menu',
+  Klass.views.PagelinksViewBasic = Backbone.View.extend({
+    templateName: 'pagelinksViewBasic',
     initialize: function(opts) {
-      this.render();
-      return this.model.on('change:active', this.setActive, this);
+      var _this = this;
+      return this.model.fetch({
+        success: function() {
+          return _this.render();
+        }
+      });
     },
     templateHash: function() {
+      var item;
       return {
-        menu: this.model.nav
+        urls: (function() {
+          var _i, _len, _ref, _results;
+          _ref = this.model.toJSON();
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            item = _ref[_i];
+            _results.push({
+              url: item.url,
+              encodedUrl: encodeURIComponent(item.url)
+            });
+          }
+          return _results;
+        }).call(this)
       };
+    }
+  });
+
+}).call(this);
+
+(function() {
+
+  Klass.views.PagelinksViewDetails = Backbone.View.extend({
+    templateName: 'pagelinksViewDetails',
+    initialize: function(opts) {
+      var baseUrl;
+      baseUrl = opts.baseUrl;
+      this.baseUrl = decodeURIComponent(baseUrl);
+      return this.model.fetch({
+        success: _.bind(this.fetch, this)
+      });
     },
-    setActive: function() {
-      var active;
-      this.$('li.active').removeClass('active');
-      active = this.model.get('active');
-      return this.$("li[data-section=" + active + "]").addClass('active');
+    fetch: function() {
+      var pagelink,
+        _this = this;
+      pagelink = this.model.get(this.baseUrl);
+      if (!pagelink) {
+        this.navigate('/pagelinks');
+        return;
+      }
+      return pagelink.fetch({
+        success: function() {
+          return _this.render();
+        }
+      });
+    },
+    templateHash: function() {
+      return this.model.get(this.baseUrl).toJSON();
+    }
+  });
+
+}).call(this);
+
+(function() {
+
+  Klass.views.Pagelinks = Backbone.View.extend({
+    templateName: 'pagelinks',
+    action: null,
+    initialize: function(opts) {
+      this.render();
+      return this.views = {};
+    },
+    displayAction: function(action, opts) {
+      var cls;
+      if (this.views[this.action] != null) {
+        this.views[this.action].remove();
+      }
+      this.action = action;
+      if (this.action === 'viewDetails') {
+        this.$('.back').show();
+      } else {
+        this.$('.back').hide();
+      }
+      opts = opts || {};
+      opts.el = this.$('.tile');
+      cls = action.substr(0, 1).toUpperCase() + action.substr(1);
+      return this.views[action] = new Klass.views["Pagelinks" + cls](opts);
     }
   });
 
@@ -209,48 +379,38 @@
 
 (function() {
 
-  Klass.views.UsersViewAll = Backbone.View.extend({
-    templateName: 'usersViewAll',
+  Klass.views.Top = Backbone.View.extend({
+    templateName: 'top',
+    events: {
+      'click .delete': 'deleteDomain'
+    },
     initialize: function(opts) {
-      var _this = this;
-      return this.model.fetch({
-        success: function() {
-          return _this.render();
-        }
-      });
+      this.domain = opts.domain;
+      this.render();
+      this.model.on('change:active', this.setActive, this);
+      return this.domain.on('change:domain', this.render, this);
     },
     templateHash: function() {
       return {
-        users: this.model.toJSON()
+        menu: this.model.nav,
+        domain: this.domain.get('domain')
       };
-    }
-  });
-
-}).call(this);
-
-(function() {
-
-  Klass.views.UsersViewOne = Backbone.View.extend({
-    templateName: 'usersViewOne',
-    initialize: function(opts) {
-      var userId,
-        _this = this;
-      userId = opts.userId;
-      this.userId = parseInt(userId, 10);
-      return this.model.fetch({
+    },
+    setActive: function() {
+      var active;
+      this.$('li.active').removeClass('active');
+      active = this.model.get('active');
+      return this.$("li[data-section=" + active + "]").addClass('active');
+    },
+    deleteDomain: function(e) {
+      var _this = this;
+      e.preventDefault();
+      return this.domain.destroy({
         success: function() {
-          var user;
-          user = _this.model.get(_this.userId);
-          return user.fetch({
-            success: function() {
-              return _this.render();
-            }
-          });
+          _this.domain.clear();
+          return _this.navigate('/domain');
         }
       });
-    },
-    templateHash: function() {
-      return this.model.get(this.userId).toJSON();
     }
   });
 
@@ -258,38 +418,9 @@
 
 (function() {
 
-  Klass.views.Users = Backbone.View.extend({
-    templateName: 'users',
-    action: null,
-    initialize: function(opts) {
-      this.render();
-      return this.views = {};
-    },
-    displayAction: function(action, opts) {
-      var cls;
-      if (this.views[this.action] != null) {
-        this.views[this.action].remove();
-      }
-      this.action = action;
-      if (this.action === 'viewOne') {
-        this.$('.back').show();
-      } else {
-        this.$('.back').hide();
-      }
-      opts = opts || {};
-      opts.el = this.$('.tile');
-      cls = action.substr(0, 1).toUpperCase() + action.substr(1);
-      return this.views[action] = new Klass.views["Users" + cls](opts);
-    }
-  });
-
-}).call(this);
-
-(function() {
-
-  Klass.collections.Users = Backbone.Collection.extend({
-    url: '/api/users',
-    model: Klass.models.User,
+  Klass.collections.Pagelinks = Backbone.Collection.extend({
+    url: '/api/pagelinks/www.restauracja-laura.pl',
+    model: Klass.models.Pagelink,
     fetched: false,
     fetch: function(opts) {
       var success,
@@ -319,20 +450,25 @@
   };
 
   App.initModels = function() {
+    this.models.domain = new Klass.models.Domain();
     this.models.menu = new Klass.models.Menu({});
-    return this.collections.users = new Klass.collections.Users();
+    return this.collections.pagelinks = new Klass.collections.Pagelinks();
   };
 
   App.init = function() {
+    var _this = this;
     this.initModels();
-    this.views.main = new Klass.views.Main({
-      el: 'body',
-      menu: this.models.menu,
-      views: this.views
-    });
-    this.routers.main = new Klass.routers.Main(this.views, this.models, this.collections);
-    return Backbone.history.start({
-      pushState: true
+    return this.models.domain.fetch().always(function() {
+      _this.views.main = new Klass.views.Main({
+        el: 'body',
+        menu: _this.models.menu,
+        domain: _this.models.domain,
+        views: _this.views
+      });
+      _this.routers.main = new Klass.routers.Main(_this.views, _this.models, _this.collections);
+      return Backbone.history.start({
+        pushState: true
+      });
     });
   };
 

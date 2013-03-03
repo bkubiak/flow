@@ -12,10 +12,14 @@ snockets = new Snockets
 	async: false
 
 libraries = [
-	'jquery-1.8.3'
+	'jquery-1.9.1'
 	'underscore-1.4.3'
 	'backbone-0.9.9'
 	'backbone-ext'
+	'jquery-ui-core-1.10.1'
+	'jquery-ui-widget-1.10.1'
+	'jquery-ui-mouse-1.10.1'
+	'jquery-ui-slider-1.10.1'
 ]
 
 lastBuildAppTime = 0

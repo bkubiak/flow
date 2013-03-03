@@ -1,11 +1,20 @@
+BACKBONE
+[*] w gui zamiast users pokazywać linki
+[ ] zrobić stronę początkową z wpisywaniem domeny
+[ ] uruchamianie crawlera w gui + zorientować się o jakiś buffer
+
+
+
+API
+[*] wynieść zapisywanie i odczytywanie pagelinks do osobnej klasy
+[*] looknac na operacje upsert - jak wydajnie dziala, czy wyszukuje po wszystkich polach czy po pierwszym etc
+
+CRAWLER
 [*] rozważyć pomijanie: 'http:domain.com' i 'http:domain.com/'
 [*] co z plikami po protokole http? np. .zip lub .pdf - opcje:
 	- pomijać zakończone .zip, .pdf itd
 	- sprawdzać czy to text/html
 [*] zastanowić się co z wielokrotnymi linkami? powinny być a obecnie ich nie ma
-
-[ ] zapis do bazy
-[ ] jak sprawdzić czy wszystkie callbacki zostały wywołane
+[*] zapis do bazy
+[*] jak sprawdzić czy wszystkie callbacki zostały wywołane
 [ ] dodać wsparcie dla https
-
-

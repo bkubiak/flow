@@ -6,18 +6,23 @@ Klass.views.Main = Backbone.View.extend
 		'click a': 'navigate'
 	
 	initialize: (opts) ->
-		{@menu, @views} = opts
+		{@menu, @domain, @views} = opts
 		
 		@render()
 	
 	render: ->
 		Backbone.View.prototype.render.call @
-
-		@views.top = new Klass.views.Menu
-			el: @$ '#menu'
+		
+		@views.top = new Klass.views.Top
+			el: @$ '#top'
 			model: @menu
+			domain: @domain
 			
 		@renderSections()
+		
+		@views.domain = new Klass.views.Domain
+			el: @$ '#domain'
+			model: @domain
 	
 	renderSections: ->
 		@views.dashboard = new Klass.views.Dashboard
@@ -29,12 +34,21 @@ Klass.views.Main = Backbone.View.extend
 		@views.section2 = new Klass.views.Section2
 			el: @$ '#content'
 				
-		@views.users = new Klass.views.Users
+		@views.pagelinks = new Klass.views.Pagelinks
 			el: @$ '#content'
-	
-	hideAllSections: ->
-		@$('#content > .section').hide()
 		
 	showSection: (section, opts) ->
+		@views.domain.hide()
+		@_hideAllSections()
+		@$('#top').show()
+		
 		@menu.set 'active', section
-		@views[section].show opts
+		@views[section].show()
+	
+	showDomainForm: ->
+		@_hideAllSections()
+		@$('#top').hide()
+		@views.domain.show()
+	
+	_hideAllSections: ->
+		@$('#content > .section').hide()

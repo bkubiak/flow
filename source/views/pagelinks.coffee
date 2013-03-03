@@ -1,6 +1,6 @@
-Klass.views.Users = Backbone.View.extend
+Klass.views.Pagelinks = Backbone.View.extend
 	
-	templateName: 'users'
+	templateName: 'pagelinks'
 	
 	action: null
 	
@@ -12,10 +12,10 @@ Klass.views.Users = Backbone.View.extend
 	displayAction: (action, opts) ->
 		if @views[@action]?
 			@views[@action].remove()
-		
+			
 		@action = action
 		
-		if @action is 'viewOne'
+		if @action is 'viewDetails'
 			@$('.back').show()
 		else
 			@$('.back').hide()
@@ -24,4 +24,4 @@ Klass.views.Users = Backbone.View.extend
 		opts.el = @$ '.tile'
 		
 		cls = action.substr(0, 1).toUpperCase() + action.substr(1)
-		@views[action] = new Klass.views["Users#{cls}"] opts
+		@views[action] = new Klass.views["Pagelinks#{cls}"] opts

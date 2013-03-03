@@ -1,7 +1,8 @@
-Klass.collections.Users = Backbone.Collection.extend
+Klass.collections.Pagelinks = Backbone.Collection.extend
 
-	url: '/api/users'
-	model: Klass.models.User
+	url: '/api/pagelinks/www.restauracja-laura.pl'
+	# url: '/api/pagelinks/www.livechatinc.com'
+	model: Klass.models.Pagelink
 	fetched: no
 	
 	fetch: (opts) ->

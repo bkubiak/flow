@@ -35,3 +35,5 @@ exports.add = (req, res) ->
 			collection = db.collection 'pageflows'
 			collection.update pageflow, {$inc: count: 1}, {upsert: yes}, (err, result) ->
 				if err then return console.log err
+		
+		db.close()

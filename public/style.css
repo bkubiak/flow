@@ -21,7 +21,61 @@ body {
       padding: 0;
       list-style-position: inside;
       list-style-type: circle; }
-    body #flow #menu {
+    body #flow #domain {
+      position: relative;
+      width: 960px;
+      margin: 0 auto;
+      padding: 150px 0 0;
+      text-align: center; }
+      body #flow #domain p {
+        margin: 0 0 10px 0;
+        text-shadow: 0px 1px 1px #555555;
+        color: #333333;
+        font: 50px "LeagueGothicRegular";
+        text-transform: uppercase; }
+      body #flow #domain .i {
+        margin-bottom: 20px; }
+        body #flow #domain .i input[type=text] {
+          width: 280px;
+          height: 30px;
+          font-size: 18px;
+          padding: 2px 10px;
+          border-radius: 3px;
+          background: rgba(255, 255, 255, 0.85);
+          box-shadow: inset 0 0 10px #888888;
+          border: 1px solid #555555;
+          color: #555555; }
+          body #flow #domain .i input[type=text]:focus {
+            outline-color: #5599cc;
+            box-shadow: none; }
+          body #flow #domain .i input[type=text].error {
+            outline-color: #883333; }
+          body #flow #domain .i input[type=text]::-webkit-input-placeholder {
+            color: #bbbbbb;
+            text-shadow: 1px 1px 1px white; }
+      body #flow #domain button {
+        width: 300px;
+        padding: 0;
+        border-radius: 3px;
+        background: #aabbcc;
+        border: 1px solid #888888;
+        height: 36px; }
+        body #flow #domain button:hover {
+          background: #bbccdd;
+          cursor: pointer; }
+          body #flow #domain button:hover span {
+            box-shadow: inset 0 2px 0 #ccddee; }
+        body #flow #domain button span {
+          display: block;
+          margin: 0 auto;
+          font-size: 18px;
+          color: #555555;
+          height: 32px;
+          line-height: 32px;
+          width: 296px;
+          border-radius: 2px;
+          box-shadow: inset 0 2px 0 #bbccdd; }
+    body #flow #top {
       width: 100%;
       line-height: 50px;
       background-color: #4d4d52;
@@ -30,24 +84,55 @@ body {
       -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
       -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
       box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1); }
-      body #flow #menu ul {
+      body #flow #top > div {
         width: 960px;
-        margin: 0 auto; }
-        body #flow #menu ul li {
-          display: inline-block; }
-          body #flow #menu ul li a {
-            padding: 0 30px;
-            display: inline-block;
-            color: #3a3a3a;
-            text-shadow: 0px 1px 1px #666666;
-            font-weight: bold;
-            font-size: 18px; }
-            body #flow #menu ul li a:first-child {
-              padding: 0 30px 0 0; }
-            body #flow #menu ul li a:hover {
+        margin: 0 auto;
+        overflow: auto; }
+        body #flow #top > div ul.menu {
+          float: left; }
+          body #flow #top > div ul.menu li {
+            display: inline-block; }
+            body #flow #top > div ul.menu li a {
+              padding: 0 30px;
+              display: inline-block;
+              color: #3a3a3a;
+              text-shadow: 0px 1px 1px #666666;
+              font-weight: bold;
+              font-size: 18px; }
+              body #flow #top > div ul.menu li a:first-child {
+                padding: 0 30px 0 0; }
+              body #flow #top > div ul.menu li a:hover {
+                color: #222222; }
+            body #flow #top > div ul.menu li.active a {
               color: #222222; }
-          body #flow #menu ul li.active a {
-            color: #222222; }
+        body #flow #top > div .domain {
+          float: right; }
+          body #flow #top > div .domain p {
+            position: relative;
+            margin: 7px 0;
+            line-height: 20px;
+            padding: 8px 20px;
+            cursor: default;
+            border-radius: 3px;
+            border: 1px solid #585858;
+            background: rgba(125, 125, 125, 0.15); }
+            body #flow #top > div .domain p .delete {
+              position: absolute;
+              line-height: normal;
+              right: 0;
+              top: 0;
+              font-size: 12px;
+              width: 15px;
+              height: 15px;
+              padding: 1px;
+              text-align: center;
+              color: #888888; }
+              body #flow #top > div .domain p .delete:hover {
+                border-radius: 3px;
+                border: 1px solid #c2c2c2;
+                background: rgba(255, 0, 0, 0.4);
+                padding: 0px;
+                color: #cccccc; }
     body #flow #content {
       width: 960px;
       margin: 0 auto; }
@@ -59,15 +144,59 @@ body {
           font: 70px "LeagueGothicRegular";
           text-transform: uppercase; }
 
-#users .tile {
+#dashboard p {
+  text-shadow: 0px 1px 1px #555555;
+  color: #333333;
+  font: "LeagueGothicRegular"; }
+  #dashboard p.slider-result {
+    font-size: 30px;
+    margin: 10px 0; }
+  #dashboard p.placeholder {
+    font-size: 70px;
+    text-transform: uppercase; }
+#dashboard .slider {
+  width: 230px;
+  height: 20px;
+  position: relative;
+  margin: 0;
+  padding: 0 10px;
+  background-color: #333333;
+  box-shadow: inset 0 2px 5px 0px #222222;
+  border-radius: 3px;
+  cursor: pointer; }
+  #dashboard .slider .ui-slider-handle {
+    width: 26px;
+    height: 26px;
+    position: absolute;
+    top: -3px;
+    margin-left: -12px;
+    outline: none;
+    border-radius: 12px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    background: #aaaaaa;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #888888), color-stop(0.5, #dddddd), color-stop(1, #888888)); }
+    #dashboard .slider .ui-slider-handle.ui-state-hover {
+      background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #999999), color-stop(0.5, #eeeeee), color-stop(1, #999999)); }
+  #dashboard .slider .ui-widget-header {
+    height: 18px;
+    left: 1px;
+    top: 1px;
+    position: absolute;
+    border-radius: 3px;
+    background: #666666;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #444444), color-stop(0.4, #666666)); }
+
+#pagelinks .tile {
   min-height: 100px;
+  max-height: 400px;
+  overflow: auto;
   background: rgba(0, 0, 0, 0.15);
   box-shadow: inset 0 2px 5px 0px #333333;
   border: 1px solid #333333;
   border-radius: 3px;
   padding: 25px;
   margin-bottom: 20px; }
-  #users .tile p {
+  #pagelinks .tile p {
     margin-top: 0; }
-  #users .tile li {
+  #pagelinks .tile li {
     margin: 5px 0; }
