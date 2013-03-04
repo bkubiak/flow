@@ -4,6 +4,15 @@ Developer: Bartek Kubiak
 
 ### Installation
 
+* Node
+* Ruby
+* Rubygems
+* Sass
+* Git
+* Curl
+
+
+
 Node dependencies:
 * coffee-script@1.4.0
 * express@3.0.6
@@ -12,5 +21,5 @@ Node dependencies:
 * watch@0.5.1
 * clientjade@0.1.1
 * sass@0.5.0
-
-
+* snockets@1.3.8
+* async@0.2.6
