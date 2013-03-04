@@ -86,7 +86,7 @@ task 'build-templates', 'Rebuild templates', ->
 	clientjade = spawn 'clientjade', ['source/templates']
 	clientjade.stderr.on 'data', (data) -> console.log data.toString()
 	clientjade.stdout.on 'data', (data) -> templatesBuffer += data.toString()
-	clientjade.on 'exit', (code, signal) -> fs.writeFileSync 'public/templates.js', templatesBuffer
+	clientjade.on 'close', (code, signal) -> fs.writeFileSync 'public/templates.js', templatesBuffer
 	console.log "Templates have been built - #{helpers.formatTime(new Date())}"
 
 task 'build-styles', 'Rebuild styles', ->	
