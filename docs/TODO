@@ -1,13 +1,22 @@
 BACKBONE
 [*] w gui zamiast users pokazywać linki
-[ ] zrobić stronę początkową z wpisywaniem domeny
-[ ] uruchamianie crawlera w gui + zorientować się o jakiś buffer
+[*] wsparcie dla pageviews
+[*] podpiąć model domain pod pageviews
+[*] obsługa błędu w pageviews - brak wyników
+[*] wsparcie dla pageviews
+[ ] dopracować stronę początkową z wpisywaniem domeny (redirect gdy domena wpisana)
+
+[ ] dopracować pagelinks + podpiąć model domain
+[ ] uruchamianie crawlera w gui
+
 
 
 
 API
 [*] wynieść zapisywanie i odczytywanie pagelinks do osobnej klasy
 [*] looknac na operacje upsert - jak wydajnie dziala, czy wyszukuje po wszystkich polach czy po pierwszym etc
+[*] wsparcie dla pageviews - get
+[*] wsparcie dla pagelinks - get
 
 CRAWLER
 [*] rozważyć pomijanie: 'http:domain.com' i 'http:domain.com/'
@@ -17,4 +26,5 @@ CRAWLER
 [*] zastanowić się co z wielokrotnymi linkami? powinny być a obecnie ich nie ma
 [*] zapis do bazy
 [*] jak sprawdzić czy wszystkie callbacki zostały wywołane
+
 [ ] dodać wsparcie dla https

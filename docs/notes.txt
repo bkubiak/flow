@@ -1,0 +1,24 @@
+* export
+mongoexport --db flow --collection pageviews --out flow-pageviews-030613-030913.json
+mongoexport --db flow --collection pageflows --out flow-pageflows-030613-030913.json
+
+* import
+mongoimport --db flow --collection pageviews --file flow-pageviews-030613-030913.json
+mongoimport --db flow --collection pageflows --file flow-pageflows-030613-030913.json
+
+* db pageviews cleaning
+db.pageviews.remove({domain:{$not:/^www.livechatinc.com$/}})
+db.pageviews.remove({url: /\/\?/})
+db.pageviews.remove({url: /(frame)|(click)|(wp-content)|(ghost)|(.png)|(.jpg)|(%)|(wix)/})
+
+* db pageflows cleaning
+db.pageflows.remove({domain: {$not: /^www.livechatinc.com$/}})
+db.pageflows.remove({source_url: {$not: /^http:\/\/www.livechatinc.com/}})
+db.pageflows.remove({source_url: /wix/})
+db.pageflows.remove({dest_url:/\/\?/})
+db.pageflows.remove({source_url:/\/\?/})
+
+* useful db queries
+db.pageviews.aggregate({$match: {url: /^http:\/\/www.livechatinc.com\/\?/}},{$group:{_id: "$domain",total: {$sum: "$count"}}})
+db.pageviews.update({url: "http:\/\/www.livechatinc.com\/"}, {$inc: {count: x}})
+db.pageviews.find({count: {$gt: 1}}).toArray().length

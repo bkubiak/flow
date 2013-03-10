@@ -1,6 +1,8 @@
 users = require './users'
 domain = require './domain'
 pagelinks = require './pagelinks'
+pageviews = require './pageviews'
+pageflows = require './pageflows'
 activity = require './activity'
 crawler = require './crawler'
 
@@ -16,6 +18,9 @@ exports.addRoutes = (app) ->
 	
 	app.get '/api/pagelinks/:domain', pagelinks.getBasic
 	app.get '/api/pagelinks/:domain/:baseUrl', pagelinks.getDetails
+	
+	app.get '/api/pageviews/:domain', pageviews.get
+	app.get '/api/pageflows/:domain', pageflows.get
 	
 	app.get '/api/activity', activity.add
 	

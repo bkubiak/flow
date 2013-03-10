@@ -6,8 +6,3 @@ Klass.views.PagelinksViewBasic = Backbone.View.extend
 		@model.fetch
 			success: =>
 				@render()
-	
-	templateHash: ->
-		urls: for item in @model.toJSON()
-			url: item.url
-			encodedUrl: encodeURIComponent item.url

@@ -211,6 +211,64 @@ buf.push('<div id="flow"><div id="top"></div><div id="content"></div><div id="do
 }
 return buf.join("");
 }
+jade.templates["pageflows"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div id="pageflows" class="section"><h2>Pageflows</h2><div class="tile"></div><a href="/pageflows" class="back">back to pageflows</a></div>');
+}
+return buf.join("");
+}
+jade.templates["pageflowsViewBasic"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div class="pageflows-basic">');
+if ( isEmpty)
+{
+buf.push('<p>There are no records</p>');
+}
+else
+{
+buf.push('<p>pageflows - categories list</p><ul><li><a href="/pageflows/1-5">1&ndash;5 pageflows</a></li><li><a href="/pageflows/6-10">6&ndash;10 pageflows</a></li><li><a href="/pageflows/11-50">11&ndash;50 pageflows</a></li><li><a href="/pageflows/51-100">51&ndash;100 pageflows</a></li><li><a href="/pageflows/101-500">101&ndash;500 pageflows</a></li><li><a href="/pageflows/501-1000">501&ndash;1000 pageflows</a></li><li><a href="/pageflows/1001-oo">1001&ndash;&infin; pageflows</a></li></ul>');
+}
+buf.push('</div>');
+}
+return buf.join("");
+}
+jade.templates["pageflowsViewDetails"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div class="pageflows-details"><p>Pages with ' + escape((interp = bounds) == null ? '' : interp) + ' pageflows</p><ul>');
+// iterate pageflows
+;(function(){
+  if ('number' == typeof pageflows.length) {
+
+    for (var $index = 0, $$l = pageflows.length; $index < $$l; $index++) {
+      var pageflow = pageflows[$index];
+
+buf.push('<li><p>' + escape((interp = pageflow.count) == null ? '' : interp) + ' &ndash; ' + escape((interp = pageflow.source_url) == null ? '' : interp) + ' &rarr; ' + escape((interp = pageflow.dest_url) == null ? '' : interp) + '</p></li>');
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in pageflows) {
+      $$l++;      var pageflow = pageflows[$index];
+
+buf.push('<li><p>' + escape((interp = pageflow.count) == null ? '' : interp) + ' &ndash; ' + escape((interp = pageflow.source_url) == null ? '' : interp) + ' &rarr; ' + escape((interp = pageflow.dest_url) == null ? '' : interp) + '</p></li>');
+    }
+
+  }
+}).call(this);
+
+buf.push('</ul></div>');
+}
+return buf.join("");
+}
 jade.templates["pagelinks"] = function(locals, attrs, escape, rethrow, merge) {
 attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
 var buf = [];
@@ -286,21 +344,61 @@ buf.push('</ul></div>');
 }
 return buf.join("");
 }
-jade.templates["section1"] = function(locals, attrs, escape, rethrow, merge) {
+jade.templates["pageviews"] = function(locals, attrs, escape, rethrow, merge) {
 attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div id="section1" class="section"><p>This is sample content of section 1</p></div>');
+buf.push('<div id="pageviews" class="section"><h2>Pageviews</h2><div class="tile"></div><a href="/pageviews" class="back">back to pageviews</a></div>');
 }
 return buf.join("");
 }
-jade.templates["section2"] = function(locals, attrs, escape, rethrow, merge) {
+jade.templates["pageviewsViewBasic"] = function(locals, attrs, escape, rethrow, merge) {
 attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div id="section2" class="section"><p>This is sample content of section 2</p></div>');
+buf.push('<div class="pageviews-basic">');
+if ( isEmpty)
+{
+buf.push('<p>There are no records</p>');
+}
+else
+{
+buf.push('<p>pageviews - categories list</p><ul><li><a href="/pageviews/1-5">1&ndash;5 pageviews</a></li><li><a href="/pageviews/6-10">6&ndash;10 pageviews</a></li><li><a href="/pageviews/11-50">11&ndash;50 pageviews</a></li><li><a href="/pageviews/51-100">51&ndash;100 pageviews</a></li><li><a href="/pageviews/101-500">101&ndash;500 pageviews</a></li><li><a href="/pageviews/501-1000">501&ndash;1000 pageviews</a></li><li><a href="/pageviews/1001-oo">1001&ndash;&infin; pageviews</a></li></ul>');
+}
+buf.push('</div>');
+}
+return buf.join("");
+}
+jade.templates["pageviewsViewDetails"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div class="pageviews-details"><p>Pages with ' + escape((interp = bounds) == null ? '' : interp) + ' pageviews</p><ul>');
+// iterate pageviews
+;(function(){
+  if ('number' == typeof pageviews.length) {
+
+    for (var $index = 0, $$l = pageviews.length; $index < $$l; $index++) {
+      var pageview = pageviews[$index];
+
+buf.push('<li><p>' + escape((interp = pageview.count) == null ? '' : interp) + ' &ndash; ' + escape((interp = pageview.url) == null ? '' : interp) + '</p></li>');
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in pageviews) {
+      $$l++;      var pageview = pageviews[$index];
+
+buf.push('<li><p>' + escape((interp = pageview.count) == null ? '' : interp) + ' &ndash; ' + escape((interp = pageview.url) == null ? '' : interp) + '</p></li>');
+    }
+
+  }
+}).call(this);
+
+buf.push('</ul></div>');
 }
 return buf.join("");
 }

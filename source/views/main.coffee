@@ -28,10 +28,10 @@ Klass.views.Main = Backbone.View.extend
 		@views.dashboard = new Klass.views.Dashboard
 			el: @$ '#content'
 
-		@views.section1 = new Klass.views.Section1
+		@views.pageflows = new Klass.views.Pageflows
 			el: @$ '#content'
 			
-		@views.section2 = new Klass.views.Section2
+		@views.pageviews = new Klass.views.Pageviews
 			el: @$ '#content'
 				
 		@views.pagelinks = new Klass.views.Pagelinks

@@ -4,11 +4,11 @@ Klass.models.Menu = Backbone.Model.extend
 		'dashboard':
 			label: 'Dashboard'
 
-		'section1':
-			label: 'Section 1'
+		'pageflows':
+			label: 'Pageflows'
 		
-		'section2':
-			label: 'Section 2'
+		'pageviews':
+			label: 'Pageviews'
 			
 		'pagelinks':
 			label: 'Pagelinks'

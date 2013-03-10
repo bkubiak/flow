@@ -9,6 +9,10 @@ App.initModels = ->
 	@models.menu = new Klass.models.Menu {}
 	
 	@collections.pagelinks = new Klass.collections.Pagelinks()
+	
+	@collections.pageviews = new Klass.collections.Pageviews {}, @models.domain
+	
+	@collections.pageflows = new Klass.collections.Pageflows {}, @models.domain
 
 App.init = ->
 	@initModels()

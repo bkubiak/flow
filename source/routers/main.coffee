@@ -2,8 +2,10 @@ Klass.routers.Main = Backbone.Router.extend
 	routes: 
 		"domain":		"showDomain"
 		"dashboard":	"showDashboard"
-		"section1":		"showSection1"
-		"section2":		"showSection2"
+		"pageflows":	"showPageflows"
+		"pageflows/*category":	"showPageflowsDetails"
+		"pageviews":	"showPageviews"
+		"pageviews/*category":	"showPageviewsDetails"
 		"pagelinks":	"showPagelinks"
 		"pagelinks/*baseUrl": "showPagelinksDetails"
 		"*notFound":	"e404"
@@ -30,20 +32,44 @@ Klass.routers.Main = Backbone.Router.extend
 		@setTitle 'Dashboard'
 		@views.main.showSection 'dashboard'
 		
-	showSection1: ->
+	showPageflows: ->
 		unless @models.domain.has 'domain'
 			return @_navigateToDomain()
 		
-		@setTitle 'Section 1'
-		@views.main.showSection 'section1'
+		@setTitle 'Pageflows'
+		@views.main.showSection 'pageflows'
+		@views.pageflows.displayAction 'viewBasic',
+			model: @collections.pageflows
 
-	showSection2: (userId) ->
+	showPageflowsDetails: (category) ->
+		unless @models.domain.has 'domain'
+			return @_navigateToDomain()
+
+		@setTitle 'Pageflows - details'
+		@views.main.showSection 'pageflows'
+		@views.pageflows.displayAction 'viewDetails',
+			model: @collections.pageflows
+			category: category
+
+	showPageviews: ->
 		unless @models.domain.has 'domain'
 			return @_navigateToDomain()
 		
-		@setTitle 'Section 2'
-		@views.main.showSection 'section2'
-
+		@setTitle 'Pageviews'
+		@views.main.showSection 'pageviews'
+		@views.pageviews.displayAction 'viewBasic',
+			model: @collections.pageviews
+	
+	showPageviewsDetails: (category) ->
+		unless @models.domain.has 'domain'
+			return @_navigateToDomain()
+		
+		@setTitle 'Pageviews - details'
+		@views.main.showSection 'pageviews'
+		@views.pageviews.displayAction 'viewDetails',
+			model: @collections.pageviews
+			category: category
+	
 	showPagelinks: ->
 		unless @models.domain.has 'domain'
 			return @_navigateToDomain()

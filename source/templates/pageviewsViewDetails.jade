@@ -1,0 +1,6 @@
+.pageviews-details
+	p Pages with #{bounds} pageviews
+	ul
+		each pageview in pageviews
+			li
+				p #{pageview.count} &ndash; #{pageview.url}

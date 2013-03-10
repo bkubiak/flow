@@ -1,0 +1,6 @@
+.pageflows-details
+	p Pages with #{bounds} pageflows
+	ul
+		each pageflow in pageflows
+			li
+				p #{pageflow.count} &ndash; #{pageflow.source_url} &rarr; #{pageflow.dest_url}
