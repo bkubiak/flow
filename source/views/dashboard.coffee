@@ -109,7 +109,6 @@ Klass.views.Dashboard = Backbone.View.extend
 			node.on "mouseover", (d,i) =>
 				name = if d.name.length > 30 then d.name.substr(0,15)+'...'+d.name.substr(d.name.length-15) else d.name
 				content = '<p class="main">' + name + '</span></p>'
-				console.log d
 				content += '<p class="main">pageviews: ' + d.count + '</span></p>'
 				tooltip.showTooltip(content,d3.event)
 				
