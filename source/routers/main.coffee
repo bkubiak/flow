@@ -3,8 +3,10 @@ Klass.routers.Main = Backbone.Router.extend
 		"domain":		"showDomain"
 		"dashboard":	"showDashboard"
 		"pageflows":	"showPageflows"
+		"pageflows/chart": "showPageflowsChart"
 		"pageflows/*category":	"showPageflowsDetails"
 		"pageviews":	"showPageviews"
+		"pageviews/chart": "showPageviewsChart"
 		"pageviews/*category":	"showPageviewsDetails"
 		"pagelinks":	"showPagelinks"
 		"pagelinks/*baseUrl": "showPagelinksDetails"
@@ -40,7 +42,16 @@ Klass.routers.Main = Backbone.Router.extend
 		@views.main.showSection 'pageflows'
 		@views.pageflows.displayAction 'viewBasic',
 			model: @collections.pageflows
-
+	
+	showPageflowsChart: ->
+		unless @models.domain.has 'domain'
+			return @_navigateToDomain()
+		
+		@setTitle 'Pageflows - chart'
+		@views.main.showSection 'pageflows'
+		@views.pageflows.displayAction 'viewChart',
+			model: @collections.pageflows
+	
 	showPageflowsDetails: (category) ->
 		unless @models.domain.has 'domain'
 			return @_navigateToDomain()
@@ -58,6 +69,15 @@ Klass.routers.Main = Backbone.Router.extend
 		@setTitle 'Pageviews'
 		@views.main.showSection 'pageviews'
 		@views.pageviews.displayAction 'viewBasic',
+			model: @collections.pageviews
+	
+	showPageviewsChart: ->
+		unless @models.domain.has 'domain'
+			return @_navigateToDomain()
+
+		@setTitle 'Pageviews - chart'
+		@views.main.showSection 'pageviews'
+		@views.pageviews.displayAction 'viewChart',
 			model: @collections.pageviews
 	
 	showPageviewsDetails: (category) ->

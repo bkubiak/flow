@@ -26,7 +26,10 @@ Klass.collections.Pageflows = Backbone.Collection.extend
 
 	getPageflowsCategory: (lowerBound, upperBound) ->
 		@filter (pageflow) =>
-			if upperBound is 'oo'
-				pageflow.get('count') >= lowerBound
-			else
+			if upperBound?
 				pageflow.get('count') >= lowerBound && pageflow.get('count') <= upperBound
+			else
+				pageflow.get('count') >= lowerBound
+	
+	getMaxCount: ->
+		@last().get 'count'

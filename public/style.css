@@ -138,23 +138,26 @@ body {
       margin: 0 auto; }
       body #flow #content .section {
         margin: 50px 0; }
-        body #flow #content .section#dashboard {
-          text-shadow: 0px 1px 1px #555555;
-          color: #333333;
-          font: 70px "LeagueGothicRegular";
-          text-transform: uppercase; }
 
-#dashboard p {
+#dashboard p, #dashboard h1 {
   text-shadow: 0px 1px 1px #555555;
   color: #333333;
   font: "LeagueGothicRegular"; }
-  #dashboard p.slider-result {
-    font-size: 30px;
-    margin: 10px 0; }
-  #dashboard p.placeholder {
-    font-size: 70px;
-    text-transform: uppercase; }
-#dashboard .slider {
+#dashboard .slider-alpha-container {
+  float: left; }
+#dashboard .slider-beta-container {
+  float: right; }
+#dashboard .slider-alpha-container p,
+#dashboard .slider-beta-container p {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #c2c2c2; }
+  #dashboard .slider-alpha-container p.coefficient,
+  #dashboard .slider-beta-container p.coefficient {
+    font-size: 14px;
+    text-align: center; }
+#dashboard .slider-alpha-container .slider,
+#dashboard .slider-beta-container .slider {
   width: 230px;
   height: 20px;
   position: relative;
@@ -164,7 +167,8 @@ body {
   box-shadow: inset 0 2px 5px 0px #222222;
   border-radius: 3px;
   cursor: pointer; }
-  #dashboard .slider .ui-slider-handle {
+  #dashboard .slider-alpha-container .slider .ui-slider-handle,
+  #dashboard .slider-beta-container .slider .ui-slider-handle {
     width: 26px;
     height: 26px;
     position: absolute;
@@ -175,9 +179,11 @@ body {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     background: #aaaaaa;
     background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #888888), color-stop(0.5, #dddddd), color-stop(1, #888888)); }
-    #dashboard .slider .ui-slider-handle.ui-state-hover {
+    #dashboard .slider-alpha-container .slider .ui-slider-handle.ui-state-hover,
+    #dashboard .slider-beta-container .slider .ui-slider-handle.ui-state-hover {
       background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #999999), color-stop(0.5, #eeeeee), color-stop(1, #999999)); }
-  #dashboard .slider .ui-widget-header {
+  #dashboard .slider-alpha-container .slider .ui-widget-header,
+  #dashboard .slider-beta-container .slider .ui-widget-header {
     height: 18px;
     left: 1px;
     top: 1px;
@@ -185,7 +191,42 @@ body {
     border-radius: 3px;
     background: #666666;
     background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #444444), color-stop(0.4, #666666)); }
+#dashboard svg {
+  background: rgba(0, 0, 0, 0.15);
+  width: 960px;
+  height: 500px; }
+  #dashboard svg .node {
+    stroke: white;
+    stroke-width: 1.5px;
+    stroke-opacity: 0.8; }
+  #dashboard svg .link {
+    stroke: #aaaaaa;
+    stroke-opacity: 0.5; }
 
+.tooltip {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  border-radius: 2px;
+  border: 1px solid #333333;
+  background: rgba(0, 0, 0, 0.5);
+  color: #c2c2c2;
+  padding: 10px;
+  width: 200px;
+  font-size: 12px;
+  z-index: 10;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); }
+
+.tooltip p.main {
+  font-size: 12px;
+  text-align: center;
+  padding: 0;
+  margin: 0; }
+
+#pagelinks h1 {
+  text-shadow: 0px 1px 1px #555555;
+  color: #333333;
+  font: "LeagueGothicRegular"; }
 #pagelinks .tile {
   min-height: 100px;
   max-height: 400px;
@@ -201,6 +242,10 @@ body {
   #pagelinks .tile li {
     margin: 5px 0; }
 
+#pageviews h1 {
+  text-shadow: 0px 1px 1px #555555;
+  color: #333333;
+  font: "LeagueGothicRegular"; }
 #pageviews .tile {
   min-height: 100px;
   max-height: 600px;
@@ -217,7 +262,20 @@ body {
     margin-top: 0; }
   #pageviews .tile li {
     margin: 5px 0; }
+  #pageviews .tile .area {
+    fill: #1f77b4;
+    stroke: white; }
+  #pageviews .tile .axis path, #pageviews .tile .axis line {
+    fill: none;
+    stroke: #888888;
+    shape-rendering: crispEdges; }
+  #pageviews .tile .axis .tick text {
+    fill: #888888; }
 
+#pageflows h1 {
+  text-shadow: 0px 1px 1px #555555;
+  color: #333333;
+  font: "LeagueGothicRegular"; }
 #pageflows .tile {
   min-height: 100px;
   max-height: 600px;
@@ -234,3 +292,12 @@ body {
     margin-top: 0; }
   #pageflows .tile li {
     margin: 5px 0; }
+  #pageflows .tile .area {
+    fill: #1f77b4;
+    stroke: white; }
+  #pageflows .tile .axis path, #pageflows .tile .axis line {
+    fill: none;
+    stroke: #888888;
+    shape-rendering: crispEdges; }
+  #pageflows .tile .axis .tick text {
+    fill: #888888; }

@@ -26,7 +26,10 @@ Klass.collections.Pageviews = Backbone.Collection.extend
 
 	getPageviewsCategory: (lowerBound, upperBound) ->
 		@filter (pageview) =>
-			if upperBound is 'oo'
-				pageview.get('count') >= lowerBound
-			else
+			if upperBound?
 				pageview.get('count') >= lowerBound && pageview.get('count') <= upperBound
+			else
+				pageview.get('count') >= lowerBound
+	
+	getMaxCount: ->
+		@last().get 'count'

@@ -189,7 +189,7 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div id="dashboard" class="section"><div class="slider"></div><p class="slider-result">ratio: <span class="value">0.50</span></p><p class="placeholder">Dashboard</p></div>');
+buf.push('<div id="dashboard" class="section"><h1>Dashboard</h1><div class="slider-alpha-container"><p class="threshold">Pageflows count threshold: <span class="value">2</span></p><div id="slider-alpha" class="slider"></div><p class="coefficient">Alpha coefficient: <span class="value">0.2</span></p></div><div class="slider-beta-container"><p class="threshold">Pageviews count threshold: <span class="value">42</span></p><div id="slider-beta" class="slider"></div><p class="coefficient">Beta coefficient: <span class="value">0.2</span></p></div></div>');
 }
 return buf.join("");
 }
@@ -216,7 +216,7 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div id="pageflows" class="section"><h2>Pageflows</h2><div class="tile"></div><a href="/pageflows" class="back">back to pageflows</a></div>');
+buf.push('<div id="pageflows" class="section"><h1>Pageflows</h1><div class="tile"></div><a href="/pageflows" class="back">back to pageflows</a></div>');
 }
 return buf.join("");
 }
@@ -232,7 +232,21 @@ buf.push('<p>There are no records</p>');
 }
 else
 {
-buf.push('<p>pageflows - categories list</p><ul><li><a href="/pageflows/1-5">1&ndash;5 pageflows</a></li><li><a href="/pageflows/6-10">6&ndash;10 pageflows</a></li><li><a href="/pageflows/11-50">11&ndash;50 pageflows</a></li><li><a href="/pageflows/51-100">51&ndash;100 pageflows</a></li><li><a href="/pageflows/101-500">101&ndash;500 pageflows</a></li><li><a href="/pageflows/501-1000">501&ndash;1000 pageflows</a></li><li><a href="/pageflows/1001-oo">1001&ndash;&infin; pageflows</a></li></ul>');
+buf.push('<p>pageflows - categories list</p><ul><li><a href="/pageflows/1-5">1&ndash;5 count (' + escape((interp = cat1Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageflows/6-10">6&ndash;10 count (' + escape((interp = cat2Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageflows/11-50">11&ndash;50 count (' + escape((interp = cat3Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageflows/51-100">51&ndash;100 count (' + escape((interp = cat4Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageflows/101-500">101&ndash;500 count (' + escape((interp = cat5Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageflows/501-1000">501&ndash;1000 count (' + escape((interp = cat6Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageflows/1001-oo">1001&ndash;&infin; count (' + escape((interp = cat7Count) == null ? '' : interp) + ' entries)</a></li></ul><p><a href="/pageflows/chart">Display chart</a></p>');
+}
+buf.push('</div>');
+}
+return buf.join("");
+}
+jade.templates["pageflowsViewChart"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div class="pageflows-chart">');
+if ( isEmpty)
+{
+buf.push('<p>There are no records</p>');
 }
 buf.push('</div>');
 }
@@ -274,7 +288,7 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div id="pagelinks" class="section"><h2>Pagelinks</h2><div class="tile"></div><a href="/pagelinks" class="back">back to pagelinks</a></div>');
+buf.push('<div id="pagelinks" class="section"><h1>Pagelinks</h1><div class="tile"></div><a href="/pagelinks" class="back">back to pagelinks</a></div>');
 }
 return buf.join("");
 }
@@ -349,7 +363,7 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div id="pageviews" class="section"><h2>Pageviews</h2><div class="tile"></div><a href="/pageviews" class="back">back to pageviews</a></div>');
+buf.push('<div id="pageviews" class="section"><h1>Pageviews</h1><div class="tile"></div><a href="/pageviews" class="back">back to pageviews</a></div>');
 }
 return buf.join("");
 }
@@ -365,7 +379,21 @@ buf.push('<p>There are no records</p>');
 }
 else
 {
-buf.push('<p>pageviews - categories list</p><ul><li><a href="/pageviews/1-5">1&ndash;5 pageviews</a></li><li><a href="/pageviews/6-10">6&ndash;10 pageviews</a></li><li><a href="/pageviews/11-50">11&ndash;50 pageviews</a></li><li><a href="/pageviews/51-100">51&ndash;100 pageviews</a></li><li><a href="/pageviews/101-500">101&ndash;500 pageviews</a></li><li><a href="/pageviews/501-1000">501&ndash;1000 pageviews</a></li><li><a href="/pageviews/1001-oo">1001&ndash;&infin; pageviews</a></li></ul>');
+buf.push('<p>pageviews - categories list</p><ul><li><a href="/pageviews/1-5">1&ndash;5 count (' + escape((interp = cat1Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageviews/6-10">6&ndash;10 count (' + escape((interp = cat2Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageviews/11-50">11&ndash;50 count (' + escape((interp = cat3Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageviews/51-100">51&ndash;100 count (' + escape((interp = cat4Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageviews/101-500">101&ndash;500 count (' + escape((interp = cat5Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageviews/501-1000">501&ndash;1000 count (' + escape((interp = cat6Count) == null ? '' : interp) + ' entries)</a></li><li><a href="/pageviews/1001-oo">1001&ndash;&infin; count (' + escape((interp = cat7Count) == null ? '' : interp) + ' entries)</a></li></ul><p><a href="/pageviews/chart">Display chart</a></p>');
+}
+buf.push('</div>');
+}
+return buf.join("");
+}
+jade.templates["pageviewsViewChart"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div class="pageviews-chart">');
+if ( isEmpty)
+{
+buf.push('<p>There are no records</p>');
 }
 buf.push('</div>');
 }

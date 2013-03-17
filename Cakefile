@@ -20,6 +20,8 @@ libraries = [
 	'jquery-ui-widget-1.10.1'
 	'jquery-ui-mouse-1.10.1'
 	'jquery-ui-slider-1.10.1'
+	'd3-3.0.8'
+	'd3-tooltip-1.0.0'
 ]
 
 lastBuildAppTime = 0

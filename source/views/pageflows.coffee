@@ -15,7 +15,7 @@ Klass.views.Pageflows = Backbone.View.extend
 
 		@action = action
 
-		if @action is 'viewDetails'
+		if @action is 'viewDetails' or @action is 'viewChart'
 			@$('.back').show()
 		else
 			@$('.back').hide()

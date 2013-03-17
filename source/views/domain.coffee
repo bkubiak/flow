@@ -23,4 +23,4 @@ Klass.views.Domain = Backbone.View.extend
 		,
 			success: =>
 				$input.val ''
-				@navigate '/dashboard'
+				@navigate '/dashboard', trigger: yes

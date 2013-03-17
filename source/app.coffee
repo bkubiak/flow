@@ -24,6 +24,7 @@ App.init = ->
 			menu: @models.menu
 			domain: @models.domain
 			views: @views
+			collections: @collections
 	
 		@routers.main = new Klass.routers.Main @views, @models, @collections
 	

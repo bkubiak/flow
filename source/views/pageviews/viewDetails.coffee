@@ -12,7 +12,7 @@ Klass.views.PageviewsViewDetails = Backbone.View.extend
 		bounds = category.split '-'
 		@bound =
 			lower: bounds[0]
-			upper: bounds[1]
+			upper: if bounds[1] is 'oo' then null else bounds[1]
 		
 		@model.fetch
 			success: => @render()
