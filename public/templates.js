@@ -189,7 +189,7 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div id="dashboard" class="section"><h1>Dashboard</h1><div class="slider-alpha-container"><p class="threshold">Pageflows count threshold: <span class="value">2</span></p><div id="slider-alpha" class="slider"></div><p class="coefficient">Alpha coefficient: <span class="value">0.2</span></p></div><div class="slider-beta-container"><p class="threshold">Pageviews count threshold: <span class="value">42</span></p><div id="slider-beta" class="slider"></div><p class="coefficient">Beta coefficient: <span class="value">0.2</span></p></div></div>');
+buf.push('<div id="dashboard" class="section"><div class="details"><p>Nodes: <span class="nodes-count"> </span></p><p>Pageflows count: &ge; <span class="pageflows-threshold"></span></p><p>Pageviews count: &ge; <span class="pageviews-threshold"></span></p></div><div class="slider-alpha-container"><div id="slider-alpha" class="slider"></div><p class="coefficient">Pageflows - alpha: <span class="value">0.2</span></p></div><div class="slider-beta-container"><div id="slider-beta" class="slider"></div><p class="coefficient">Pageviews - beta: <span class="value">0.2</span></p></div><div class="layout-container"><a id="random" href="" class="active">Random</a><a id="radial" href="">Radial</a></div><div class="scc-container"><a id="scc" href="">SCC</a></div><div class="chart"><svg></svg></div></div>');
 }
 return buf.join("");
 }

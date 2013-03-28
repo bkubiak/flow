@@ -1,14 +1,23 @@
 .section#dashboard
-	h1 Dashboard
+	.details
+		p Nodes: 
+			span.nodes-count 
+		p Pageflows count: &ge; 
+			span.pageflows-threshold
+		p Pageviews count: &ge; 
+			span.pageviews-threshold
 	.slider-alpha-container
-		p.threshold Pageflows count threshold: 
-			span.value 2
 		#slider-alpha.slider
-		p.coefficient Alpha coefficient: 
+		p.coefficient Pageflows - alpha: 
 			span.value 0.2
 	.slider-beta-container
-		p.threshold Pageviews count threshold: 
-			span.value 42
 		#slider-beta.slider
-		p.coefficient Beta coefficient: 
+		p.coefficient Pageviews - beta: 
 			span.value 0.2
+	.layout-container
+		a#random.active(href="") Random
+		a#radial(href="") Radial
+	.scc-container
+		a#scc(href="") SCC
+	.chart
+		svg

@@ -32,7 +32,7 @@ Klass.views.PageflowsViewChart = Backbone.View.extend
 			.y0(height)
 			.y1((d) => y d.count)
 		
-		d3.select("svg").remove()
+		d3.select("#pageflows svg").remove()
 		svg = d3.select("#pageflows .pageflows-chart").append("svg")
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom)

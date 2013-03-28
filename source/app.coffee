@@ -13,6 +13,8 @@ App.initModels = ->
 	@collections.pageviews = new Klass.collections.Pageviews {}, @models.domain
 	
 	@collections.pageflows = new Klass.collections.Pageflows {}, @models.domain
+	
+	@models.graph = new Klass.models.Graph {}, @collections.pageviews, @collections.pageflows
 
 App.init = ->
 	@initModels()
@@ -23,8 +25,8 @@ App.init = ->
 			el: 'body'
 			menu: @models.menu
 			domain: @models.domain
+			graph: @models.graph
 			views: @views
-			collections: @collections
 	
 		@routers.main = new Klass.routers.Main @views, @models, @collections
 	

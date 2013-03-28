@@ -14,8 +14,8 @@ BACKBONE
 [*] dodać liczbę wyników w pageflows i pageviews - widok basic
 [*] dopracować stronę początkową z wpisywaniem domeny (redirect gdy domena wpisana)
 [*] narysować wykresy pokazujące liczbność danych count w pageflows i pageviews
-[ ] przy zmianie slidera pokazywać liczbę graniczną obok współczynnika
-[ ] dopieścić graf - dodać hover z informacjami i podświetlaniem linków
+[*] przy zmianie slidera pokazywać liczbę graniczną obok współczynnika
+[*] dopieścić graf - dodać hover z informacjami i podświetlaniem linków
 
 [ ] dopracować pagelinks + podpiąć model domain
 [ ] uruchamianie crawlera w gui
@@ -38,6 +38,7 @@ CRAWLER
 
 [ ] dodać wsparcie dla https
 
-CICHON
+PROMOTOR
 [ ] co z pagelinks i crawlerem?
-[ ] co jeśli pageflow odrzuci daną krawedź a pageview będzie ją miał? Czy rysować oderwane node'y?
+[ ] dodaję do grafu oderwane node'y
+[ ] pomijam takie połączenia, gdzie nie występują node'y

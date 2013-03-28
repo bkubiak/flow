@@ -143,60 +143,93 @@ body {
   text-shadow: 0px 1px 1px #555555;
   color: #333333;
   font: "LeagueGothicRegular"; }
-#dashboard .slider-alpha-container {
-  float: left; }
+#dashboard .details {
+  float: left;
+  margin: 0 30px 10px 0;
+  height: 70px;
+  width: 190px;
+  border-right: 1px solid #666666; }
+  #dashboard .details p {
+    color: #c2c2c2;
+    font-size: 16px;
+    margin: 0 0 5px 0; }
+#dashboard .layout-container {
+  float: left;
+  padding-top: 20px;
+  margin-right: 30px; }
+  #dashboard .layout-container a {
+    margin-right: 10px;
+    padding: 3px 8px;
+    float: left; }
+    #dashboard .layout-container a.active {
+      background: #666666;
+      background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #444444), color-stop(0.4, #666666));
+      border-radius: 3px;
+      border: 1px solid #333333;
+      font-size: 16px; }
+      #dashboard .layout-container a.active:hover {
+        background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #555555), color-stop(0.4, #777777));
+        color: #dddddd; }
+#dashboard .scc-container {
+  float: left;
+  padding-top: 20px; }
+  #dashboard .scc-container a.enabled {
+    text-decoration: underline; }
+#dashboard .slider-alpha-container,
 #dashboard .slider-beta-container {
-  float: right; }
-#dashboard .slider-alpha-container p,
-#dashboard .slider-beta-container p {
-  font-size: 18px;
-  margin: 10px 0;
-  color: #c2c2c2; }
-  #dashboard .slider-alpha-container p.coefficient,
-  #dashboard .slider-beta-container p.coefficient {
-    font-size: 14px;
+  float: left;
+  margin: 0 30px 10px 0;
+  padding-top: 20px; }
+  #dashboard .slider-alpha-container p,
+  #dashboard .slider-beta-container p {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #c2c2c2;
     text-align: center; }
-#dashboard .slider-alpha-container .slider,
-#dashboard .slider-beta-container .slider {
-  width: 230px;
-  height: 20px;
-  position: relative;
-  margin: 0;
-  padding: 0 10px;
-  background-color: #333333;
-  box-shadow: inset 0 2px 5px 0px #222222;
-  border-radius: 3px;
-  cursor: pointer; }
-  #dashboard .slider-alpha-container .slider .ui-slider-handle,
-  #dashboard .slider-beta-container .slider .ui-slider-handle {
-    width: 26px;
-    height: 26px;
-    position: absolute;
-    top: -3px;
-    margin-left: -12px;
-    outline: none;
-    border-radius: 12px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    background: #aaaaaa;
-    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #888888), color-stop(0.5, #dddddd), color-stop(1, #888888)); }
-    #dashboard .slider-alpha-container .slider .ui-slider-handle.ui-state-hover,
-    #dashboard .slider-beta-container .slider .ui-slider-handle.ui-state-hover {
-      background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #999999), color-stop(0.5, #eeeeee), color-stop(1, #999999)); }
-  #dashboard .slider-alpha-container .slider .ui-widget-header,
-  #dashboard .slider-beta-container .slider .ui-widget-header {
-    height: 18px;
-    left: 1px;
-    top: 1px;
-    position: absolute;
+    #dashboard .slider-alpha-container p.coefficient,
+    #dashboard .slider-beta-container p.coefficient {
+      font-size: 16px;
+      margin: 0 0 5px 0; }
+  #dashboard .slider-alpha-container .slider,
+  #dashboard .slider-beta-container .slider {
+    width: 200px;
+    height: 17px;
+    position: relative;
+    margin-bottom: 10px;
+    background-color: #333333;
+    box-shadow: inset 0 2px 5px 0px #222222;
     border-radius: 3px;
-    background: #666666;
-    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #444444), color-stop(0.4, #666666)); }
+    cursor: pointer; }
+    #dashboard .slider-alpha-container .slider .ui-slider-handle,
+    #dashboard .slider-beta-container .slider .ui-slider-handle {
+      width: 22px;
+      height: 22px;
+      position: absolute;
+      top: -3px;
+      margin-left: -12px;
+      outline: none;
+      border-radius: 12px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      background: #aaaaaa;
+      background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #888888), color-stop(0.5, #dddddd), color-stop(1, #888888)); }
+      #dashboard .slider-alpha-container .slider .ui-slider-handle.ui-state-hover,
+      #dashboard .slider-beta-container .slider .ui-slider-handle.ui-state-hover {
+        background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #999999), color-stop(0.5, #eeeeee), color-stop(1, #999999)); }
+    #dashboard .slider-alpha-container .slider .ui-widget-header,
+    #dashboard .slider-beta-container .slider .ui-widget-header {
+      height: 15px;
+      left: 1px;
+      top: 1px;
+      position: absolute;
+      border-radius: 3px;
+      background: #666666;
+      background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #444444), color-stop(0.4, #666666)); }
 #dashboard svg {
   background: rgba(0, 0, 0, 0.15);
   width: 960px;
-  height: 500px; }
+  height: 600px; }
   #dashboard svg .node {
-    stroke: white;
+    stroke: #cccccc;
     stroke-width: 1.5px;
     stroke-opacity: 0.8; }
   #dashboard svg .link {
@@ -209,19 +242,27 @@ body {
   left: 100px;
   border-radius: 2px;
   border: 1px solid #333333;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   color: #c2c2c2;
   padding: 10px;
-  width: 200px;
+  width: 250px;
   font-size: 12px;
   z-index: 10;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); }
-
-.tooltip p.main {
-  font-size: 12px;
-  text-align: center;
-  padding: 0;
-  margin: 0; }
+  .tooltip p.main {
+    font-size: 12px;
+    text-align: center;
+    padding: 0;
+    margin: 0 0 10px 0;
+    color: #eeeeee; }
+  .tooltip p.link {
+    color: #bbbbbb;
+    margin: 0 0 5px 0;
+    padding: 0; }
+  .tooltip p.line {
+    margin: 0 0 10px 0;
+    padding: 0;
+    border-bottom: 1px solid #666666; }
 
 #pagelinks h1 {
   text-shadow: 0px 1px 1px #555555;

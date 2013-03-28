@@ -6,7 +6,7 @@ Klass.views.Main = Backbone.View.extend
 		'click a': 'navigate'
 	
 	initialize: (opts) ->
-		{@menu, @domain, @views, @collections} = opts
+		{@menu, @domain, @views, @graph} = opts
 		
 		@render()
 	
@@ -27,12 +27,11 @@ Klass.views.Main = Backbone.View.extend
 	renderSections: ->
 		@views.dashboard = new Klass.views.Dashboard
 			el: @$ '#content'
-			pageviews: @collections.pageviews
-			pageflows: @collections.pageflows
+			model: @graph
+			domain: @domain
 
 		@views.pageflows = new Klass.views.Pageflows
 			el: @$ '#content'
-			model: @collections.pageflows
 			
 		@views.pageviews = new Klass.views.Pageviews
 			el: @$ '#content'
