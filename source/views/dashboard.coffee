@@ -13,7 +13,7 @@ Klass.views.Dashboard = Backbone.View.extend
 
 	events:
 		'click .layout-container a': 'setLayout'
-		'click .scc-container a': 'setScc'
+		'click #scc': 'bindSwitch'
 	
 	initialize: (opts) ->
 		{@domain} = opts
@@ -46,7 +46,24 @@ Klass.views.Dashboard = Backbone.View.extend
 			parseInt Math.pow(@coefficientAlpha,4) * @model.getPageflowsMaxCount()
 		else
 			parseInt Math.pow(@coefficientBeta,4) * @model.getPageviewsMaxCount()
-			
+	
+	bindSwitch: (e) ->
+		$switch = $(e.currentTarget)
+
+		if $switch.hasClass 'on'
+			$switch.find('span.toggle').animate {left: -1}, 200, =>
+				$switch.removeClass('on').addClass('off')
+			$switch.find('span.off-bg').animate {width: 60}, 300
+			$switch.find('span.off-text').animate {right: -2}, 50
+		else
+			$switch.find('span.toggle').animate {left: 44}, 200, =>
+				$switch.removeClass('off').addClass('on')
+			$switch.find('span.off-bg').animate {width: 0}, 100
+			$switch.find('span.off-text').delay(150).animate {right: -5}, 50
+		
+		@scc = not @scc
+		@$('.scc-container a').toggleClass('enabled')
+		@drawChart()
 	
 	bindSliders: ->
 		@$('#slider-alpha').slider
@@ -89,6 +106,7 @@ Klass.views.Dashboard = Backbone.View.extend
 		
 		@$('.nodes-count').html @data.nodes.length
 		
+		@force.stop() if @force?
 		@force = d3.layout.force().linkDistance(100).size([@width, @height])
 		d3.select("#dashboard svg").remove()
 
@@ -235,15 +253,6 @@ Klass.views.Dashboard = Backbone.View.extend
 		)
 		
 		@update()
-	
-	setScc: (e) ->
-		e.preventDefault()
-		
-		@scc = not @scc
-		
-		@$('.scc-container a').toggleClass('enabled')
-		
-		@drawChart()
 		
 	
 	update: ->

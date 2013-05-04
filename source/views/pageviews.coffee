@@ -1,14 +1,20 @@
+# **Pageviews** view class
 Klass.views.Pageviews = Backbone.View.extend
 	
 	templateName: 'pageviews'
 	
 	action: null
 	
+	# **initialize** - initializes Pageviews class
 	initialize: (opts) ->
 		@render()
 	
 		@views = {}
 
+	# **displayAction** - displays specific action by creating a new view
+	#
+	# * `action` can be *viewDetails* or *viewBasic*
+	# * `opts` is passed to created view's constructor
 	displayAction: (action, opts) ->
 		if @views[@action]?
 			@views[@action].remove()

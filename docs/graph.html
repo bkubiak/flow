@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>graph.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="Pageflows.html">
+                Pageflows.coffee
+              </a>
+            
+              
+              <a class="source" href="Pagelinks.html">
+                Pagelinks.coffee
+              </a>
+            
+              
+              <a class="source" href="Pageviews.html">
+                Pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="domain.html">
+                domain.coffee
+              </a>
+            
+              
+              <a class="source" href="graph.html">
+                graph.coffee
+              </a>
+            
+              
+              <a class="source" href="menu.html">
+                menu.coffee
+              </a>
+            
+              
+              <a class="source" href="pageflow.html">
+                pageflow.coffee
+              </a>
+            
+              
+              <a class="source" href="pagelink.html">
+                pagelink.coffee
+              </a>
+            
+              
+              <a class="source" href="pageview.html">
+                pageview.coffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.coffee
+              </a>
+            
+              
+              <a class="source" href="dashboard.html">
+                dashboard.coffee
+              </a>
+            
+              
+              <a class="source" href="domain.html">
+                domain.coffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.coffee
+              </a>
+            
+              
+              <a class="source" href="pageflows.html">
+                pageflows.coffee
+              </a>
+            
+              
+              <a class="source" href="pagelinks.html">
+                pagelinks.coffee
+              </a>
+            
+              
+              <a class="source" href="pageviews.html">
+                pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="placement.html">
+                placement.coffee
+              </a>
+            
+              
+              <a class="source" href="top.html">
+                top.coffee
+              </a>
+            
+              
+              <a class="source" href="a.html">
+                a.coffee
+              </a>
+            
+              
+              <a class="source" href="c.html">
+                c.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>graph.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Klass.models.Graph = Backbone.Model.extend
+	
+	pageflowsFetched: <span class="literal">no</span>
+	pageviewsFetched: <span class="literal">no</span>
+	
+	initialize: (attrs, <span class="property">@pageviews</span>, <span class="property">@pageflows</span>) -&gt;
+	
+	fetch: (opts) -&gt;
+		<span class="property">@pageflows</span>.fetch
+			success: =&gt;
+				<span class="property">@pageflowsFetched</span> = <span class="literal">yes</span>
+				<span class="keyword">if</span> <span class="property">@pageviewsFetched</span> <span class="keyword">then</span> opts.success()
+	
+		<span class="property">@pageviews</span>.fetch
+			success: =&gt;
+				<span class="property">@pageviewsFetched</span> = <span class="literal">yes</span>
+				<span class="keyword">if</span> <span class="property">@pageflowsFetched</span> <span class="keyword">then</span> opts.success()
+	
+	getPageflowsMaxCount: -&gt;
+		<span class="keyword">if</span> <span class="property">@pageflowsFetched</span> <span class="keyword">then</span> <span class="property">@pageflows</span>.getMaxCount() <span class="keyword">else</span> <span class="literal">no</span>
+	
+	getPageviewsMaxCount: -&gt;
+		<span class="keyword">if</span> <span class="property">@pageviewsFetched</span> <span class="keyword">then</span> <span class="property">@pageviews</span>.getMaxCount() <span class="keyword">else</span> <span class="literal">no</span>
+	
+	
+	
+	getData: (thresholdAlpha, thresholdBeta, width, height) -&gt;
+		<span class="keyword">unless</span> <span class="property">@pageflowsFetched</span> <span class="keyword">and</span> <span class="property">@pageviewsFetched</span>
+			<span class="keyword">return</span> <span class="literal">no</span>
+		
+		pageflows = <span class="property">@pageflows</span>.getPageflowsCategory thresholdAlpha
+
+		pageviews = <span class="property">@pageviews</span>.getPageviewsCategory thresholdBeta
+
+		arrUrls = <span class="keyword">for</span> pageview <span class="keyword">in</span> pageviews
+			pageview.get <span class="string">'url'</span>
+
+		pageflows = <span class="keyword">for</span> pageflow <span class="keyword">in</span> pageflows
+			pageflow = pageflow.toJSON()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>skip connections without nodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="keyword">if</span> arrUrls.indexOf(pageflow.source_url) <span class="keyword">is</span> -<span class="number">1</span> <span class="keyword">or</span> arrUrls.indexOf(pageflow.dest_url) <span class="keyword">is</span> -<span class="number">1</span>
+				<span class="keyword">continue</span>
+			pageflow
+
+
+		arrAddedNodes = []
+		nodes = []</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>add nodes with connections only</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">for</span> pageflow <span class="keyword">in</span> pageflows
+			<span class="keyword">if</span> arrAddedNodes.indexOf(pageflow.source_url) <span class="keyword">is</span> -<span class="number">1</span>
+				arrAddedNodes.push pageflow.source_url
+				viewCount = <span class="property">@pageviews</span>.get(pageflow.source_url).get <span class="string">'count'</span>
+
+				nodes.push
+					name: pageflow.source_url
+					count: viewCount
+
+			<span class="keyword">if</span> arrAddedNodes.indexOf(pageflow.dest_url) <span class="keyword">is</span> -<span class="number">1</span>
+				arrAddedNodes.push pageflow.dest_url
+				viewCount = <span class="property">@pageviews</span>.get(pageflow.dest_url).get <span class="string">'count'</span>
+
+				nodes.push
+					name: pageflow.dest_url
+					count: viewCount</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>add the rest of the nodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">for</span> pageview <span class="keyword">in</span> pageviews
+			url = pageview.get <span class="string">'url'</span>
+			<span class="keyword">if</span> arrAddedNodes.indexOf(url) <span class="keyword">is</span> -<span class="number">1</span>
+				arrAddedNodes.push url
+				viewCount = pageview.get <span class="string">'count'</span>
+
+				nodes.push
+					name: url
+					count: viewCount
+
+		links = <span class="keyword">for</span> pageflow <span class="keyword">in</span> pageflows
+			source: pageflow.source_url
+			target: pageflow.dest_url
+			count: pageflow.count
+
+		rawData =
+			nodes: nodes
+			links: links
+		
+		data = <span class="property">@setupRawData</span> rawData, width, height</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>extend data for radius, x &amp; y pos, value;
+also source and target points to node instead of name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	setupRawData: (data, width, height) -&gt;
+		data.nodes.forEach (n) =&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>set initial x/y to values within the width/height of the visualization</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			n.x = Math.floor(Math.random()*width)
+			n.y = Math.floor(Math.random()*height)
+
+			n.radius = Math.log(n.count)*<span class="number">1.5</span>
+			
+			n.group = <span class="number">0</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>id&#39;s -&gt; node objects</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		nodesMap = <span class="property">@mapNodes</span>(data.nodes)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>switch links to point to node objects instead of id&#39;s</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		data.links.forEach (l) =&gt;
+			l.source = nodesMap.get(l.source)
+			l.target = nodesMap.get(l.target)
+			l.value = Math.log(l.count)/<span class="number">1.5</span>
+
+		data</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>implementation of Tarjan&#39;s strongly connected components algorithm</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	scc: (data) -&gt;
+		nodes = <span class="keyword">for</span> node <span class="keyword">in</span> data.nodes</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>if node.name is &#39;<a href="http://www.livechatinc.com/">http://www.livechatinc.com/</a>&#39; or node.name is &#39;<a href="https://www.livechatinc.com/signup/">https://www.livechatinc.com/signup/</a>&#39; then continue</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			$.extend {}, node,
+				index: -<span class="number">1</span>
+				lowLink: -<span class="number">1</span>
+				connections: []
+		
+		nodesMap = <span class="property">@mapNodes</span> nodes
+
+		<span class="keyword">for</span> link <span class="keyword">in</span> data.links
+			<span class="keyword">for</span> node <span class="keyword">in</span> nodes
+				<span class="keyword">if</span> link.source.name <span class="keyword">is</span> node.name</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>unless link.target.name is &#39;<a href="http://www.livechatinc.com/">http://www.livechatinc.com/</a>&#39; or link.target.name is &#39;<a href="https://www.livechatinc.com/signup/">https://www.livechatinc.com/signup/</a>&#39;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					node.connections.push nodesMap.get(link.target.name)
+
+		<span class="property">@index</span> = <span class="number">0</span>
+		<span class="property">@stack</span> = []
+		<span class="property">@sccNodes</span> = []
+
+		<span class="keyword">for</span> node <span class="keyword">in</span> nodes
+			<span class="keyword">if</span> node.index &lt; <span class="number">0</span>
+				<span class="property">@strongConnect</span> node
+
+		sccData = <span class="property">@setupSccData</span> <span class="property">@sccNodes</span>, data
+
+	
+	strongConnect: (node) -&gt;
+		node.index = <span class="property">@index</span>
+		node.lowLink = <span class="property">@index</span>
+		<span class="property">@index</span>++
+		<span class="property">@stack</span>.push node
+
+		<span class="keyword">for</span> w <span class="keyword">in</span> node.connections
+			v = node
+			<span class="keyword">if</span> w.index &lt; <span class="number">0</span>
+				<span class="property">@strongConnect</span> w
+				v.lowLink = Math.min v.lowLink, w.lowLink
+			<span class="keyword">else</span>
+				<span class="keyword">for</span> stackNode <span class="keyword">in</span> <span class="property">@stack</span>
+					<span class="keyword">if</span> stackNode.name <span class="keyword">is</span> w.name
+						v.lowLink = Math.min v.lowLink, w.index
+
+		<span class="keyword">if</span> node.lowLink <span class="keyword">is</span> node.index
+			innerNodes = []
+			w = <span class="literal">null</span>
+			
+			<span class="keyword">if</span> <span class="property">@stack</span>.length &gt; <span class="number">0</span>
+				w = <span class="property">@stack</span>.pop()
+				innerNodes.push w
+				<span class="keyword">until</span> node.name <span class="keyword">is</span> w.name
+					w = <span class="property">@stack</span>.pop()
+					innerNodes.push w
+			
+			<span class="keyword">if</span> innerNodes.length &gt; <span class="number">0</span>
+				<span class="property">@sccNodes</span>.push innerNodes
+	
+	
+	setupSccData: (sccNodes, data) -&gt;
+		nodes = []
+		links = []
+		joinedNodesCount = <span class="number">0</span>
+		nodesMap = <span class="property">@mapNodes</span> data.nodes
+		sccNodesMap = {}
+		linksMap = {}
+		
+		<span class="keyword">for</span> sccNode <span class="keyword">in</span> sccNodes
+			<span class="keyword">if</span> sccNode.length <span class="keyword">is</span> <span class="number">1</span>
+				nodes.push nodesMap.get(sccNode[<span class="number">0</span>].name)
+			<span class="keyword">else</span>
+				joinedNode =
+					name: <span class="string">"joined_node_<span class="subst">#{joinedNodesCount}</span>"</span>
+					innerNames: []
+					count: <span class="number">0</span>
+					x: sccNode[<span class="number">0</span>].x
+					y: sccNode[<span class="number">0</span>].y
+					group: <span class="number">1</span>
+					
+				<span class="keyword">for</span> innerNode <span class="keyword">in</span> sccNode
+					joinedNode.innerNames.push innerNode.name
+					joinedNode.count += innerNode.count
+					
+					sccNodesMap[innerNode.name] = joinedNode
+					
+				joinedNode.radius = Math.log(joinedNode.count)*<span class="number">1.5</span>
+				
+				nodes.push joinedNode
+				joinedNodesCount++
+		
+		
+		nodesMap = <span class="property">@mapNodes</span> nodes
+		
+		<span class="keyword">for</span> link <span class="keyword">in</span> data.links
+			joinedLink = {}
+			<span class="keyword">if</span> sccNodesMap.hasOwnProperty(link.source.name)
+				joinedLink.source = sccNodesMap[link.source.name]
+			<span class="keyword">else</span>
+				joinedLink.source = nodesMap.get(link.source.name)
+			<span class="keyword">if</span> sccNodesMap.hasOwnProperty(link.target.name)
+				joinedLink.target = sccNodesMap[link.target.name]
+			<span class="keyword">else</span>
+				joinedLink.target = nodesMap.get(link.target.name)
+			
+			<span class="keyword">if</span> joinedLink.target.name <span class="keyword">is</span> joinedLink.source.name
+				<span class="keyword">continue</span>
+			
+			joinedLink.count = link.count
+			
+			<span class="keyword">if</span> linksMap.hasOwnProperty(<span class="string">"<span class="subst">#{joinedLink.source.name}</span>_<span class="subst">#{joinedLink.target.name}</span>"</span>)
+				joinedLink.count += linksMap[<span class="string">"<span class="subst">#{joinedLink.source.name}</span>_<span class="subst">#{joinedLink.target.name}</span>"</span>].count
+				joinedLink.value = Math.log(joinedLink.count)/<span class="number">1.5</span>
+			<span class="keyword">else</span>
+				joinedLink.value = link.value
+			
+			linksMap[<span class="string">"<span class="subst">#{joinedLink.source.name}</span>_<span class="subst">#{joinedLink.target.name}</span>"</span>] = joinedLink
+		
+		<span class="keyword">for</span> key, link <span class="keyword">of</span> linksMap
+			links.push link
+		
+		nodes: nodes
+		links: links</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>helper - map node name&#39;s to node objects (d3.map of names -&gt; nodes)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	mapNodes: (nodes) -&gt;
+		nodesMap = d3.map()
+		nodes.forEach (n) =&gt;
+			nodesMap.set(n.name, n)
+		nodesMap</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>helper - check if nodes stack contains specified node</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	stackContains: (stack, node) -&gt;
+		<span class="keyword">for</span> stackNode <span class="keyword">in</span> stack
+			<span class="keyword">if</span> stackNode.name <span class="keyword">is</span> stack.name
+				<span class="keyword">return</span> <span class="literal">yes</span>
+		<span class="literal">no</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

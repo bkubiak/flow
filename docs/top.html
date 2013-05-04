@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>top.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="Pageflows.html">
+                Pageflows.coffee
+              </a>
+            
+              
+              <a class="source" href="Pagelinks.html">
+                Pagelinks.coffee
+              </a>
+            
+              
+              <a class="source" href="Pageviews.html">
+                Pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="domain.html">
+                domain.coffee
+              </a>
+            
+              
+              <a class="source" href="graph.html">
+                graph.coffee
+              </a>
+            
+              
+              <a class="source" href="menu.html">
+                menu.coffee
+              </a>
+            
+              
+              <a class="source" href="pageflow.html">
+                pageflow.coffee
+              </a>
+            
+              
+              <a class="source" href="pagelink.html">
+                pagelink.coffee
+              </a>
+            
+              
+              <a class="source" href="pageview.html">
+                pageview.coffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.coffee
+              </a>
+            
+              
+              <a class="source" href="dashboard.html">
+                dashboard.coffee
+              </a>
+            
+              
+              <a class="source" href="domain.html">
+                domain.coffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.coffee
+              </a>
+            
+              
+              <a class="source" href="pageflows.html">
+                pageflows.coffee
+              </a>
+            
+              
+              <a class="source" href="pagelinks.html">
+                pagelinks.coffee
+              </a>
+            
+              
+              <a class="source" href="pageviews.html">
+                pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="placement.html">
+                placement.coffee
+              </a>
+            
+              
+              <a class="source" href="top.html">
+                top.coffee
+              </a>
+            
+              
+              <a class="source" href="a.html">
+                a.coffee
+              </a>
+            
+              
+              <a class="source" href="c.html">
+                c.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>top.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Klass.views.Top = Backbone.View.extend
+	
+	templateName: <span class="string">'top'</span>
+	
+	events:
+		<span class="string">'click .delete'</span>: <span class="string">'deleteDomain'</span>
+	
+	initialize: (opts) -&gt;
+		{<span class="property">@domain</span>} = opts
+		<span class="property">@render</span>()
+		<span class="property">@model</span>.<span class="literal">on</span> <span class="string">'change:active'</span>, <span class="property">@setActive</span>, @
+		<span class="property">@domain</span>.<span class="literal">on</span> <span class="string">'change:domain'</span>, <span class="property">@render</span>, @
+	
+	templateHash: -&gt;
+		menu: <span class="property">@model</span>.nav
+		domain: <span class="property">@domain</span>.get <span class="string">'domain'</span>
+	
+	setActive: -&gt;
+		<span class="property">@$</span>(<span class="string">'li.active'</span>).removeClass <span class="string">'active'</span>
+
+		active = <span class="property">@model</span>.get <span class="string">'active'</span>
+		<span class="property">@$</span>(<span class="string">"li[data-section=<span class="subst">#{active}</span>]"</span>).addClass <span class="string">'active'</span>
+	
+	deleteDomain: (e) -&gt;
+		e.preventDefault()
+
+		<span class="property">@domain</span>.destroy
+			success: =&gt;
+				<span class="property">@domain</span>.clear()
+				<span class="property">@navigate</span> <span class="string">'/domain'</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

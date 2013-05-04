@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>dashboard.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="Pageflows.html">
+                Pageflows.coffee
+              </a>
+            
+              
+              <a class="source" href="Pagelinks.html">
+                Pagelinks.coffee
+              </a>
+            
+              
+              <a class="source" href="Pageviews.html">
+                Pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="domain.html">
+                domain.coffee
+              </a>
+            
+              
+              <a class="source" href="graph.html">
+                graph.coffee
+              </a>
+            
+              
+              <a class="source" href="menu.html">
+                menu.coffee
+              </a>
+            
+              
+              <a class="source" href="pageflow.html">
+                pageflow.coffee
+              </a>
+            
+              
+              <a class="source" href="pagelink.html">
+                pagelink.coffee
+              </a>
+            
+              
+              <a class="source" href="pageview.html">
+                pageview.coffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.coffee
+              </a>
+            
+              
+              <a class="source" href="dashboard.html">
+                dashboard.coffee
+              </a>
+            
+              
+              <a class="source" href="domain.html">
+                domain.coffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.coffee
+              </a>
+            
+              
+              <a class="source" href="pageflows.html">
+                pageflows.coffee
+              </a>
+            
+              
+              <a class="source" href="pagelinks.html">
+                pagelinks.coffee
+              </a>
+            
+              
+              <a class="source" href="pageviews.html">
+                pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="placement.html">
+                placement.coffee
+              </a>
+            
+              
+              <a class="source" href="top.html">
+                top.coffee
+              </a>
+            
+              
+              <a class="source" href="a.html">
+                a.coffee
+              </a>
+            
+              
+              <a class="source" href="c.html">
+                c.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>dashboard.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Klass.views.Dashboard = Backbone.View.extend
+	
+	templateName: <span class="string">'dashboard'</span>
+	
+	modelFetched: <span class="literal">no</span>
+	
+	coefficientAlpha: <span class="number">0.2</span>
+	coefficientBeta: <span class="number">0.2</span>
+	width: <span class="number">960</span>
+	height: <span class="number">600</span>	
+	layout: <span class="string">'random'</span>
+	scc: <span class="literal">no</span>
+
+	events:
+		<span class="string">'click .layout-container a'</span>: <span class="string">'setLayout'</span>
+		<span class="string">'click #scc'</span>: <span class="string">'bindSwitch'</span>
+	
+	initialize: (opts) -&gt;
+		{<span class="property">@domain</span>} = opts
+		
+		
+		<span class="property">@render</span>()
+		<span class="property">@bindSliders</span>()
+		<span class="property">@tooltip</span> = Tooltip(<span class="string">"flow-tooltip"</span>, <span class="number">250</span>)
+		<span class="property">@placement</span> = <span class="keyword">new</span> Klass.views.Placement {domainName: <span class="property">@domain</span>.get(<span class="string">'domain'</span>)}
+	
+	show: -&gt;
+		Backbone.View.prototype.show.call @
+		
+		<span class="keyword">unless</span> <span class="property">@modelFetched</span>
+			<span class="property">@model</span>.fetch
+				success: =&gt; <span class="property">@onFetch</span>()
+	
+	onFetch: -&gt;
+		<span class="property">@modelFetched</span> = <span class="literal">yes</span>
+		<span class="property">@thresholdAlpha</span> = <span class="property">@computeThreshold</span> <span class="string">'alpha'</span>
+		<span class="property">@thresholdBeta</span> = <span class="property">@computeThreshold</span> <span class="string">'beta'</span>
+		<span class="property">@$</span>(<span class="string">'.pageflows-threshold'</span>).html <span class="property">@thresholdAlpha</span>
+		<span class="property">@$</span>(<span class="string">'.pageviews-threshold'</span>).html <span class="property">@thresholdBeta</span>
+		setTimeout =&gt;
+			<span class="property">@drawChart</span>()
+		, <span class="number">100</span>
+	
+	computeThreshold: (type) -&gt;
+		<span class="keyword">if</span> type <span class="keyword">is</span> <span class="string">'alpha'</span>
+			parseInt Math.pow(<span class="property">@coefficientAlpha</span>,<span class="number">4</span>) * <span class="property">@model</span>.getPageflowsMaxCount()
+		<span class="keyword">else</span>
+			parseInt Math.pow(<span class="property">@coefficientBeta</span>,<span class="number">4</span>) * <span class="property">@model</span>.getPageviewsMaxCount()
+	
+	bindSwitch: (e) -&gt;
+		$<span class="keyword">switch</span> = $(e.currentTarget)
+
+		<span class="keyword">if</span> $<span class="keyword">switch</span>.hasClass <span class="string">'on'</span>
+			$<span class="keyword">switch</span>.find(<span class="string">'span.toggle'</span>).animate {left: -<span class="number">1</span>}, <span class="number">200</span>, =&gt;
+				$<span class="keyword">switch</span>.removeClass(<span class="string">'on'</span>).addClass(<span class="string">'off'</span>)
+			$<span class="keyword">switch</span>.find(<span class="string">'span.off-bg'</span>).animate {width: <span class="number">60</span>}, <span class="number">300</span>
+			$<span class="keyword">switch</span>.find(<span class="string">'span.off-text'</span>).animate {right: -<span class="number">2</span>}, <span class="number">50</span>
+		<span class="keyword">else</span>
+			$<span class="keyword">switch</span>.find(<span class="string">'span.toggle'</span>).animate {left: <span class="number">44</span>}, <span class="number">200</span>, =&gt;
+				$<span class="keyword">switch</span>.removeClass(<span class="string">'off'</span>).addClass(<span class="string">'on'</span>)
+			$<span class="keyword">switch</span>.find(<span class="string">'span.off-bg'</span>).animate {width: <span class="number">0</span>}, <span class="number">100</span>
+			$<span class="keyword">switch</span>.find(<span class="string">'span.off-text'</span>).delay(<span class="number">150</span>).animate {right: -<span class="number">5</span>}, <span class="number">50</span>
+		
+		<span class="property">@scc</span> = <span class="keyword">not</span> <span class="property">@scc</span>
+		<span class="property">@$</span>(<span class="string">'.scc-container a'</span>).toggleClass(<span class="string">'enabled'</span>)
+		<span class="property">@drawChart</span>()
+	
+	bindSliders: -&gt;
+		<span class="property">@$</span>(<span class="string">'#slider-alpha'</span>).slider
+			range: <span class="string">'min'</span>
+			animate: <span class="literal">yes</span>
+			value: <span class="number">0.2</span>
+			min: <span class="number">0.01</span>
+			max: <span class="number">0.99</span>
+			step: <span class="number">0.01</span>
+			slide: (event, ui) =&gt;
+				<span class="property">@$</span>(<span class="string">'.slider-alpha-container .coefficient .value'</span>).html ui.value
+			change: (event, ui) =&gt;
+				<span class="property">@coefficientAlpha</span> = ui.value
+				<span class="property">@thresholdAlpha</span> = <span class="property">@computeThreshold</span> <span class="string">'alpha'</span>
+				<span class="property">@$</span>(<span class="string">'.pageflows-threshold'</span>).html <span class="property">@thresholdAlpha</span>
+				<span class="property">@drawChart</span>()
+		
+		<span class="property">@$</span>(<span class="string">'#slider-beta'</span>).slider
+			range: <span class="string">'min'</span>
+			animate: <span class="literal">yes</span>
+			value: <span class="number">0.2</span>
+			min: <span class="number">0.01</span>
+			max: <span class="number">0.99</span>
+			step: <span class="number">0.01</span>
+			slide: (event, ui) =&gt;
+				<span class="property">@$</span>(<span class="string">'.slider-beta-container .coefficient .value'</span>).html ui.value
+			change: (event, ui) =&gt;
+				<span class="property">@coefficientBeta</span> = ui.value
+				<span class="property">@thresholdBeta</span> = <span class="property">@computeThreshold</span> <span class="string">'beta'</span>
+				<span class="property">@$</span>(<span class="string">'.pageviews-threshold'</span>).html <span class="property">@thresholdBeta</span>
+				<span class="property">@drawChart</span>()
+	
+	drawChart: -&gt;
+		<span class="property">@data</span> = <span class="property">@model</span>.getData <span class="property">@thresholdAlpha</span>, <span class="property">@thresholdBeta</span>, <span class="property">@width</span>, <span class="property">@height</span>
+		
+		<span class="keyword">if</span> <span class="property">@scc</span>
+			<span class="property">@data</span> = <span class="property">@model</span>.scc <span class="property">@data</span>
+			console.log <span class="property">@data</span>
+		
+		
+		<span class="property">@$</span>(<span class="string">'.nodes-count'</span>).html <span class="property">@data</span>.nodes.length
+		
+		<span class="property">@force</span>.stop() <span class="keyword">if</span> <span class="property">@force</span>?
+		<span class="property">@force</span> = d3.layout.force().linkDistance(<span class="number">100</span>).size([<span class="property">@width</span>, <span class="property">@height</span>])
+		d3.select(<span class="string">"#dashboard svg"</span>).remove()
+
+		svg = d3.select(<span class="string">"#dashboard .chart"</span>).append(<span class="string">"svg"</span>).attr(<span class="string">"width"</span>, <span class="property">@width</span>).attr(<span class="string">"height"</span>, <span class="property">@height</span>)
+		
+		<span class="property">@linksG</span> = svg.append(<span class="string">"g"</span>).attr(<span class="string">"id"</span>, <span class="string">"links"</span>)
+		<span class="property">@nodesG</span> = svg.append(<span class="string">"g"</span>).attr(<span class="string">"id"</span>, <span class="string">"nodes"</span>)
+		
+		<span class="property">@setLayout</span> <span class="property">@layout</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>@force.on &quot;tick&quot;, =&gt;
+    @link.attr(&quot;x1&quot;, (d) =&gt; d.source.x)
+        .attr(&quot;y1&quot;, (d) =&gt; d.source.y)
+        .attr(&quot;x2&quot;, (d) =&gt; d.target.x)
+        .attr(&quot;y2&quot;, (d) =&gt; d.target.y)</p>
+<pre><code>@node.attr(&quot;cx&quot;, (d) =&gt; d.x)
+    .attr(&quot;cy&quot;, (d) =&gt; d.y)</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				
+	
+	getTooltipContent: (node) -&gt;
+		domain = <span class="property">@domain</span>.get <span class="string">'domain'</span>
+		search = <span class="keyword">new</span> RegExp <span class="string">"https?:\/\/<span class="subst">#{domain}</span>"</span>
+		name = <span class="keyword">unless</span> node.name <span class="keyword">is</span> <span class="string">"http://<span class="subst">#{domain}</span>/"</span> <span class="keyword">then</span> node.name.replace search, <span class="string">''</span> <span class="keyword">else</span> node.name
+		
+		content = <span class="string">'&lt;p class="main"&gt;'</span> + name + <span class="string">'&lt;/p&gt;'</span>
+		content += <span class="string">'&lt;p class="main"&gt;pageviews: '</span> + node.count + <span class="string">'&lt;/p&gt;'</span>
+		
+		<span class="keyword">if</span> node.innerNames?
+			content += <span class="string">'&lt;p class="line"&gt;&lt;/p&gt;&lt;p class="main"&gt;Joined nodes ('</span> + node.innerNames.length + <span class="string">')&lt;/p&gt;'</span>
+			namesMaxNumber = <span class="number">5</span>
+			<span class="keyword">for</span> innerName <span class="keyword">in</span> node.innerNames
+				<span class="keyword">if</span> namesMaxNumber <span class="keyword">is</span> <span class="number">0</span>
+					<span class="keyword">break</span>
+				innerName = <span class="keyword">unless</span> innerName <span class="keyword">is</span> <span class="string">"http://<span class="subst">#{domain}</span>/"</span> <span class="keyword">then</span> innerName.replace search, <span class="string">''</span> <span class="keyword">else</span> innerName
+				<span class="keyword">if</span> innerName.length &gt; <span class="number">30</span> <span class="keyword">then</span> innerName = innerName.substr(<span class="number">0</span>, <span class="number">28</span>)+<span class="string">'...'</span>
+				content += <span class="string">'&lt;p class="link"&gt;&amp;diams; '</span> + innerName + <span class="string">'&lt;/p&gt;'</span>
+				namesMaxNumber--
+			<span class="keyword">if</span> node.innerNames.length &gt; <span class="number">5</span> <span class="keyword">then</span> content += <span class="string">'&lt;p class="link"&gt;...&lt;/p&gt;'</span>
+		
+		linkDetails = []	
+		<span class="keyword">for</span> link <span class="keyword">in</span> <span class="property">@curLinksData</span>
+			<span class="keyword">if</span> link.source.name <span class="keyword">is</span> node.name
+				linkName = <span class="keyword">unless</span> link.target.name <span class="keyword">is</span> <span class="string">"http://<span class="subst">#{domain}</span>/"</span> <span class="keyword">then</span> link.target.name.replace search, <span class="string">''</span> <span class="keyword">else</span> link.target.name
+				<span class="keyword">if</span> linkName.length &gt; <span class="number">30</span> <span class="keyword">then</span> linkName = linkName.substr(<span class="number">0</span>, <span class="number">28</span>)+<span class="string">'...'</span>
+				linkDetails.push
+					name: linkName
+					count: link.count
+		
+		<span class="keyword">if</span> linkDetails.length
+			linkDetails = linkDetails.sort (a,b) =&gt; b.count - a.count
+			content += <span class="string">'&lt;p class="line"&gt;&lt;/p&gt;&lt;p class="main"&gt;Links pageflows ('</span> + linkDetails.length + <span class="string">')&lt;/p&gt;'</span>
+			linksMaxNumber = <span class="number">5</span>
+			<span class="keyword">for</span> link <span class="keyword">in</span> linkDetails
+				<span class="keyword">if</span> linksMaxNumber <span class="keyword">is</span> <span class="number">0</span>
+					<span class="keyword">break</span>
+				content += <span class="string">'&lt;p class="link"&gt;&amp;diams; '</span> + link.name + <span class="string">' &amp;ndash; '</span> + link.count + <span class="string">'&lt;/p&gt;'</span>
+				linksMaxNumber--
+			<span class="keyword">if</span> linkDetails.length &gt; <span class="number">5</span> <span class="keyword">then</span> content += <span class="string">'&lt;p class="link"&gt;...&lt;/p&gt;'</span>
+		
+		content
+	
+	onMouseOver: (d,i) -&gt;
+		<span class="property">@tooltip</span>.showTooltip(<span class="property">@getTooltipContent</span>(d),d3.event)
+		
+		<span class="keyword">if</span> <span class="property">@link</span>
+			<span class="property">@link</span>.style <span class="string">"stroke"</span>, (l) =&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>if l.source == d or l.target == d then &quot;#fff&quot; else &quot;#aaa&quot;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="keyword">if</span> l.source == d <span class="keyword">then</span> <span class="string">"#fff"</span> <span class="keyword">else</span> <span class="string">"#aaa"</span>
+			<span class="property">@link</span>.style <span class="string">"stroke-opacity"</span>, (l) =&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>if l.source == d or l.target == d then 1.0 else 0.3</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="keyword">if</span> l.source == d <span class="keyword">then</span> <span class="number">1.0</span> <span class="keyword">else</span> <span class="number">0.3</span>
+		<span class="property">@node</span>.style <span class="string">"stroke"</span>, (n) =&gt;
+			<span class="keyword">if</span> n.index == d.index <span class="keyword">then</span> <span class="string">"#fff"</span> <span class="keyword">else</span> <span class="string">"#aaa"</span>
+	
+	onMouseOut: (d, i) -&gt;
+		<span class="property">@tooltip</span>.hideTooltip()
+		
+		<span class="keyword">if</span> <span class="property">@link</span>
+			<span class="property">@link</span>.style(<span class="string">"stroke"</span>, <span class="string">"#aaa"</span>).style(<span class="string">"stroke-opacity"</span>, <span class="number">0.5</span>)
+		<span class="property">@node</span>.style(<span class="string">"stroke"</span>,<span class="string">"#ccc"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>enter/exit display for nodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	updateNodes: -&gt;
+		nodeColors = d3.scale.category20()
+		
+		<span class="property">@node</span> = <span class="property">@nodesG</span>.selectAll(<span class="string">"circle.node"</span>).data(<span class="property">@curNodesData</span>, (d) -&gt; d.name)
+
+		<span class="property">@node</span>.enter().append(<span class="string">"circle"</span>)
+			.attr(<span class="string">"class"</span>, <span class="string">"node"</span>)
+			.attr(<span class="string">"cx"</span>, (d) =&gt; d.x)
+			.attr(<span class="string">"cy"</span>, (d) =&gt; d.y)
+			.attr(<span class="string">"r"</span>, (d) =&gt; d.radius)
+			.style(<span class="string">"fill"</span>, (d) =&gt; nodeColors(d.group))
+
+		<span class="property">@node</span>.<span class="literal">on</span>(<span class="string">"mouseover"</span>, _.bind(<span class="property">@onMouseOver</span>,@))
+			.<span class="literal">on</span>(<span class="string">"mouseout"</span>, _.bind(<span class="property">@onMouseOut</span>,@))
+
+		<span class="property">@node</span>.exit().remove()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>enter/exit display for links</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	updateLinks: -&gt;
+		<span class="property">@link</span> = <span class="property">@linksG</span>.selectAll(<span class="string">"line.link"</span>).data(<span class="property">@curLinksData</span>, (d) -&gt; <span class="string">"<span class="subst">#{d.source.name}</span>_<span class="subst">#{d.target.name}</span>"</span>)
+			
+		<span class="property">@link</span>.enter().append(<span class="string">"line"</span>)
+			.attr(<span class="string">"class"</span>, <span class="string">"link"</span>)
+			.attr(<span class="string">"x1"</span>, (d) -&gt; d.source.x)
+			.attr(<span class="string">"y1"</span>, (d) -&gt; d.source.y)
+			.attr(<span class="string">"x2"</span>, (d) -&gt; d.target.x)
+			.attr(<span class="string">"y2"</span>, (d) -&gt; d.target.y)
+			.style(<span class="string">"stroke-width"</span>, (d) =&gt; d.value)
+
+		<span class="property">@link</span>.exit().remove()
+	
+	setLayout: (e) -&gt;
+		isEvent = <span class="keyword">typeof</span>(e.isDefaultPrevented) <span class="keyword">isnt</span> <span class="string">'undefined'</span>
+		
+		<span class="keyword">if</span> isEvent
+			e.preventDefault()	
+			layout = $(e.currentTarget).attr <span class="string">'id'</span>
+		<span class="keyword">else</span>
+			layout = e
+		
+		<span class="property">@layout</span> = layout
+		
+		<span class="property">@$</span>(<span class="string">'.layout-container a'</span>).removeClass <span class="string">'active'</span>
+		<span class="property">@$</span>(<span class="string">"#<span class="subst">#{layout}</span>"</span>).addClass <span class="string">'active'</span>
+		
+		<span class="property">@force</span>.stop()
+		
+		<span class="property">@force</span>.<span class="literal">on</span>(<span class="string">'tick'</span>, (e) =&gt;
+			k = e.alpha * <span class="number">0.1</span>
+			<span class="property">@node</span>.each (d) =&gt;
+				targetPlacement = <span class="property">@placement</span>.getPlacement(d.name)
+				d.x += (targetPlacement.x - d.x) * k
+				d.y += (targetPlacement.y - d.y) * k
+		
+			<span class="property">@node</span>.attr(<span class="string">"cx"</span>, (d) -&gt; d.x).attr(<span class="string">"cy"</span>, (d) -&gt; d.y)
+
+			<span class="keyword">if</span> e.alpha &lt; <span class="number">0.03</span>
+				<span class="property">@force</span>.stop()
+				<span class="property">@updateLinks</span>()
+		)
+		
+		<span class="property">@update</span>()
+		
+	
+	update: -&gt;
+		<span class="property">@curNodesData</span> = <span class="property">@data</span>.nodes
+		<span class="property">@curLinksData</span> = <span class="property">@data</span>.links
+		
+		names = <span class="keyword">for</span> node <span class="keyword">in</span> <span class="property">@curNodesData</span>
+			node.name
+		
+		<span class="keyword">if</span> <span class="property">@layout</span> <span class="keyword">is</span> <span class="string">'radial'</span>
+			<span class="property">@force</span>.charge(-<span class="number">100</span>)
+			<span class="property">@placement</span>.radialPlacement(names, {x: <span class="property">@width</span> / <span class="number">2</span>, y: <span class="property">@height</span> / <span class="number">2</span>}, <span class="number">250</span>, <span class="number">20</span>, -<span class="number">120</span>)
+		<span class="keyword">else</span>
+			<span class="property">@force</span>.charge(-<span class="number">200</span>)
+			<span class="property">@placement</span>.randomPlacement(names, <span class="property">@width</span>, <span class="property">@height</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>reset nodes in force layout</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="property">@force</span>.nodes(<span class="property">@curNodesData</span>)
+		<span class="property">@updateNodes</span>()
+
+		<span class="property">@force</span>.links([])
+		<span class="keyword">if</span> <span class="property">@link</span>
+			<span class="property">@link</span>.data([]).exit().remove()
+			<span class="property">@link</span> = <span class="literal">null</span>
+
+		<span class="property">@force</span>.start()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>@node.call(@force.drag)            </p>
+
+            </div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

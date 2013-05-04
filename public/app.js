@@ -534,7 +534,7 @@
     scc: false,
     events: {
       'click .layout-container a': 'setLayout',
-      'click .scc-container a': 'setScc'
+      'click #scc': 'bindSwitch'
     },
     initialize: function(opts) {
       this.domain = opts.domain;
@@ -573,6 +573,39 @@
       } else {
         return parseInt(Math.pow(this.coefficientBeta, 4) * this.model.getPageviewsMaxCount());
       }
+    },
+    bindSwitch: function(e) {
+      var $switch,
+        _this = this;
+      $switch = $(e.currentTarget);
+      if ($switch.hasClass('on')) {
+        $switch.find('span.toggle').animate({
+          left: -1
+        }, 200, function() {
+          return $switch.removeClass('on').addClass('off');
+        });
+        $switch.find('span.off-bg').animate({
+          width: 60
+        }, 300);
+        $switch.find('span.off-text').animate({
+          right: -2
+        }, 50);
+      } else {
+        $switch.find('span.toggle').animate({
+          left: 44
+        }, 200, function() {
+          return $switch.removeClass('off').addClass('on');
+        });
+        $switch.find('span.off-bg').animate({
+          width: 0
+        }, 100);
+        $switch.find('span.off-text').delay(150).animate({
+          right: -5
+        }, 50);
+      }
+      this.scc = !this.scc;
+      this.$('.scc-container a').toggleClass('enabled');
+      return this.drawChart();
     },
     bindSliders: function() {
       var _this = this;
@@ -619,6 +652,9 @@
         console.log(this.data);
       }
       this.$('.nodes-count').html(this.data.nodes.length);
+      if (this.force != null) {
+        this.force.stop();
+      }
       this.force = d3.layout.force().linkDistance(100).size([this.width, this.height]);
       d3.select("#dashboard svg").remove();
       svg = d3.select("#dashboard .chart").append("svg").attr("width", this.width).attr("height", this.height);
@@ -794,12 +830,6 @@
         }
       });
       return this.update();
-    },
-    setScc: function(e) {
-      e.preventDefault();
-      this.scc = !this.scc;
-      this.$('.scc-container a').toggleClass('enabled');
-      return this.drawChart();
     },
     update: function() {
       var names, node;

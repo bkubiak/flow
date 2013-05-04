@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>main.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="Pageflows.html">
+                Pageflows.coffee
+              </a>
+            
+              
+              <a class="source" href="Pagelinks.html">
+                Pagelinks.coffee
+              </a>
+            
+              
+              <a class="source" href="Pageviews.html">
+                Pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="domain.html">
+                domain.coffee
+              </a>
+            
+              
+              <a class="source" href="graph.html">
+                graph.coffee
+              </a>
+            
+              
+              <a class="source" href="menu.html">
+                menu.coffee
+              </a>
+            
+              
+              <a class="source" href="pageflow.html">
+                pageflow.coffee
+              </a>
+            
+              
+              <a class="source" href="pagelink.html">
+                pagelink.coffee
+              </a>
+            
+              
+              <a class="source" href="pageview.html">
+                pageview.coffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.coffee
+              </a>
+            
+              
+              <a class="source" href="dashboard.html">
+                dashboard.coffee
+              </a>
+            
+              
+              <a class="source" href="domain.html">
+                domain.coffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.coffee
+              </a>
+            
+              
+              <a class="source" href="pageflows.html">
+                pageflows.coffee
+              </a>
+            
+              
+              <a class="source" href="pagelinks.html">
+                pagelinks.coffee
+              </a>
+            
+              
+              <a class="source" href="pageviews.html">
+                pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="placement.html">
+                placement.coffee
+              </a>
+            
+              
+              <a class="source" href="top.html">
+                top.coffee
+              </a>
+            
+              
+              <a class="source" href="a.html">
+                a.coffee
+              </a>
+            
+              
+              <a class="source" href="c.html">
+                c.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>main.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Klass.views.Main = Backbone.View.extend
+	
+	templateName: <span class="string">'main'</span>
+	
+	events:
+		<span class="string">'click a'</span>: <span class="string">'navigate'</span>
+	
+	initialize: (opts) -&gt;
+		{<span class="property">@menu</span>, <span class="property">@domain</span>, <span class="property">@views</span>, <span class="property">@graph</span>} = opts
+		
+		<span class="property">@render</span>()
+	
+	render: -&gt;
+		Backbone.View.prototype.render.call @
+		
+		<span class="property">@views</span>.top = <span class="keyword">new</span> Klass.views.Top
+			el: <span class="property">@$</span> <span class="string">'#top'</span>
+			model: <span class="property">@menu</span>
+			domain: <span class="property">@domain</span>
+			
+		<span class="property">@renderSections</span>()
+		
+		<span class="property">@views</span>.domain = <span class="keyword">new</span> Klass.views.Domain
+			el: <span class="property">@$</span> <span class="string">'#domain'</span>
+			model: <span class="property">@domain</span>
+	
+	renderSections: -&gt;
+		<span class="property">@views</span>.dashboard = <span class="keyword">new</span> Klass.views.Dashboard
+			el: <span class="property">@$</span> <span class="string">'#content'</span>
+			model: <span class="property">@graph</span>
+			domain: <span class="property">@domain</span>
+
+		<span class="property">@views</span>.pageflows = <span class="keyword">new</span> Klass.views.Pageflows
+			el: <span class="property">@$</span> <span class="string">'#content'</span>
+			
+		<span class="property">@views</span>.pageviews = <span class="keyword">new</span> Klass.views.Pageviews
+			el: <span class="property">@$</span> <span class="string">'#content'</span>
+				
+		<span class="property">@views</span>.pagelinks = <span class="keyword">new</span> Klass.views.Pagelinks
+			el: <span class="property">@$</span> <span class="string">'#content'</span>
+		
+	showSection: (section, opts) -&gt;
+		<span class="property">@views</span>.domain.hide()
+		<span class="property">@_hideAllSections</span>()
+		<span class="property">@$</span>(<span class="string">'#top'</span>).show()
+		
+		<span class="property">@menu</span>.set <span class="string">'active'</span>, section
+		<span class="property">@views</span>[section].show()
+	
+	showDomainForm: -&gt;
+		<span class="property">@_hideAllSections</span>()
+		<span class="property">@$</span>(<span class="string">'#top'</span>).hide()
+		<span class="property">@views</span>.domain.show()
+	
+	_hideAllSections: -&gt;
+		<span class="property">@$</span>(<span class="string">'#content &gt; .section'</span>).hide()</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
