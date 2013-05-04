@@ -1,11 +1,11 @@
-# **Pageviews** view class
+# **Pageviews** view class responsible for *Pageviews* section
 Klass.views.Pageviews = Backbone.View.extend
 	
 	templateName: 'pageviews'
 	
 	action: null
 	
-	# **initialize** - initializes Pageviews class
+	# **initialize** - class constructor
 	initialize: (opts) ->
 		@render()
 	
@@ -13,7 +13,7 @@ Klass.views.Pageviews = Backbone.View.extend
 
 	# **displayAction** - displays specific action by creating a new view
 	#
-	# * `action` can be *viewDetails* or *viewBasic*
+	# * `action` can be *viewDetails*, *viewBasic* or *viewChart*
 	# * `opts` is passed to created view's constructor
 	displayAction: (action, opts) ->
 		if @views[@action]?

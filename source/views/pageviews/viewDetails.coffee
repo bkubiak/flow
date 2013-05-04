@@ -1,7 +1,10 @@
+# **PageviewsViewDetails** view class responsible for displaying all pageviews
+# that belongs to specific category
 Klass.views.PageviewsViewDetails = Backbone.View.extend
 	
 	templateName: 'pageviewsViewDetails'
 	
+	# **initialize** - class constructor
 	initialize: (opts) ->
 		{category} = opts
 
@@ -17,6 +20,7 @@ Klass.views.PageviewsViewDetails = Backbone.View.extend
 		@model.fetch
 			success: => @render()
 	
+	# **templateHash** - used to pass variables to template
 	templateHash: ->
 		pageviewsModels = @model.getPageviewsCategory @bound.lower, @bound.upper
 		pageviews = for pageviewModel in pageviewsModels

@@ -1,3 +1,4 @@
+# **Dashboard** view class responsible for *Dashboard* section with graph
 Klass.views.Dashboard = Backbone.View.extend
 	
 	templateName: 'dashboard'
@@ -15,6 +16,7 @@ Klass.views.Dashboard = Backbone.View.extend
 		'click .layout-container a': 'setLayout'
 		'click #scc': 'bindSwitch'
 	
+	# **initialize** - class constructor
 	initialize: (opts) ->
 		{@domain} = opts
 		
@@ -24,6 +26,7 @@ Klass.views.Dashboard = Backbone.View.extend
 		@tooltip = Tooltip("flow-tooltip", 250)
 		@placement = new Klass.views.Placement {domainName: @domain.get('domain')}
 	
+	# **show** - shows section and ensures that model is fetched
 	show: ->
 		Backbone.View.prototype.show.call @
 		
@@ -31,6 +34,7 @@ Klass.views.Dashboard = Backbone.View.extend
 			@model.fetch
 				success: => @onFetch()
 	
+	# **onFetch** - draws chart
 	onFetch: ->
 		@modelFetched = yes
 		@thresholdAlpha = @computeThreshold 'alpha'
@@ -41,12 +45,18 @@ Klass.views.Dashboard = Backbone.View.extend
 			@drawChart()
 		, 100
 	
+	# **computeThreshold** - computes specific threshold
+	#
+	# * `type` - threshold type, can be *alpha* or *beta*
 	computeThreshold: (type) ->
 		if type is 'alpha'
 			parseInt Math.pow(@coefficientAlpha,4) * @model.getPageflowsMaxCount()
 		else
 			parseInt Math.pow(@coefficientBeta,4) * @model.getPageviewsMaxCount()
 	
+	# **bindSwitch** - enables/disables strongly connected components algorithm and draws chart
+	#
+	# * `e` - user's event
 	bindSwitch: (e) ->
 		$switch = $(e.currentTarget)
 
@@ -65,6 +75,7 @@ Klass.views.Dashboard = Backbone.View.extend
 		@$('.scc-container a').toggleClass('enabled')
 		@drawChart()
 	
+	# **bindSliders** - creates sliders and binds callbacks to them
 	bindSliders: ->
 		@$('#slider-alpha').slider
 			range: 'min'
@@ -96,6 +107,7 @@ Klass.views.Dashboard = Backbone.View.extend
 				@$('.pageviews-threshold').html @thresholdBeta
 				@drawChart()
 	
+	# **drawChart** - gets necessary data and draws chart
 	drawChart: ->
 		@data = @model.getData @thresholdAlpha, @thresholdBeta, @width, @height
 		
@@ -116,17 +128,11 @@ Klass.views.Dashboard = Backbone.View.extend
 		@nodesG = svg.append("g").attr("id", "nodes")
 		
 		@setLayout @layout
-
-		# @force.on "tick", =>
-		# 	@link.attr("x1", (d) => d.source.x)
-		# 		.attr("y1", (d) => d.source.y)
-		# 		.attr("x2", (d) => d.target.x)
-		# 		.attr("y2", (d) => d.target.y)
-		# 
-		# 	@node.attr("cx", (d) => d.x)
-		# 		.attr("cy", (d) => d.y)
 				
 	
+	# **getTooltipContent** - builds node's tooltip content
+	#
+	# * `node` - node's details
 	getTooltipContent: (node) ->
 		domain = @domain.get 'domain'
 		search = new RegExp "https?:\/\/#{domain}"
@@ -169,20 +175,24 @@ Klass.views.Dashboard = Backbone.View.extend
 		
 		content
 	
-	onMouseOver: (d,i) ->
+	# **onMouseOver** - shows tooltip when hovering mouse pointer over a node
+	#
+	# * `d` - node's details
+	onMouseOver: (d) ->
 		@tooltip.showTooltip(@getTooltipContent(d),d3.event)
 		
 		if @link
 			@link.style "stroke", (l) =>
-				# if l.source == d or l.target == d then "#fff" else "#aaa"
 				if l.source == d then "#fff" else "#aaa"
 			@link.style "stroke-opacity", (l) =>
-				# if l.source == d or l.target == d then 1.0 else 0.3
 				if l.source == d then 1.0 else 0.3
 		@node.style "stroke", (n) =>
 			if n.index == d.index then "#fff" else "#aaa"
 	
-	onMouseOut: (d, i) ->
+	# **onMouseOut** - hides tooltip when mouse pointer is out
+	#
+	# * `d` - node's details
+	onMouseOut: (d) ->
 		@tooltip.hideTooltip()
 		
 		if @link
@@ -190,7 +200,7 @@ Klass.views.Dashboard = Backbone.View.extend
 		@node.style("stroke","#ccc")
 	
 	
-	# enter/exit display for nodes
+	# **updateNodes** - resets nodes
 	updateNodes: ->
 		nodeColors = d3.scale.category20()
 		
@@ -208,7 +218,7 @@ Klass.views.Dashboard = Backbone.View.extend
 
 		@node.exit().remove()
 	
-	# enter/exit display for links
+	# **updateLinks** - resets links
 	updateLinks: ->
 		@link = @linksG.selectAll("line.link").data(@curLinksData, (d) -> "#{d.source.name}_#{d.target.name}")
 			
@@ -222,6 +232,9 @@ Klass.views.Dashboard = Backbone.View.extend
 
 		@link.exit().remove()
 	
+	# **setLayout** - sets chosen (in passed event) layout
+	#
+	# * `e` - user's event
 	setLayout: (e) ->
 		isEvent = typeof(e.isDefaultPrevented) isnt 'undefined'
 		
@@ -255,6 +268,7 @@ Klass.views.Dashboard = Backbone.View.extend
 		@update()
 		
 	
+	# **update** - updates graph
 	update: ->
 		@curNodesData = @data.nodes
 		@curLinksData = @data.links
@@ -279,7 +293,5 @@ Klass.views.Dashboard = Backbone.View.extend
 			@link = null
 
 		@force.start()
-		
-		# @node.call(@force.drag)			
 			
 	

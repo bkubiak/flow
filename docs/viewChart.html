@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>top.coffee</title>
+  <title>viewChart.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -131,7 +131,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>top.coffee</h1>
+                  <h1>viewChart.coffee</h1>
               </div>
           </li>
         
@@ -143,16 +143,16 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p><strong>Top</strong> view class responsible for top menu</p>
+              <p><strong>PageviewsViewChart</strong> view class responsible for displaying pageviews
+distrubution chart</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Klass.views.Top = Backbone.View.extend
+            <div class="content"><div class='highlight'><pre>Klass.views.PageviewsViewChart = Backbone.View.extend
 	
-	templateName: <span class="string">'top'</span>
+	templateName: <span class="string">'pageviewsViewChart'</span>
 	
-	events:
-		<span class="string">'click .delete'</span>: <span class="string">'deleteDomain'</span></pre></div></div>
+	isEmpty: <span class="literal">no</span></pre></div></div>
             
         </li>
         
@@ -168,10 +168,14 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>	initialize: (opts) -&gt;
-		{<span class="property">@domain</span>} = opts
-		<span class="property">@render</span>()
-		<span class="property">@model</span>.<span class="literal">on</span> <span class="string">'change:active'</span>, <span class="property">@setActive</span>, @
-		<span class="property">@domain</span>.<span class="literal">on</span> <span class="string">'change:domain'</span>, <span class="property">@render</span>, @</pre></div></div>
+		<span class="property">@model</span>.fetch
+			success: =&gt;
+				<span class="property">@isEmpty</span> = <span class="literal">no</span>
+				<span class="property">@render</span>()
+				<span class="property">@drawChart</span>()
+			error: =&gt;
+				<span class="property">@isEmpty</span> = <span class="literal">yes</span>
+				<span class="property">@render</span>()</pre></div></div>
             
         </li>
         
@@ -187,8 +191,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>	templateHash: -&gt;
-		menu: <span class="property">@model</span>.nav
-		domain: <span class="property">@domain</span>.get <span class="string">'domain'</span></pre></div></div>
+		isEmpty: <span class="property">@isEmpty</span></pre></div></div>
             
         </li>
         
@@ -199,15 +202,47 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p><strong>setActive</strong> - sets active menu item</p>
+              <p><strong>drawChart</strong> - draws distribution chart</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	setActive: -&gt;
-		<span class="property">@$</span>(<span class="string">'li.active'</span>).removeClass <span class="string">'active'</span>
+            <div class="content"><div class='highlight'><pre>	drawChart: -&gt;
+		width = <span class="number">750</span>
+		height = <span class="number">400</span>
+		margin = {top: <span class="number">75</span>, right: <span class="number">75</span>, bottom: <span class="number">75</span>, left: <span class="number">75</span>}
+		x = d3.scale.linear().range [<span class="number">0</span>, width]
+		y = d3.scale.linear().range [height, <span class="number">0</span>]
+		
+		xAxis = d3.svg.axis().scale(x).orient <span class="string">"bottom"</span>
+		yAxis = d3.svg.axis().scale(y).orient <span class="string">"left"</span>
+		
+		area = d3.svg.area()
+			.x((d) =&gt; x d.index)
+			.y0(height)
+			.y1((d) =&gt; y d.count)
+		
+		d3.select(<span class="string">"#pageviews svg"</span>).remove()
+		svg = d3.select(<span class="string">"#pageviews .pageviews-chart"</span>).append(<span class="string">"svg"</span>)
+			.attr(<span class="string">"width"</span>, width + margin.left + margin.right)
+			.attr(<span class="string">"height"</span>, height + margin.top + margin.bottom)
+			.append(<span class="string">"g"</span>).attr(<span class="string">"transform"</span>, <span class="string">"translate("</span> + margin.left + <span class="string">","</span> + margin.top + <span class="string">")"</span>)
+		
+		data = <span class="property">@getData</span>()
+		
+		x.domain [<span class="number">0</span>, d3.max(data, (d) =&gt; d.index )]
+		y.domain [<span class="number">0</span>, d3.max(data, (d) =&gt; d.count )]
 
-		active = <span class="property">@model</span>.get <span class="string">'active'</span>
-		<span class="property">@$</span>(<span class="string">"li[data-section=<span class="subst">#{active}</span>]"</span>).addClass <span class="string">'active'</span></pre></div></div>
+		svg.append(<span class="string">"path"</span>).datum(data).attr(<span class="string">"class"</span>, <span class="string">"area"</span>).attr(<span class="string">"d"</span>, area)
+			
+		svg.append(<span class="string">"g"</span>).attr(<span class="string">"class"</span>, <span class="string">"x axis"</span>)
+			.attr(<span class="string">"transform"</span>, <span class="string">"translate(0,"</span> + height + <span class="string">")"</span>).call(xAxis)
+			.append(<span class="string">"text"</span>).text(<span class="string">"index"</span>).attr(<span class="string">"x"</span>,width).attr(<span class="string">"y"</span>, <span class="number">40</span>)
+			.style(<span class="string">"fill"</span>,<span class="string">"#888"</span>).style(<span class="string">"text-anchor"</span>, <span class="string">"end"</span>)
+			
+		svg.append(<span class="string">"g"</span>).attr(<span class="string">"class"</span>, <span class="string">"y axis"</span>).call(yAxis)
+			.append(<span class="string">"text"</span>).attr(<span class="string">"transform"</span>, <span class="string">"rotate(-90)"</span>)
+			.attr(<span class="string">"y"</span>, <span class="number">20</span>).attr(<span class="string">"dy"</span>, <span class="string">"5px"</span>).text(<span class="string">"pageview count"</span>)
+			.style(<span class="string">"fill"</span>,<span class="string">"#888"</span>).style(<span class="string">"text-anchor"</span>, <span class="string">"end"</span>)</pre></div></div>
             
         </li>
         
@@ -218,17 +253,18 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p><strong>deleteDomain</strong> - unsets domain name that is used in project</p>
+              <p><strong>getData</strong> - gets necessary data from model</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	deleteDomain: (e) -&gt;
-		e.preventDefault()
-
-		<span class="property">@domain</span>.destroy
-			success: =&gt;
-				<span class="property">@domain</span>.clear()
-				<span class="property">@navigate</span> <span class="string">'/domain'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>	getData: -&gt;
+		pageviewsModels = <span class="property">@model</span>.getPageviewsCategory(<span class="number">2</span>, <span class="property">@model</span>.at(<span class="property">@model</span>.length-<span class="number">2</span>).get(<span class="string">'count'</span>))
+		pageviews = <span class="keyword">for</span> pageviewsModel <span class="keyword">in</span> pageviewsModels
+			pageviewsModel.toJSON()
+		
+		<span class="keyword">for</span> pageview, index <span class="keyword">in</span> pageviews
+			count: pageview.count
+			index: index</pre></div></div>
             
         </li>
         

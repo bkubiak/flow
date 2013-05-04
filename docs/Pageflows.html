@@ -24,11 +24,6 @@
               </a>
             
               
-              <a class="source" href="Pagelinks.html">
-                Pagelinks.coffee
-              </a>
-            
-              
               <a class="source" href="Pageviews.html">
                 Pageviews.coffee
               </a>
@@ -51,11 +46,6 @@
               
               <a class="source" href="pageflow.html">
                 pageflow.coffee
-              </a>
-            
-              
-              <a class="source" href="pagelink.html">
-                pagelink.coffee
               </a>
             
               
@@ -89,13 +79,38 @@
               </a>
             
               
-              <a class="source" href="pagelinks.html">
-                pagelinks.coffee
+              <a class="source" href="viewBasic.html">
+                viewBasic.coffee
+              </a>
+            
+              
+              <a class="source" href="viewChart.html">
+                viewChart.coffee
+              </a>
+            
+              
+              <a class="source" href="viewDetails.html">
+                viewDetails.coffee
               </a>
             
               
               <a class="source" href="pageviews.html">
                 pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="viewBasic.html">
+                viewBasic.coffee
+              </a>
+            
+              
+              <a class="source" href="viewChart.html">
+                viewChart.coffee
+              </a>
+            
+              
+              <a class="source" href="viewDetails.html">
+                viewDetails.coffee
               </a>
             
               
@@ -106,16 +121,6 @@
               
               <a class="source" href="top.html">
                 top.coffee
-              </a>
-            
-              
-              <a class="source" href="a.html">
-                a.coffee
-              </a>
-            
-              
-              <a class="source" href="c.html">
-                c.coffee
               </a>
             
           </div>
@@ -138,7 +143,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p><strong>Pageflows</strong> view class</p>
+              <p><strong>Pageflows</strong> view class responsible for <em>Pageflows</em> section</p>
 
             </div>
             
@@ -157,7 +162,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p><strong>initialize</strong> - initializes Pageflows class</p>
+              <p><strong>initialize</strong> - class constructor</p>
 
             </div>
             
@@ -177,7 +182,7 @@
               </div>
               <p><strong>displayAction</strong> - displays specific action by creating a new view</p>
 <ul>
-<li><code>action</code> can be <em>viewDetails</em> or <em>viewBasic</em></li>
+<li><code>action</code> can be <em>viewDetails</em>, <em>viewBasic</em> or <em>viewChart</em></li>
 <li><code>opts</code> is passed to created view&#39;s constructor</li>
 </ul>
 
@@ -188,7 +193,7 @@
 			<span class="property">@views</span>[<span class="property">@action</span>].remove()
 
 		<span class="property">@action</span> = action
-
+		
 		<span class="keyword">if</span> <span class="property">@action</span> <span class="keyword">is</span> <span class="string">'viewDetails'</span> <span class="keyword">or</span> <span class="property">@action</span> <span class="keyword">is</span> <span class="string">'viewChart'</span>
 			<span class="property">@$</span>(<span class="string">'.back'</span>).show()
 		<span class="keyword">else</span>

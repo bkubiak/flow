@@ -1,9 +1,11 @@
+# **PageviewsViewBasic** view class responsible for displaying pageviews categories
 Klass.views.PageviewsViewBasic = Backbone.View.extend
 	
 	templateName: 'pageviewsViewBasic'
 	
 	isEmpty: no
 	
+	# **initialize** - class constructor
 	initialize: (opts) ->
 		@model.fetch
 			success: =>
@@ -13,6 +15,7 @@ Klass.views.PageviewsViewBasic = Backbone.View.extend
 				@isEmpty = yes
 				@render()
 	
+	# **templateHash** - used to pass variables to template
 	templateHash: ->
 		isEmpty: @isEmpty
 		cat1Count: @model.getPageviewsCategory(1, 5).length

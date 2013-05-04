@@ -1,9 +1,11 @@
+# **PageflowsViewBasic** view class responsible for displaying pageflows categories
 Klass.views.PageflowsViewBasic = Backbone.View.extend
 	
 	templateName: 'pageflowsViewBasic'
 	
 	isEmpty: no
 	
+	# **initialize** - class constructor
 	initialize: (opts) ->
 		@model.fetch
 			success: =>
@@ -13,6 +15,7 @@ Klass.views.PageflowsViewBasic = Backbone.View.extend
 				@isEmpty = yes
 				@render()
 	
+	# **templateHash** - used to pass variables to template
 	templateHash: ->
 		isEmpty: @isEmpty
 		cat1Count: @model.getPageflowsCategory(1, 5).length

@@ -1,3 +1,4 @@
+# **Menu** model class storing top menu items
 Klass.models.Menu = Backbone.Model.extend
 
 	nav:
@@ -9,6 +10,3 @@ Klass.models.Menu = Backbone.Model.extend
 		
 		'pageviews':
 			label: 'Pageviews'
-			
-		'pagelinks':
-			label: 'Pagelinks'

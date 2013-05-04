@@ -24,11 +24,6 @@
               </a>
             
               
-              <a class="source" href="Pagelinks.html">
-                Pagelinks.coffee
-              </a>
-            
-              
               <a class="source" href="Pageviews.html">
                 Pageviews.coffee
               </a>
@@ -51,11 +46,6 @@
               
               <a class="source" href="pageflow.html">
                 pageflow.coffee
-              </a>
-            
-              
-              <a class="source" href="pagelink.html">
-                pagelink.coffee
               </a>
             
               
@@ -89,13 +79,38 @@
               </a>
             
               
-              <a class="source" href="pagelinks.html">
-                pagelinks.coffee
+              <a class="source" href="viewBasic.html">
+                viewBasic.coffee
+              </a>
+            
+              
+              <a class="source" href="viewChart.html">
+                viewChart.coffee
+              </a>
+            
+              
+              <a class="source" href="viewDetails.html">
+                viewDetails.coffee
               </a>
             
               
               <a class="source" href="pageviews.html">
                 pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="viewBasic.html">
+                viewBasic.coffee
+              </a>
+            
+              
+              <a class="source" href="viewChart.html">
+                viewChart.coffee
+              </a>
+            
+              
+              <a class="source" href="viewDetails.html">
+                viewDetails.coffee
               </a>
             
               
@@ -106,16 +121,6 @@
               
               <a class="source" href="top.html">
                 top.coffee
-              </a>
-            
-              
-              <a class="source" href="a.html">
-                a.coffee
-              </a>
-            
-              
-              <a class="source" href="c.html">
-                c.coffee
               </a>
             
           </div>
@@ -138,7 +143,8 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              
+              <p><strong>Dashboard</strong> view class responsible for <em>Dashboard</em> section with graph</p>
+
             </div>
             
             <div class="content"><div class='highlight'><pre>Klass.views.Dashboard = Backbone.View.extend
@@ -156,25 +162,64 @@
 
 	events:
 		<span class="string">'click .layout-container a'</span>: <span class="string">'setLayout'</span>
-		<span class="string">'click #scc'</span>: <span class="string">'bindSwitch'</span>
-	
-	initialize: (opts) -&gt;
+		<span class="string">'click #scc'</span>: <span class="string">'bindSwitch'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p><strong>initialize</strong> - class constructor</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	initialize: (opts) -&gt;
 		{<span class="property">@domain</span>} = opts
 		
 		
 		<span class="property">@render</span>()
 		<span class="property">@bindSliders</span>()
 		<span class="property">@tooltip</span> = Tooltip(<span class="string">"flow-tooltip"</span>, <span class="number">250</span>)
-		<span class="property">@placement</span> = <span class="keyword">new</span> Klass.views.Placement {domainName: <span class="property">@domain</span>.get(<span class="string">'domain'</span>)}
-	
-	show: -&gt;
+		<span class="property">@placement</span> = <span class="keyword">new</span> Klass.views.Placement {domainName: <span class="property">@domain</span>.get(<span class="string">'domain'</span>)}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><strong>show</strong> - shows section and ensures that model is fetched</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	show: -&gt;
 		Backbone.View.prototype.show.call @
 		
 		<span class="keyword">unless</span> <span class="property">@modelFetched</span>
 			<span class="property">@model</span>.fetch
-				success: =&gt; <span class="property">@onFetch</span>()
-	
-	onFetch: -&gt;
+				success: =&gt; <span class="property">@onFetch</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><strong>onFetch</strong> - draws chart</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	onFetch: -&gt;
 		<span class="property">@modelFetched</span> = <span class="literal">yes</span>
 		<span class="property">@thresholdAlpha</span> = <span class="property">@computeThreshold</span> <span class="string">'alpha'</span>
 		<span class="property">@thresholdBeta</span> = <span class="property">@computeThreshold</span> <span class="string">'beta'</span>
@@ -182,15 +227,47 @@
 		<span class="property">@$</span>(<span class="string">'.pageviews-threshold'</span>).html <span class="property">@thresholdBeta</span>
 		setTimeout =&gt;
 			<span class="property">@drawChart</span>()
-		, <span class="number">100</span>
-	
-	computeThreshold: (type) -&gt;
+		, <span class="number">100</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><strong>computeThreshold</strong> - computes specific threshold</p>
+<ul>
+<li><code>type</code> - threshold type, can be <em>alpha</em> or <em>beta</em></li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	computeThreshold: (type) -&gt;
 		<span class="keyword">if</span> type <span class="keyword">is</span> <span class="string">'alpha'</span>
 			parseInt Math.pow(<span class="property">@coefficientAlpha</span>,<span class="number">4</span>) * <span class="property">@model</span>.getPageflowsMaxCount()
 		<span class="keyword">else</span>
-			parseInt Math.pow(<span class="property">@coefficientBeta</span>,<span class="number">4</span>) * <span class="property">@model</span>.getPageviewsMaxCount()
-	
-	bindSwitch: (e) -&gt;
+			parseInt Math.pow(<span class="property">@coefficientBeta</span>,<span class="number">4</span>) * <span class="property">@model</span>.getPageviewsMaxCount()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p><strong>bindSwitch</strong> - enables/disables strongly connected components algorithm and draws chart</p>
+<ul>
+<li><code>e</code> - user&#39;s event</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	bindSwitch: (e) -&gt;
 		$<span class="keyword">switch</span> = $(e.currentTarget)
 
 		<span class="keyword">if</span> $<span class="keyword">switch</span>.hasClass <span class="string">'on'</span>
@@ -206,9 +283,22 @@
 		
 		<span class="property">@scc</span> = <span class="keyword">not</span> <span class="property">@scc</span>
 		<span class="property">@$</span>(<span class="string">'.scc-container a'</span>).toggleClass(<span class="string">'enabled'</span>)
-		<span class="property">@drawChart</span>()
-	
-	bindSliders: -&gt;
+		<span class="property">@drawChart</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p><strong>bindSliders</strong> - creates sliders and binds callbacks to them</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	bindSliders: -&gt;
 		<span class="property">@$</span>(<span class="string">'#slider-alpha'</span>).slider
 			range: <span class="string">'min'</span>
 			animate: <span class="literal">yes</span>
@@ -237,9 +327,22 @@
 				<span class="property">@coefficientBeta</span> = ui.value
 				<span class="property">@thresholdBeta</span> = <span class="property">@computeThreshold</span> <span class="string">'beta'</span>
 				<span class="property">@$</span>(<span class="string">'.pageviews-threshold'</span>).html <span class="property">@thresholdBeta</span>
-				<span class="property">@drawChart</span>()
-	
-	drawChart: -&gt;
+				<span class="property">@drawChart</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p><strong>drawChart</strong> - gets necessary data and draws chart</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	drawChart: -&gt;
 		<span class="property">@data</span> = <span class="property">@model</span>.getData <span class="property">@thresholdAlpha</span>, <span class="property">@thresholdBeta</span>, <span class="property">@width</span>, <span class="property">@height</span>
 		
 		<span class="keyword">if</span> <span class="property">@scc</span>
@@ -263,25 +366,20 @@
         </li>
         
         
-        <li id="section-2">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>@force.on &quot;tick&quot;, =&gt;
-    @link.attr(&quot;x1&quot;, (d) =&gt; d.source.x)
-        .attr(&quot;y1&quot;, (d) =&gt; d.source.y)
-        .attr(&quot;x2&quot;, (d) =&gt; d.target.x)
-        .attr(&quot;y2&quot;, (d) =&gt; d.target.y)</p>
-<pre><code>@node.attr(&quot;cx&quot;, (d) =&gt; d.x)
-    .attr(&quot;cy&quot;, (d) =&gt; d.y)</code></pre>
+              <p><strong>getTooltipContent</strong> - builds node&#39;s tooltip content</p>
+<ul>
+<li><code>node</code> - node&#39;s details</li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>				
-	
-	getTooltipContent: (node) -&gt;
+            <div class="content"><div class='highlight'><pre>	getTooltipContent: (node) -&gt;
 		domain = <span class="property">@domain</span>.get <span class="string">'domain'</span>
 		search = <span class="keyword">new</span> RegExp <span class="string">"https?:\/\/<span class="subst">#{domain}</span>"</span>
 		name = <span class="keyword">unless</span> node.name <span class="keyword">is</span> <span class="string">"http://<span class="subst">#{domain}</span>/"</span> <span class="keyword">then</span> node.name.replace search, <span class="string">''</span> <span class="keyword">else</span> node.name
@@ -321,48 +419,52 @@
 				linksMaxNumber--
 			<span class="keyword">if</span> linkDetails.length &gt; <span class="number">5</span> <span class="keyword">then</span> content += <span class="string">'&lt;p class="link"&gt;...&lt;/p&gt;'</span>
 		
-		content
-	
-	onMouseOver: (d,i) -&gt;
+		content</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p><strong>onMouseOver</strong> - shows tooltip when hovering mouse pointer over a node</p>
+<ul>
+<li><code>d</code> - node&#39;s details</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	onMouseOver: (d) -&gt;
 		<span class="property">@tooltip</span>.showTooltip(<span class="property">@getTooltipContent</span>(d),d3.event)
 		
 		<span class="keyword">if</span> <span class="property">@link</span>
-			<span class="property">@link</span>.style <span class="string">"stroke"</span>, (l) =&gt;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>if l.source == d or l.target == d then &quot;#fff&quot; else &quot;#aaa&quot;</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>				<span class="keyword">if</span> l.source == d <span class="keyword">then</span> <span class="string">"#fff"</span> <span class="keyword">else</span> <span class="string">"#aaa"</span>
-			<span class="property">@link</span>.style <span class="string">"stroke-opacity"</span>, (l) =&gt;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-4">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>if l.source == d or l.target == d then 1.0 else 0.3</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>				<span class="keyword">if</span> l.source == d <span class="keyword">then</span> <span class="number">1.0</span> <span class="keyword">else</span> <span class="number">0.3</span>
+			<span class="property">@link</span>.style <span class="string">"stroke"</span>, (l) =&gt;
+				<span class="keyword">if</span> l.source == d <span class="keyword">then</span> <span class="string">"#fff"</span> <span class="keyword">else</span> <span class="string">"#aaa"</span>
+			<span class="property">@link</span>.style <span class="string">"stroke-opacity"</span>, (l) =&gt;
+				<span class="keyword">if</span> l.source == d <span class="keyword">then</span> <span class="number">1.0</span> <span class="keyword">else</span> <span class="number">0.3</span>
 		<span class="property">@node</span>.style <span class="string">"stroke"</span>, (n) =&gt;
-			<span class="keyword">if</span> n.index == d.index <span class="keyword">then</span> <span class="string">"#fff"</span> <span class="keyword">else</span> <span class="string">"#aaa"</span>
-	
-	onMouseOut: (d, i) -&gt;
+			<span class="keyword">if</span> n.index == d.index <span class="keyword">then</span> <span class="string">"#fff"</span> <span class="keyword">else</span> <span class="string">"#aaa"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p><strong>onMouseOut</strong> - hides tooltip when mouse pointer is out</p>
+<ul>
+<li><code>d</code> - node&#39;s details</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	onMouseOut: (d) -&gt;
 		<span class="property">@tooltip</span>.hideTooltip()
 		
 		<span class="keyword">if</span> <span class="property">@link</span>
@@ -372,13 +474,13 @@
         </li>
         
         
-        <li id="section-5">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>enter/exit display for nodes</p>
+              <p><strong>updateNodes</strong> - resets nodes</p>
 
             </div>
             
@@ -402,13 +504,13 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>enter/exit display for links</p>
+              <p><strong>updateLinks</strong> - resets links</p>
 
             </div>
             
@@ -423,9 +525,25 @@
 			.attr(<span class="string">"y2"</span>, (d) -&gt; d.target.y)
 			.style(<span class="string">"stroke-width"</span>, (d) =&gt; d.value)
 
-		<span class="property">@link</span>.exit().remove()
-	
-	setLayout: (e) -&gt;
+		<span class="property">@link</span>.exit().remove()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p><strong>setLayout</strong> - sets chosen (in passed event) layout</p>
+<ul>
+<li><code>e</code> - user&#39;s event</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	setLayout: (e) -&gt;
 		isEvent = <span class="keyword">typeof</span>(e.isDefaultPrevented) <span class="keyword">isnt</span> <span class="string">'undefined'</span>
 		
 		<span class="keyword">if</span> isEvent
@@ -455,10 +573,22 @@
 				<span class="property">@updateLinks</span>()
 		)
 		
-		<span class="property">@update</span>()
-		
-	
-	update: -&gt;
+		<span class="property">@update</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p><strong>update</strong> - updates graph</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	update: -&gt;
 		<span class="property">@curNodesData</span> = <span class="property">@data</span>.nodes
 		<span class="property">@curLinksData</span> = <span class="property">@data</span>.links
 		
@@ -475,11 +605,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>reset nodes in force layout</p>
 
@@ -494,19 +624,6 @@
 			<span class="property">@link</span> = <span class="literal">null</span>
 
 		<span class="property">@force</span>.start()</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <p>@node.call(@force.drag)            </p>
-
-            </div>
             
         </li>
         

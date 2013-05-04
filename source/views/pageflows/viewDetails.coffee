@@ -1,7 +1,10 @@
+# **PageflowsViewDetails** view class responsible for displaying all pageflows
+# that belongs to specific category
 Klass.views.PageflowsViewDetails = Backbone.View.extend
 	
 	templateName: 'pageflowsViewDetails'
 	
+	# **initialize** - class constructor
 	initialize: (opts) ->
 		{category} = opts
 		
@@ -17,6 +20,7 @@ Klass.views.PageflowsViewDetails = Backbone.View.extend
 		@model.fetch
 			success: => @render()
 	
+	# **templateHash** - used to pass variables to template
 	templateHash: ->
 		pageflowsModels = @model.getPageflowsCategory @bound.lower, @bound.upper
 		pageflows = for pageflowModel in pageflowsModels

@@ -5,6 +5,7 @@ MongoClient = mongo.MongoClient
 config =
 	url: "mongodb://localhost:27017/flow"
 
+# **add** - receives activity details from tracking code and saves it to the database
 exports.add = (req, res) ->
 	res.send 200
 	query = req.query

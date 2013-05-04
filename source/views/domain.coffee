@@ -1,3 +1,4 @@
+# **Domain** view class responsible for changing domain name
 Klass.views.Domain = Backbone.View.extend
 	
 	templateName: 'domain'
@@ -5,9 +6,13 @@ Klass.views.Domain = Backbone.View.extend
 	events:
 		'submit': 'setDomain'
 	
+	# **initialize** - class constructor
 	initialize: (opts) ->
 		@render()
 	
+	# **setDomain** - sets domain name that is used in project
+	#
+	# * `e` - user's event
 	setDomain: (e) ->
 		e.preventDefault()
 		

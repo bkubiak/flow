@@ -4,6 +4,7 @@ MongoClient = mongo.MongoClient
 config =
 	url: "mongodb://localhost:27017/flow"
 
+# **get** - gets all pageviews and their details from database
 exports.get = (req, res) ->
 	domain = req.params.domain
 	unless domain.length

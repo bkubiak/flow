@@ -3,12 +3,11 @@
 App.templates = (name) ->
 	jade.templates[name]
 
+# models initialization
 App.initModels = ->
 	@models.domain = new Klass.models.Domain()
 	
 	@models.menu = new Klass.models.Menu {}
-	
-	@collections.pagelinks = new Klass.collections.Pagelinks()
 	
 	@collections.pageviews = new Klass.collections.Pageviews {}, @models.domain
 	
@@ -16,6 +15,7 @@ App.initModels = ->
 	
 	@models.graph = new Klass.models.Graph {}, @collections.pageviews, @collections.pageflows
 
+# application initialization
 App.init = ->
 	@initModels()
 	
@@ -34,6 +34,6 @@ App.init = ->
 			pushState: yes
 
 
-# Start the app, poor bastard! :)
+# Start the app!
 $ ->
 	App.init()

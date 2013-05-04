@@ -7,6 +7,7 @@ activity = require './activity'
 crawler = require './crawler'
 
 
+# **addRoutes** - responsible for routing logic in api
 exports.addRoutes = (app) ->
 
 	app.get '/api/users', users.getAll

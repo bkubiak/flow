@@ -1,3 +1,4 @@
+# **Main** view class responsible for rendering all main sections and top menu
 Klass.views.Main = Backbone.View.extend
 	
 	templateName: 'main'
@@ -5,11 +6,13 @@ Klass.views.Main = Backbone.View.extend
 	events:
 		'click a': 'navigate'
 	
+	# **initialize** - class constructor
 	initialize: (opts) ->
 		{@menu, @domain, @views, @graph} = opts
 		
 		@render()
 	
+	# **render** - renders view
 	render: ->
 		Backbone.View.prototype.render.call @
 		
@@ -24,6 +27,7 @@ Klass.views.Main = Backbone.View.extend
 			el: @$ '#domain'
 			model: @domain
 	
+	# **renderSections** - renders all sections
 	renderSections: ->
 		@views.dashboard = new Klass.views.Dashboard
 			el: @$ '#content'
@@ -35,11 +39,11 @@ Klass.views.Main = Backbone.View.extend
 			
 		@views.pageviews = new Klass.views.Pageviews
 			el: @$ '#content'
-				
-		@views.pagelinks = new Klass.views.Pagelinks
-			el: @$ '#content'
-		
-	showSection: (section, opts) ->
+	
+	# **showSection** - shows specific section
+	#
+	# * `section` - which section must be shown
+	showSection: (section) ->
 		@views.domain.hide()
 		@_hideAllSections()
 		@$('#top').show()
@@ -47,10 +51,12 @@ Klass.views.Main = Backbone.View.extend
 		@menu.set 'active', section
 		@views[section].show()
 	
+	# **showDomainForm** - shows form to change domain name
 	showDomainForm: ->
 		@_hideAllSections()
 		@$('#top').hide()
 		@views.domain.show()
 	
+	# **_hideAllSections** - hides all sections
 	_hideAllSections: ->
 		@$('#content > .section').hide()

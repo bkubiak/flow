@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>pagelink.coffee</title>
+  <title>viewBasic.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -21,11 +21,6 @@
               
               <a class="source" href="Pageflows.html">
                 Pageflows.coffee
-              </a>
-            
-              
-              <a class="source" href="Pagelinks.html">
-                Pagelinks.coffee
               </a>
             
               
@@ -51,11 +46,6 @@
               
               <a class="source" href="pageflow.html">
                 pageflow.coffee
-              </a>
-            
-              
-              <a class="source" href="pagelink.html">
-                pagelink.coffee
               </a>
             
               
@@ -89,13 +79,38 @@
               </a>
             
               
-              <a class="source" href="pagelinks.html">
-                pagelinks.coffee
+              <a class="source" href="viewBasic.html">
+                viewBasic.coffee
+              </a>
+            
+              
+              <a class="source" href="viewChart.html">
+                viewChart.coffee
+              </a>
+            
+              
+              <a class="source" href="viewDetails.html">
+                viewDetails.coffee
               </a>
             
               
               <a class="source" href="pageviews.html">
                 pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="viewBasic.html">
+                viewBasic.coffee
+              </a>
+            
+              
+              <a class="source" href="viewChart.html">
+                viewChart.coffee
+              </a>
+            
+              
+              <a class="source" href="viewDetails.html">
+                viewDetails.coffee
               </a>
             
               
@@ -108,16 +123,6 @@
                 top.coffee
               </a>
             
-              
-              <a class="source" href="a.html">
-                a.coffee
-              </a>
-            
-              
-              <a class="source" href="c.html">
-                c.coffee
-              </a>
-            
           </div>
         </li>
       </ul>
@@ -126,7 +131,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>pagelink.coffee</h1>
+                  <h1>viewBasic.coffee</h1>
               </div>
           </li>
         
@@ -138,12 +143,15 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              
+              <p><strong>PageviewsViewBasic</strong> view class responsible for displaying pageviews categories</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>Klass.models.Pagelink = Backbone.Model.extend
+            <div class="content"><div class='highlight'><pre>Klass.views.PageviewsViewBasic = Backbone.View.extend
 	
-	urlRoot: <span class="string">'/api/pagelinks/www.restauracja-laura.pl'</span></pre></div></div>
+	templateName: <span class="string">'pageviewsViewBasic'</span>
+	
+	isEmpty: <span class="literal">no</span></pre></div></div>
             
         </li>
         
@@ -154,12 +162,41 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>urlRoot: &#39;/api/pagelinks/www.livechatinc.com&#39;</p>
+              <p><strong>initialize</strong> - class constructor</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	idAttribute: <span class="string">'url'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>	initialize: (opts) -&gt;
+		<span class="property">@model</span>.fetch
+			success: =&gt;
+				<span class="property">@isEmpty</span> = <span class="literal">no</span>
+				<span class="property">@render</span>()
+			error: =&gt;
+				<span class="property">@isEmpty</span> = <span class="literal">yes</span>
+				<span class="property">@render</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><strong>templateHash</strong> - used to pass variables to template</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	templateHash: -&gt;
+		isEmpty: <span class="property">@isEmpty</span>
+		cat1Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">1</span>, <span class="number">5</span>).length
+		cat2Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">6</span>, <span class="number">10</span>).length
+		cat3Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">11</span>, <span class="number">50</span>).length
+		cat4Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">51</span>, <span class="number">100</span>).length
+		cat5Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">101</span>, <span class="number">500</span>).length
+		cat6Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">501</span>, <span class="number">1000</span>).length
+		cat7Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">1001</span>).length</pre></div></div>
             
         </li>
         

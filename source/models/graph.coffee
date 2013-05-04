@@ -1,10 +1,19 @@
+# **Graph** model class responsible for managing data (nodes and links) to draw a graph
 Klass.models.Graph = Backbone.Model.extend
 	
 	pageflowsFetched: no
 	pageviewsFetched: no
 	
+	# **initialize** - class constructor
+	#
+	# * `attrs` - initial attributes
+	# * `pageviews` - pageviews model
+	# * `pageflows`- pageflows model
 	initialize: (attrs, @pageviews, @pageflows) ->
 	
+	# **fetch** - tries to fetch pageviews and pageflows from api
+	#
+	# * `opts` - optional param containing *success* callback
 	fetch: (opts) ->
 		@pageflows.fetch
 			success: =>
@@ -16,14 +25,23 @@ Klass.models.Graph = Backbone.Model.extend
 				@pageviewsFetched = yes
 				if @pageflowsFetched then opts.success()
 	
+	# **getPageflowsMaxCount** - gets the biggest count value of pageflows
 	getPageflowsMaxCount: ->
 		if @pageflowsFetched then @pageflows.getMaxCount() else no
 	
+	# **getPageviewsMaxCount** - gets the biggest count value of pageviews
 	getPageviewsMaxCount: ->
 		if @pageviewsFetched then @pageviews.getMaxCount() else no
 	
 	
 	
+	# **getData** - gets data from pageviews and pageflows collections,
+	# processes it and passes to *setupRawData* function
+	#
+	# * `thresholdAlpha` - threshold alpha related to pageflows
+	# * `thresholdBeta` - threshold beta related to pageviews
+	# * `width` - width of the graph layer
+	# * `height` - height of the graph layer
 	getData: (thresholdAlpha, thresholdBeta, width, height) ->
 		unless @pageflowsFetched and @pageviewsFetched
 			return no
@@ -87,9 +105,11 @@ Klass.models.Graph = Backbone.Model.extend
 		
 		data = @setupRawData rawData, width, height
 	
-	
-	# extend data for radius, x & y pos, value;
-	# also source and target points to node instead of name
+	# **setupRawData** - processes raw data obtained from api
+	#
+	# * `data` - data to set up
+	# * `width` - width of the graph layer
+	# * `height` - height of the graph layer
 	setupRawData: (data, width, height) ->
 		data.nodes.forEach (n) =>
 			# set initial x/y to values within the width/height of the visualization
@@ -107,17 +127,18 @@ Klass.models.Graph = Backbone.Model.extend
 		data.links.forEach (l) =>
 			l.source = nodesMap.get(l.source)
 			l.target = nodesMap.get(l.target)
-			l.value = Math.log(l.count)/1.5
+			l.value = Math.log(l.count) / 1.5
 
 		data
 
 
 
 	
-	# implementation of Tarjan's strongly connected components algorithm
+	# **scc** - implements Tarjan's strongly connected components algorithm
+	#
+	# * `data` - raw data containing single nodes and links
 	scc: (data) ->
 		nodes = for node in data.nodes
-			# if node.name is 'http://www.livechatinc.com/' or node.name is 'https://www.livechatinc.com/signup/' then continue
 			$.extend {}, node,
 				index: -1
 				lowLink: -1
@@ -128,7 +149,6 @@ Klass.models.Graph = Backbone.Model.extend
 		for link in data.links
 			for node in nodes
 				if link.source.name is node.name
-					# unless link.target.name is 'http://www.livechatinc.com/' or link.target.name is 'https://www.livechatinc.com/signup/'
 					node.connections.push nodesMap.get(link.target.name)
 
 		@index = 0
@@ -142,6 +162,9 @@ Klass.models.Graph = Backbone.Model.extend
 		sccData = @setupSccData @sccNodes, data
 
 	
+	# **strongConnect** - starts finding new strongly connected component
+	#
+	# * `node` - node details with linked nodes references
 	strongConnect: (node) ->
 		node.index = @index
 		node.lowLink = @index
@@ -173,6 +196,10 @@ Klass.models.Graph = Backbone.Model.extend
 				@sccNodes.push innerNodes
 	
 	
+	# **setupSccData** - processes data obtained from strongly connected compontents algorithm
+	#
+	# * `sccNodes` - raw nodes obtained from scc algorithm; must be adjusted
+	# * `data` - raw data containing single nodes and links; used to generate new links for scc nodes
 	setupSccData: (sccNodes, data) ->
 		nodes = []
 		links = []
@@ -225,7 +252,7 @@ Klass.models.Graph = Backbone.Model.extend
 			
 			if linksMap.hasOwnProperty("#{joinedLink.source.name}_#{joinedLink.target.name}")
 				joinedLink.count += linksMap["#{joinedLink.source.name}_#{joinedLink.target.name}"].count
-				joinedLink.value = Math.log(joinedLink.count)/1.5
+				joinedLink.value = Math.log(joinedLink.count) / 1.5
 			else
 				joinedLink.value = link.value
 			
@@ -240,23 +267,21 @@ Klass.models.Graph = Backbone.Model.extend
 	
 	
 	
-	# helper - map node name's to node objects (d3.map of names -> nodes)
+	# **mapNodes** - helper function, maps node name's to node objects (d3.map of names -> nodes)
+	#
+	# * `nodes` - nodes' details
 	mapNodes: (nodes) ->
 		nodesMap = d3.map()
 		nodes.forEach (n) =>
 			nodesMap.set(n.name, n)
 		nodesMap
 
-	# helper - check if nodes stack contains specified node
+	# **stackContains** - helper function, checks if nodes stack contains specified node
+	#
+	# * `stack` - stack of nodes
+	# * `node` - node's details
 	stackContains: (stack, node) ->
 		for stackNode in stack
 			if stackNode.name is stack.name
 				return yes
 		no
-	
-	
-	
-	
-	
-	
-	

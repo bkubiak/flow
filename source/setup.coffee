@@ -1,4 +1,4 @@
-# The application
+# The application consisting of specific class instances
 App =
 	views: {}
 	models: {}
@@ -12,6 +12,6 @@ Klass =
 	collections: {}
 	routers: {}
 
-#export App variable
+# export *App* and *Klass* variable
 window['App'] = App
 window['Klass'] = Klass

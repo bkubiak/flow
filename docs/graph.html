@@ -24,11 +24,6 @@
               </a>
             
               
-              <a class="source" href="Pagelinks.html">
-                Pagelinks.coffee
-              </a>
-            
-              
               <a class="source" href="Pageviews.html">
                 Pageviews.coffee
               </a>
@@ -51,11 +46,6 @@
               
               <a class="source" href="pageflow.html">
                 pageflow.coffee
-              </a>
-            
-              
-              <a class="source" href="pagelink.html">
-                pagelink.coffee
               </a>
             
               
@@ -89,13 +79,38 @@
               </a>
             
               
-              <a class="source" href="pagelinks.html">
-                pagelinks.coffee
+              <a class="source" href="viewBasic.html">
+                viewBasic.coffee
+              </a>
+            
+              
+              <a class="source" href="viewChart.html">
+                viewChart.coffee
+              </a>
+            
+              
+              <a class="source" href="viewDetails.html">
+                viewDetails.coffee
               </a>
             
               
               <a class="source" href="pageviews.html">
                 pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="viewBasic.html">
+                viewBasic.coffee
+              </a>
+            
+              
+              <a class="source" href="viewChart.html">
+                viewChart.coffee
+              </a>
+            
+              
+              <a class="source" href="viewDetails.html">
+                viewDetails.coffee
               </a>
             
               
@@ -106,16 +121,6 @@
               
               <a class="source" href="top.html">
                 top.coffee
-              </a>
-            
-              
-              <a class="source" href="a.html">
-                a.coffee
-              </a>
-            
-              
-              <a class="source" href="c.html">
-                c.coffee
               </a>
             
           </div>
@@ -334,7 +339,7 @@ also source and target points to node instead of name</p>
             <div class="content"><div class='highlight'><pre>		data.links.forEach (l) =&gt;
 			l.source = nodesMap.get(l.source)
 			l.target = nodesMap.get(l.target)
-			l.value = Math.log(l.count)/<span class="number">1.5</span>
+			l.value = Math.log(l.count) / <span class="number">1.5</span>
 
 		data</pre></div></div>
             
@@ -487,7 +492,7 @@ also source and target points to node instead of name</p>
 			
 			<span class="keyword">if</span> linksMap.hasOwnProperty(<span class="string">"<span class="subst">#{joinedLink.source.name}</span>_<span class="subst">#{joinedLink.target.name}</span>"</span>)
 				joinedLink.count += linksMap[<span class="string">"<span class="subst">#{joinedLink.source.name}</span>_<span class="subst">#{joinedLink.target.name}</span>"</span>].count
-				joinedLink.value = Math.log(joinedLink.count)/<span class="number">1.5</span>
+				joinedLink.value = Math.log(joinedLink.count) / <span class="number">1.5</span>
 			<span class="keyword">else</span>
 				joinedLink.value = link.value
 			

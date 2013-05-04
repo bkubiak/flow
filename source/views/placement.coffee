@@ -1,17 +1,26 @@
+# **Placement** view class responsible for placement of nodes in graph
 Klass.views.Placement = Backbone.View.extend
 
 	currentAngle: 0
-
+	
+	# **initialize** - class constructor
 	initialize: (opts) ->
 		{@domainName} = opts
-
+	
+	# **getPlacement** - gets coordinates for specified node
+	#
+	# * `key` - node's id
 	getPlacement: (key) ->
 		value = @values.get(key)
 		if !@values.has(key)
 			value = place(key)
 		value
 	
-	
+	# **randomPlacement** - responsible for random placement of nodes
+	#
+	# * `keys` - nodes' ids
+	# * `width` - graph layout width
+	# * `height` - graph layout height
 	randomPlacement: (keys, width, height) ->
 		@values = d3.map()
 		
@@ -21,6 +30,13 @@ Klass.views.Placement = Backbone.View.extend
 				y: Math.floor(Math.random()*height)
 		
 	
+	# **radialPlacement** - responsible for radial placement of nodes
+	#
+	# * `keys` - nodes' ids
+	# * `center` - graph layout center
+	# * `radius` - first circle radius
+	# * `increment` - increment angle value
+	# * `start` - start angle value
 	radialPlacement: (keys, center, radius, increment, start) ->
 		@currentAngle = start
 		
@@ -51,8 +67,13 @@ Klass.views.Placement = Backbone.View.extend
 		increment = 360 / secondCircleKeys.length
 
 		secondCircleKeys.forEach (k) => @placeOnCircle(k, center, radius, increment)
-
-	# Gets a new location for input key
+	
+	# **placeOnCircle** - computes coordinates for a node to place it on a circle
+	#
+	# * `key` - node's id
+	# * `center` - graph layout center
+	# * `radius` - first circle radius
+	# * `increment` - increment angle value
 	placeOnCircle: (key, center, radius, increment) ->
 		@values.set key,
 			x: (center.x + radius * Math.cos(@currentAngle * Math.PI / 180))

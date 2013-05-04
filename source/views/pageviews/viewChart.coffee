@@ -1,9 +1,12 @@
+# **PageviewsViewChart** view class responsible for displaying pageviews
+# distrubution chart
 Klass.views.PageviewsViewChart = Backbone.View.extend
 	
 	templateName: 'pageviewsViewChart'
 	
 	isEmpty: no
 	
+	# **initialize** - class constructor
 	initialize: (opts) ->
 		@model.fetch
 			success: =>
@@ -14,9 +17,11 @@ Klass.views.PageviewsViewChart = Backbone.View.extend
 				@isEmpty = yes
 				@render()
 	
+	# **templateHash** - used to pass variables to template
 	templateHash: ->
 		isEmpty: @isEmpty
 	
+	# **drawChart** - draws distribution chart
 	drawChart: ->
 		width = 750
 		height = 400
@@ -55,6 +60,7 @@ Klass.views.PageviewsViewChart = Backbone.View.extend
 			.attr("y", 20).attr("dy", "5px").text("pageview count")
 			.style("fill","#888").style("text-anchor", "end")
 	
+	# **getData** - gets necessary data from model
 	getData: ->
 		pageviewsModels = @model.getPageviewsCategory(2, @model.at(@model.length-2).get('count'))
 		pageviews = for pageviewsModel in pageviewsModels

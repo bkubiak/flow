@@ -5,6 +5,7 @@ url = require 'url'
 config =
 	url: "mongodb://localhost:27017/flow"
 
+# **get** - gets currently set domain name
 exports.get = (req, res) ->
 	MongoClient.connect config.url, (err, db) ->
 		if err then return console.log err
@@ -17,6 +18,7 @@ exports.get = (req, res) ->
 			res.json items[0]
 			db.close()
 
+# **set** - sets domain name
 exports.set = (req, res) ->
 	domain = req.body.domain
 	unless domain.length
@@ -31,6 +33,7 @@ exports.set = (req, res) ->
 			res.json result[0]
 			db.close()
 
+# **remove** - unsets domain name
 exports.remove = (req, res) ->
 	MongoClient.connect config.url, (err, db) ->
 		if err then return console.log err

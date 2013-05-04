@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>pageviews.coffee</title>
+  <title>viewDetails.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -131,7 +131,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>pageviews.coffee</h1>
+                  <h1>viewDetails.coffee</h1>
               </div>
           </li>
         
@@ -143,15 +143,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p><strong>Pageviews</strong> view class responsible for <em>Pageviews</em> section</p>
+              <p><strong>PageviewsViewDetails</strong> view class responsible for displaying all pageviews
+that belongs to specific category</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Klass.views.Pageviews = Backbone.View.extend
+            <div class="content"><div class='highlight'><pre>Klass.views.PageviewsViewDetails = Backbone.View.extend
 	
-	templateName: <span class="string">'pageviews'</span>
-	
-	action: <span class="literal">null</span></pre></div></div>
+	templateName: <span class="string">'pageviewsViewDetails'</span></pre></div></div>
             
         </li>
         
@@ -167,9 +166,19 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>	initialize: (opts) -&gt;
-		<span class="property">@render</span>()
-	
-		<span class="property">@views</span> = {}</pre></div></div>
+		{category} = opts
+
+		<span class="keyword">unless</span> <span class="regexp">/^(1|6|11|51|101|501|1001)-(5|10|50|100|500|1000|oo)$/</span>.test category
+			<span class="property">@navigate</span> <span class="string">'/pageviews'</span>
+			<span class="keyword">return</span>
+		
+		bounds = category.split <span class="string">'-'</span>
+		<span class="property">@bound</span> =
+			lower: bounds[<span class="number">0</span>]
+			upper: <span class="keyword">if</span> bounds[<span class="number">1</span>] <span class="keyword">is</span> <span class="string">'oo'</span> <span class="keyword">then</span> <span class="literal">null</span> <span class="keyword">else</span> bounds[<span class="number">1</span>]
+		
+		<span class="property">@model</span>.fetch
+			success: =&gt; <span class="property">@render</span>()</pre></div></div>
             
         </li>
         
@@ -180,30 +189,16 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p><strong>displayAction</strong> - displays specific action by creating a new view</p>
-<ul>
-<li><code>action</code> can be <em>viewDetails</em>, <em>viewBasic</em> or <em>viewChart</em></li>
-<li><code>opts</code> is passed to created view&#39;s constructor</li>
-</ul>
+              <p><strong>templateHash</strong> - used to pass variables to template</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	displayAction: (action, opts) -&gt;
-		<span class="keyword">if</span> <span class="property">@views</span>[<span class="property">@action</span>]?
-			<span class="property">@views</span>[<span class="property">@action</span>].remove()
-
-		<span class="property">@action</span> = action
-
-		<span class="keyword">if</span> <span class="property">@action</span> <span class="keyword">is</span> <span class="string">'viewDetails'</span> <span class="keyword">or</span> <span class="property">@action</span> <span class="keyword">is</span> <span class="string">'viewChart'</span>
-			<span class="property">@$</span>(<span class="string">'.back'</span>).show()
-		<span class="keyword">else</span>
-			<span class="property">@$</span>(<span class="string">'.back'</span>).hide()
-
-		opts = opts || {}
-		opts.el = <span class="property">@$</span> <span class="string">'.tile'</span>
-
-		cls = action.substr(<span class="number">0</span>, <span class="number">1</span>).toUpperCase() + action.substr(<span class="number">1</span>)
-		<span class="property">@views</span>[action] = <span class="keyword">new</span> Klass.views[<span class="string">"Pageviews<span class="subst">#{cls}</span>"</span>] opts</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	templateHash: -&gt;
+		pageviewsModels = <span class="property">@model</span>.getPageviewsCategory <span class="property">@bound</span>.lower, <span class="property">@bound</span>.upper
+		pageviews = <span class="keyword">for</span> pageviewModel <span class="keyword">in</span> pageviewsModels
+			pageviewModel.toJSON()
+		pageviews: pageviews
+		bounds: <span class="string">"<span class="subst">#{@bound.lower}</span>-<span class="subst">#{@bound.upper}</span>"</span></pre></div></div>
             
         </li>
         
