@@ -319,10 +319,9 @@
             
             <div class="content"><div class='highlight'><pre>	drawChart: -&gt;
 		<span class="property">@data</span> = <span class="property">@model</span>.getData <span class="property">@thresholdAlpha</span>, <span class="property">@thresholdBeta</span>, <span class="property">@width</span>, <span class="property">@height</span>
-		
+		console.log <span class="property">@data</span>
 		<span class="keyword">if</span> <span class="property">@scc</span>
 			<span class="property">@data</span> = <span class="property">@model</span>.scc <span class="property">@data</span>
-			console.log <span class="property">@data</span>
 		
 		
 		<span class="property">@$</span>(<span class="string">'.nodes-count'</span>).html <span class="property">@data</span>.nodes.length
@@ -569,7 +568,7 @@
 		
 		names = <span class="keyword">for</span> node <span class="keyword">in</span> <span class="property">@curNodesData</span>
 			node.name
-		
+
 		<span class="keyword">if</span> <span class="property">@layout</span> <span class="keyword">is</span> <span class="string">'radial'</span>
 			<span class="property">@force</span>.charge(-<span class="number">100</span>)
 			<span class="property">@placement</span>.radialPlacement(names, {x: <span class="property">@width</span> / <span class="number">2</span>, y: <span class="property">@height</span> / <span class="number">2</span>}, <span class="number">250</span>, <span class="number">20</span>, -<span class="number">120</span>)

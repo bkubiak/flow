@@ -224,13 +224,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>place homepage in the center</p>
+              <p>place homepage in the center if there is homepage</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>		homepage = <span class="string">"http://<span class="subst">#{@domainName}</span>/"</span>
-		<span class="property">@values</span>.set homepage, center
-		keys.splice keys.indexOf(homepage), <span class="number">1</span></pre></div></div>
+		<span class="keyword">unless</span> keys.indexOf(homepage) <span class="keyword">is</span> -<span class="number">1</span>
+			<span class="property">@values</span>.set homepage, center
+			keys.splice keys.indexOf(homepage), <span class="number">1</span></pre></div></div>
             
         </li>
         
