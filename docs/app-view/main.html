@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>top.coffee</title>
+  <title>main.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -17,46 +17,6 @@
           <a class="small" href="javascript:void(0);">+</a>
           <div id="jump_wrapper">
           <div id="jump_page">
-            
-              
-              <a class="source" href="Pageflows.html">
-                Pageflows.coffee
-              </a>
-            
-              
-              <a class="source" href="Pageviews.html">
-                Pageviews.coffee
-              </a>
-            
-              
-              <a class="source" href="domain.html">
-                domain.coffee
-              </a>
-            
-              
-              <a class="source" href="graph.html">
-                graph.coffee
-              </a>
-            
-              
-              <a class="source" href="menu.html">
-                menu.coffee
-              </a>
-            
-              
-              <a class="source" href="pageflow.html">
-                pageflow.coffee
-              </a>
-            
-              
-              <a class="source" href="pageview.html">
-                pageview.coffee
-              </a>
-            
-              
-              <a class="source" href="main.html">
-                main.coffee
-              </a>
             
               
               <a class="source" href="dashboard.html">
@@ -131,7 +91,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>top.coffee</h1>
+                  <h1>main.coffee</h1>
               </div>
           </li>
         
@@ -143,16 +103,16 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p><strong>Top</strong> view class responsible for top menu</p>
+              <p><strong>Main</strong> view class responsible for rendering all main sections and top menu</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Klass.views.Top = Backbone.View.extend
+            <div class="content"><div class='highlight'><pre>Klass.views.Main = Backbone.View.extend
 	
-	templateName: <span class="string">'top'</span>
+	templateName: <span class="string">'main'</span>
 	
 	events:
-		<span class="string">'click .delete'</span>: <span class="string">'deleteDomain'</span></pre></div></div>
+		<span class="string">'click a'</span>: <span class="string">'navigate'</span></pre></div></div>
             
         </li>
         
@@ -168,10 +128,9 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>	initialize: (opts) -&gt;
-		{<span class="property">@domain</span>} = opts
-		<span class="property">@render</span>()
-		<span class="property">@model</span>.<span class="literal">on</span> <span class="string">'change:active'</span>, <span class="property">@setActive</span>, @
-		<span class="property">@domain</span>.<span class="literal">on</span> <span class="string">'change:domain'</span>, <span class="property">@render</span>, @</pre></div></div>
+		{<span class="property">@menu</span>, <span class="property">@domain</span>, <span class="property">@views</span>, <span class="property">@graph</span>} = opts
+		
+		<span class="property">@render</span>()</pre></div></div>
             
         </li>
         
@@ -182,13 +141,23 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p><strong>templateHash</strong> - used to pass variables to template</p>
+              <p><strong>render</strong> - renders view</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	templateHash: -&gt;
-		menu: <span class="property">@model</span>.nav
-		domain: <span class="property">@domain</span>.get <span class="string">'domain'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>	render: -&gt;
+		Backbone.View.prototype.render.call @
+		
+		<span class="property">@views</span>.top = <span class="keyword">new</span> Klass.views.Top
+			el: <span class="property">@$</span> <span class="string">'#top'</span>
+			model: <span class="property">@menu</span>
+			domain: <span class="property">@domain</span>
+			
+		<span class="property">@renderSections</span>()
+		
+		<span class="property">@views</span>.domain = <span class="keyword">new</span> Klass.views.Domain
+			el: <span class="property">@$</span> <span class="string">'#domain'</span>
+			model: <span class="property">@domain</span></pre></div></div>
             
         </li>
         
@@ -199,15 +168,21 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p><strong>setActive</strong> - sets active menu item</p>
+              <p><strong>renderSections</strong> - renders all sections</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	setActive: -&gt;
-		<span class="property">@$</span>(<span class="string">'li.active'</span>).removeClass <span class="string">'active'</span>
+            <div class="content"><div class='highlight'><pre>	renderSections: -&gt;
+		<span class="property">@views</span>.dashboard = <span class="keyword">new</span> Klass.views.Dashboard
+			el: <span class="property">@$</span> <span class="string">'#content'</span>
+			model: <span class="property">@graph</span>
+			domain: <span class="property">@domain</span>
 
-		active = <span class="property">@model</span>.get <span class="string">'active'</span>
-		<span class="property">@$</span>(<span class="string">"li[data-section=<span class="subst">#{active}</span>]"</span>).addClass <span class="string">'active'</span></pre></div></div>
+		<span class="property">@views</span>.pageflows = <span class="keyword">new</span> Klass.views.Pageflows
+			el: <span class="property">@$</span> <span class="string">'#content'</span>
+			
+		<span class="property">@views</span>.pageviews = <span class="keyword">new</span> Klass.views.Pageviews
+			el: <span class="property">@$</span> <span class="string">'#content'</span></pre></div></div>
             
         </li>
         
@@ -218,17 +193,54 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p><strong>deleteDomain</strong> - unsets domain name that is used in project</p>
+              <p><strong>showSection</strong> - shows specific section</p>
+<ul>
+<li><code>section</code> - which section must be shown</li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	deleteDomain: (e) -&gt;
-		e.preventDefault()
+            <div class="content"><div class='highlight'><pre>	showSection: (section) -&gt;
+		<span class="property">@views</span>.domain.hide()
+		<span class="property">@_hideAllSections</span>()
+		<span class="property">@$</span>(<span class="string">'#top'</span>).show()
+		
+		<span class="property">@menu</span>.set <span class="string">'active'</span>, section
+		<span class="property">@views</span>[section].show()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p><strong>showDomainForm</strong> - shows form to change domain name</p>
 
-		<span class="property">@domain</span>.destroy
-			success: =&gt;
-				<span class="property">@domain</span>.clear()
-				<span class="property">@navigate</span> <span class="string">'/domain'</span></pre></div></div>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showDomainForm: -&gt;
+		<span class="property">@_hideAllSections</span>()
+		<span class="property">@$</span>(<span class="string">'#top'</span>).hide()
+		<span class="property">@views</span>.domain.show()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p><strong>_hideAllSections</strong> - hides all sections</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	_hideAllSections: -&gt;
+		<span class="property">@$</span>(<span class="string">'#content &gt; .section'</span>).hide()</pre></div></div>
             
         </li>
         

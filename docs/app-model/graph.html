@@ -19,16 +19,6 @@
           <div id="jump_page">
             
               
-              <a class="source" href="Pageflows.html">
-                Pageflows.coffee
-              </a>
-            
-              
-              <a class="source" href="Pageviews.html">
-                Pageviews.coffee
-              </a>
-            
-              
               <a class="source" href="domain.html">
                 domain.coffee
               </a>
@@ -53,76 +43,6 @@
                 pageview.coffee
               </a>
             
-              
-              <a class="source" href="main.html">
-                main.coffee
-              </a>
-            
-              
-              <a class="source" href="dashboard.html">
-                dashboard.coffee
-              </a>
-            
-              
-              <a class="source" href="domain.html">
-                domain.coffee
-              </a>
-            
-              
-              <a class="source" href="main.html">
-                main.coffee
-              </a>
-            
-              
-              <a class="source" href="pageflows.html">
-                pageflows.coffee
-              </a>
-            
-              
-              <a class="source" href="viewBasic.html">
-                viewBasic.coffee
-              </a>
-            
-              
-              <a class="source" href="viewChart.html">
-                viewChart.coffee
-              </a>
-            
-              
-              <a class="source" href="viewDetails.html">
-                viewDetails.coffee
-              </a>
-            
-              
-              <a class="source" href="pageviews.html">
-                pageviews.coffee
-              </a>
-            
-              
-              <a class="source" href="viewBasic.html">
-                viewBasic.coffee
-              </a>
-            
-              
-              <a class="source" href="viewChart.html">
-                viewChart.coffee
-              </a>
-            
-              
-              <a class="source" href="viewDetails.html">
-                viewDetails.coffee
-              </a>
-            
-              
-              <a class="source" href="placement.html">
-                placement.coffee
-              </a>
-            
-              
-              <a class="source" href="top.html">
-                top.coffee
-              </a>
-            
           </div>
         </li>
       </ul>
@@ -143,17 +63,52 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              
+              <p><strong>Graph</strong> model class responsible for managing data (nodes and links) to draw a graph</p>
+
             </div>
             
             <div class="content"><div class='highlight'><pre>Klass.models.Graph = Backbone.Model.extend
 	
 	pageflowsFetched: <span class="literal">no</span>
-	pageviewsFetched: <span class="literal">no</span>
-	
-	initialize: (attrs, <span class="property">@pageviews</span>, <span class="property">@pageflows</span>) -&gt;
-	
-	fetch: (opts) -&gt;
+	pageviewsFetched: <span class="literal">no</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p><strong>initialize</strong> - class constructor</p>
+<ul>
+<li><code>attrs</code> - initial attributes</li>
+<li><code>pageviews</code> - pageviews model</li>
+<li><code>pageflows</code>- pageflows model</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	initialize: (attrs, <span class="property">@pageviews</span>, <span class="property">@pageflows</span>) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><strong>fetch</strong> - tries to fetch pageviews and pageflows from api</p>
+<ul>
+<li><code>opts</code> - optional param containing <em>success</em> callback</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	fetch: (opts) -&gt;
 		<span class="property">@pageflows</span>.fetch
 			success: =&gt;
 				<span class="property">@pageflowsFetched</span> = <span class="literal">yes</span>
@@ -162,17 +117,61 @@
 		<span class="property">@pageviews</span>.fetch
 			success: =&gt;
 				<span class="property">@pageviewsFetched</span> = <span class="literal">yes</span>
-				<span class="keyword">if</span> <span class="property">@pageflowsFetched</span> <span class="keyword">then</span> opts.success()
-	
-	getPageflowsMaxCount: -&gt;
-		<span class="keyword">if</span> <span class="property">@pageflowsFetched</span> <span class="keyword">then</span> <span class="property">@pageflows</span>.getMaxCount() <span class="keyword">else</span> <span class="literal">no</span>
-	
-	getPageviewsMaxCount: -&gt;
-		<span class="keyword">if</span> <span class="property">@pageviewsFetched</span> <span class="keyword">then</span> <span class="property">@pageviews</span>.getMaxCount() <span class="keyword">else</span> <span class="literal">no</span>
-	
-	
-	
-	getData: (thresholdAlpha, thresholdBeta, width, height) -&gt;
+				<span class="keyword">if</span> <span class="property">@pageflowsFetched</span> <span class="keyword">then</span> opts.success()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><strong>getPageflowsMaxCount</strong> - gets the biggest count value of pageflows</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	getPageflowsMaxCount: -&gt;
+		<span class="keyword">if</span> <span class="property">@pageflowsFetched</span> <span class="keyword">then</span> <span class="property">@pageflows</span>.getMaxCount() <span class="keyword">else</span> <span class="literal">no</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><strong>getPageviewsMaxCount</strong> - gets the biggest count value of pageviews</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	getPageviewsMaxCount: -&gt;
+		<span class="keyword">if</span> <span class="property">@pageviewsFetched</span> <span class="keyword">then</span> <span class="property">@pageviews</span>.getMaxCount() <span class="keyword">else</span> <span class="literal">no</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p><strong>getData</strong> - gets data from pageviews and pageflows collections,
+processes it and passes to <em>setupRawData</em> function</p>
+<ul>
+<li><code>thresholdAlpha</code> - threshold alpha related to pageflows</li>
+<li><code>thresholdBeta</code> - threshold beta related to pageviews</li>
+<li><code>width</code> - width of the graph layer</li>
+<li><code>height</code> - height of the graph layer</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	getData: (thresholdAlpha, thresholdBeta, width, height) -&gt;
 		<span class="keyword">unless</span> <span class="property">@pageflowsFetched</span> <span class="keyword">and</span> <span class="property">@pageviewsFetched</span>
 			<span class="keyword">return</span> <span class="literal">no</span>
 		
@@ -189,11 +188,11 @@
         </li>
         
         
-        <li id="section-2">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>skip connections without nodes</p>
 
@@ -210,11 +209,11 @@
         </li>
         
         
-        <li id="section-3">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>add nodes with connections only</p>
 
@@ -240,11 +239,11 @@
         </li>
         
         
-        <li id="section-4">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>add the rest of the nodes</p>
 
@@ -274,14 +273,18 @@
         </li>
         
         
-        <li id="section-5">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>extend data for radius, x &amp; y pos, value;
-also source and target points to node instead of name</p>
+              <p><strong>setupRawData</strong> - processes raw data obtained from api</p>
+<ul>
+<li><code>data</code> - data to set up</li>
+<li><code>width</code> - width of the graph layer</li>
+<li><code>height</code> - height of the graph layer</li>
+</ul>
 
             </div>
             
@@ -291,11 +294,11 @@ also source and target points to node instead of name</p>
         </li>
         
         
-        <li id="section-6">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>set initial x/y to values within the width/height of the visualization</p>
 
@@ -311,11 +314,11 @@ also source and target points to node instead of name</p>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>id&#39;s -&gt; node objects</p>
 
@@ -326,11 +329,11 @@ also source and target points to node instead of name</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>switch links to point to node objects instead of id&#39;s</p>
 
@@ -346,33 +349,22 @@ also source and target points to node instead of name</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>implementation of Tarjan&#39;s strongly connected components algorithm</p>
+              <p><strong>scc</strong> - implements Tarjan&#39;s strongly connected components algorithm</p>
+<ul>
+<li><code>data</code> - raw data containing single nodes and links</li>
+</ul>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>	scc: (data) -&gt;
-		nodes = <span class="keyword">for</span> node <span class="keyword">in</span> data.nodes</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <p>if node.name is &#39;<a href="http://www.livechatinc.com/">http://www.livechatinc.com/</a>&#39; or node.name is &#39;<a href="https://www.livechatinc.com/signup/">https://www.livechatinc.com/signup/</a>&#39; then continue</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>			$.extend {}, node,
+		nodes = <span class="keyword">for</span> node <span class="keyword">in</span> data.nodes
+			$.extend {}, node,
 				index: -<span class="number">1</span>
 				lowLink: -<span class="number">1</span>
 				connections: []
@@ -381,22 +373,8 @@ also source and target points to node instead of name</p>
 
 		<span class="keyword">for</span> link <span class="keyword">in</span> data.links
 			<span class="keyword">for</span> node <span class="keyword">in</span> nodes
-				<span class="keyword">if</span> link.source.name <span class="keyword">is</span> node.name</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p>unless link.target.name is &#39;<a href="http://www.livechatinc.com/">http://www.livechatinc.com/</a>&#39; or link.target.name is &#39;<a href="https://www.livechatinc.com/signup/">https://www.livechatinc.com/signup/</a>&#39;</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>					node.connections.push nodesMap.get(link.target.name)
+				<span class="keyword">if</span> link.source.name <span class="keyword">is</span> node.name
+					node.connections.push nodesMap.get(link.target.name)
 
 		<span class="property">@index</span> = <span class="number">0</span>
 		<span class="property">@stack</span> = []
@@ -406,10 +384,25 @@ also source and target points to node instead of name</p>
 			<span class="keyword">if</span> node.index &lt; <span class="number">0</span>
 				<span class="property">@strongConnect</span> node
 
-		sccData = <span class="property">@setupSccData</span> <span class="property">@sccNodes</span>, data
+		sccData = <span class="property">@setupSccData</span> <span class="property">@sccNodes</span>, data</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p><strong>strongConnect</strong> - starts finding new strongly connected component</p>
+<ul>
+<li><code>node</code> - node details with linked nodes references</li>
+</ul>
 
-	
-	strongConnect: (node) -&gt;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	strongConnect: (node) -&gt;
 		node.index = <span class="property">@index</span>
 		node.lowLink = <span class="property">@index</span>
 		<span class="property">@index</span>++
@@ -437,10 +430,26 @@ also source and target points to node instead of name</p>
 					innerNodes.push w
 			
 			<span class="keyword">if</span> innerNodes.length &gt; <span class="number">0</span>
-				<span class="property">@sccNodes</span>.push innerNodes
-	
-	
-	setupSccData: (sccNodes, data) -&gt;
+				<span class="property">@sccNodes</span>.push innerNodes</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p><strong>setupSccData</strong> - processes data obtained from strongly connected compontents algorithm</p>
+<ul>
+<li><code>sccNodes</code> - raw nodes obtained from scc algorithm; must be adjusted</li>
+<li><code>data</code> - raw data containing single nodes and links; used to generate new links for scc nodes</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	setupSccData: (sccNodes, data) -&gt;
 		nodes = []
 		links = []
 		joinedNodesCount = <span class="number">0</span>
@@ -507,13 +516,16 @@ also source and target points to node instead of name</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>helper - map node name&#39;s to node objects (d3.map of names -&gt; nodes)</p>
+              <p><strong>mapNodes</strong> - helper function, maps node name&#39;s to node objects (d3.map of names -&gt; nodes)</p>
+<ul>
+<li><code>nodes</code> - nodes&#39; details</li>
+</ul>
 
             </div>
             
@@ -526,13 +538,17 @@ also source and target points to node instead of name</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p>helper - check if nodes stack contains specified node</p>
+              <p><strong>stackContains</strong> - helper function, checks if nodes stack contains specified node</p>
+<ul>
+<li><code>stack</code> - stack of nodes</li>
+<li><code>node</code> - node&#39;s details</li>
+</ul>
 
             </div>
             

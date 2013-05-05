@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>pageviews.coffee</title>
+  <title>viewBasic.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -17,46 +17,6 @@
           <a class="small" href="javascript:void(0);">+</a>
           <div id="jump_wrapper">
           <div id="jump_page">
-            
-              
-              <a class="source" href="Pageflows.html">
-                Pageflows.coffee
-              </a>
-            
-              
-              <a class="source" href="Pageviews.html">
-                Pageviews.coffee
-              </a>
-            
-              
-              <a class="source" href="domain.html">
-                domain.coffee
-              </a>
-            
-              
-              <a class="source" href="graph.html">
-                graph.coffee
-              </a>
-            
-              
-              <a class="source" href="menu.html">
-                menu.coffee
-              </a>
-            
-              
-              <a class="source" href="pageflow.html">
-                pageflow.coffee
-              </a>
-            
-              
-              <a class="source" href="pageview.html">
-                pageview.coffee
-              </a>
-            
-              
-              <a class="source" href="main.html">
-                main.coffee
-              </a>
             
               
               <a class="source" href="dashboard.html">
@@ -131,7 +91,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>pageviews.coffee</h1>
+                  <h1>viewBasic.coffee</h1>
               </div>
           </li>
         
@@ -143,15 +103,15 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p><strong>Pageviews</strong> view class responsible for <em>Pageviews</em> section</p>
+              <p><strong>PageviewsViewBasic</strong> view class responsible for displaying pageviews categories</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Klass.views.Pageviews = Backbone.View.extend
+            <div class="content"><div class='highlight'><pre>Klass.views.PageviewsViewBasic = Backbone.View.extend
 	
-	templateName: <span class="string">'pageviews'</span>
+	templateName: <span class="string">'pageviewsViewBasic'</span>
 	
-	action: <span class="literal">null</span></pre></div></div>
+	isEmpty: <span class="literal">no</span></pre></div></div>
             
         </li>
         
@@ -167,9 +127,13 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>	initialize: (opts) -&gt;
-		<span class="property">@render</span>()
-	
-		<span class="property">@views</span> = {}</pre></div></div>
+		<span class="property">@model</span>.fetch
+			success: =&gt;
+				<span class="property">@isEmpty</span> = <span class="literal">no</span>
+				<span class="property">@render</span>()
+			error: =&gt;
+				<span class="property">@isEmpty</span> = <span class="literal">yes</span>
+				<span class="property">@render</span>()</pre></div></div>
             
         </li>
         
@@ -180,30 +144,19 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p><strong>displayAction</strong> - displays specific action by creating a new view</p>
-<ul>
-<li><code>action</code> can be <em>viewDetails</em>, <em>viewBasic</em> or <em>viewChart</em></li>
-<li><code>opts</code> is passed to created view&#39;s constructor</li>
-</ul>
+              <p><strong>templateHash</strong> - used to pass variables to template</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	displayAction: (action, opts) -&gt;
-		<span class="keyword">if</span> <span class="property">@views</span>[<span class="property">@action</span>]?
-			<span class="property">@views</span>[<span class="property">@action</span>].remove()
-
-		<span class="property">@action</span> = action
-
-		<span class="keyword">if</span> <span class="property">@action</span> <span class="keyword">is</span> <span class="string">'viewDetails'</span> <span class="keyword">or</span> <span class="property">@action</span> <span class="keyword">is</span> <span class="string">'viewChart'</span>
-			<span class="property">@$</span>(<span class="string">'.back'</span>).show()
-		<span class="keyword">else</span>
-			<span class="property">@$</span>(<span class="string">'.back'</span>).hide()
-
-		opts = opts || {}
-		opts.el = <span class="property">@$</span> <span class="string">'.tile'</span>
-
-		cls = action.substr(<span class="number">0</span>, <span class="number">1</span>).toUpperCase() + action.substr(<span class="number">1</span>)
-		<span class="property">@views</span>[action] = <span class="keyword">new</span> Klass.views[<span class="string">"Pageviews<span class="subst">#{cls}</span>"</span>] opts</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	templateHash: -&gt;
+		isEmpty: <span class="property">@isEmpty</span>
+		cat1Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">1</span>, <span class="number">5</span>).length
+		cat2Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">6</span>, <span class="number">10</span>).length
+		cat3Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">11</span>, <span class="number">50</span>).length
+		cat4Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">51</span>, <span class="number">100</span>).length
+		cat5Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">101</span>, <span class="number">500</span>).length
+		cat6Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">501</span>, <span class="number">1000</span>).length
+		cat7Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">1001</span>).length</pre></div></div>
             
         </li>
         

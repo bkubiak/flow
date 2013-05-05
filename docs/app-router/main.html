@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>main.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>main.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p><strong>Main</strong> router class responsible for all routing logic in the application</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Klass.routers.Main = Backbone.Router.extend
+	routes: 
+		<span class="string">"domain"</span>:		<span class="string">"showDomain"</span>
+		<span class="string">"dashboard"</span>:	<span class="string">"showDashboard"</span>
+		<span class="string">"pageflows"</span>:	<span class="string">"showPageflows"</span>
+		<span class="string">"pageflows/chart"</span>: <span class="string">"showPageflowsChart"</span>
+		<span class="string">"pageflows/*category"</span>:	<span class="string">"showPageflowsDetails"</span>
+		<span class="string">"pageviews"</span>:	<span class="string">"showPageviews"</span>
+		<span class="string">"pageviews/chart"</span>: <span class="string">"showPageviewsChart"</span>
+		<span class="string">"pageviews/*category"</span>:	<span class="string">"showPageviewsDetails"</span>
+		<span class="string">"*notFound"</span>:	<span class="string">"e404"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p><strong>initialize</strong> - class constructor</p>
+<ul>
+<li><code>views</code> - views instances</li>
+<li><code>models</code> - models instances</li>
+<li><code>collections</code>- collections instances</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	initialize: (<span class="property">@views</span>, <span class="property">@models</span>, <span class="property">@collections</span>) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><strong>e404</strong> - 404 page, redirects to <em>/dashboard</em></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	e404: (path) -&gt;
+		<span class="property">@navigate</span> <span class="string">'/dashboard'</span>, trigger: <span class="literal">yes</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><strong>_navigateToDomain</strong> - redirects to <em>/domain</em></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	_navigateToDomain: -&gt;
+		<span class="property">@navigate</span> <span class="string">'/domain'</span>, trigger: <span class="literal">yes</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><strong>showDomain</strong> - shows domain form</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showDomain: -&gt;
+		<span class="keyword">unless</span> <span class="property">@models</span>.domain.has <span class="string">'domain'</span>
+			<span class="property">@setTitle</span> <span class="string">'Domain'</span>
+			<span class="property">@views</span>.main.showDomainForm()
+		<span class="keyword">else</span>
+			<span class="property">@navigate</span> <span class="string">'/dashboard'</span>, trigger: <span class="literal">yes</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p><strong>showDashboard</strong> - shows <em>dashboard</em> section</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showDashboard: -&gt;
+		<span class="keyword">unless</span> <span class="property">@models</span>.domain.has <span class="string">'domain'</span>
+			<span class="keyword">return</span> <span class="property">@_navigateToDomain</span>()
+		
+		<span class="property">@setTitle</span> <span class="string">'Dashboard'</span>
+		<span class="property">@views</span>.main.showSection <span class="string">'dashboard'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p><strong>showPageflows</strong> - shows <em>pageflows</em> section and <em>viewBasic</em> action</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showPageflows: -&gt;
+		<span class="keyword">unless</span> <span class="property">@models</span>.domain.has <span class="string">'domain'</span>
+			<span class="keyword">return</span> <span class="property">@_navigateToDomain</span>()
+		
+		<span class="property">@setTitle</span> <span class="string">'Pageflows'</span>
+		<span class="property">@views</span>.main.showSection <span class="string">'pageflows'</span>
+		<span class="property">@views</span>.pageflows.displayAction <span class="string">'viewBasic'</span>,
+			model: <span class="property">@collections</span>.pageflows</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p><strong>showPageflowsChart</strong> - shows <em>pageflows</em> section and <em>viewChart</em> action</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showPageflowsChart: -&gt;
+		<span class="keyword">unless</span> <span class="property">@models</span>.domain.has <span class="string">'domain'</span>
+			<span class="keyword">return</span> <span class="property">@_navigateToDomain</span>()
+		
+		<span class="property">@setTitle</span> <span class="string">'Pageflows - chart'</span>
+		<span class="property">@views</span>.main.showSection <span class="string">'pageflows'</span>
+		<span class="property">@views</span>.pageflows.displayAction <span class="string">'viewChart'</span>,
+			model: <span class="property">@collections</span>.pageflows</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p><strong>showPageflowsDetails</strong> - shows <em>pageflows</em> section and <em>viewDetails</em> action</p>
+<ul>
+<li><code>category</code> - which <em>pageflows</em> category must be shown</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showPageflowsDetails: (category) -&gt;
+		<span class="keyword">unless</span> <span class="property">@models</span>.domain.has <span class="string">'domain'</span>
+			<span class="keyword">return</span> <span class="property">@_navigateToDomain</span>()
+
+		<span class="property">@setTitle</span> <span class="string">'Pageflows - details'</span>
+		<span class="property">@views</span>.main.showSection <span class="string">'pageflows'</span>
+		<span class="property">@views</span>.pageflows.displayAction <span class="string">'viewDetails'</span>,
+			model: <span class="property">@collections</span>.pageflows
+			category: category</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p><strong>showPageviews</strong> - shows <em>pageviews</em> section and <em>viewBasic</em> action</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showPageviews: -&gt;
+		<span class="keyword">unless</span> <span class="property">@models</span>.domain.has <span class="string">'domain'</span>
+			<span class="keyword">return</span> <span class="property">@_navigateToDomain</span>()
+		
+		<span class="property">@setTitle</span> <span class="string">'Pageviews'</span>
+		<span class="property">@views</span>.main.showSection <span class="string">'pageviews'</span>
+		<span class="property">@views</span>.pageviews.displayAction <span class="string">'viewBasic'</span>,
+			model: <span class="property">@collections</span>.pageviews</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p><strong>showPageviewsChart</strong> - shows <em>pageviews</em> section and <em>viewChart</em> action</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showPageviewsChart: -&gt;
+		<span class="keyword">unless</span> <span class="property">@models</span>.domain.has <span class="string">'domain'</span>
+			<span class="keyword">return</span> <span class="property">@_navigateToDomain</span>()
+
+		<span class="property">@setTitle</span> <span class="string">'Pageviews - chart'</span>
+		<span class="property">@views</span>.main.showSection <span class="string">'pageviews'</span>
+		<span class="property">@views</span>.pageviews.displayAction <span class="string">'viewChart'</span>,
+			model: <span class="property">@collections</span>.pageviews</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p><strong>showPageviewsDetails</strong> - shows <em>pageviews</em> section and <em>viewDetails</em> action</p>
+<ul>
+<li><code>category</code> - which <em>pageviews</em> category must be shown</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showPageviewsDetails: (category) -&gt;
+		<span class="keyword">unless</span> <span class="property">@models</span>.domain.has <span class="string">'domain'</span>
+			<span class="keyword">return</span> <span class="property">@_navigateToDomain</span>()
+		
+		<span class="property">@setTitle</span> <span class="string">'Pageviews - details'</span>
+		<span class="property">@views</span>.main.showSection <span class="string">'pageviews'</span>
+		<span class="property">@views</span>.pageviews.displayAction <span class="string">'viewDetails'</span>,
+			model: <span class="property">@collections</span>.pageviews
+			category: category</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
