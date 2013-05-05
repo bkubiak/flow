@@ -19,6 +19,21 @@
           <div id="jump_page">
             
               
+              <a class="source" href="Pageflows.html">
+                Pageflows.coffee
+              </a>
+            
+              
+              <a class="source" href="Pageviews.html">
+                Pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="Validations.html">
+                Validations.coffee
+              </a>
+            
+              
               <a class="source" href="domain.html">
                 domain.coffee
               </a>
@@ -41,6 +56,11 @@
               
               <a class="source" href="pageview.html">
                 pageview.coffee
+              </a>
+            
+              
+              <a class="source" href="validation.html">
+                validation.coffee
               </a>
             
           </div>
@@ -468,13 +488,16 @@ processes it and passes to <em>setupRawData</em> function</p>
 					x: sccNode[<span class="number">0</span>].x
 					y: sccNode[<span class="number">0</span>].y
 					group: <span class="number">1</span>
+				
+				sccNode.sort (a, b) =&gt;
+					b.count - a.count
 					
 				<span class="keyword">for</span> innerNode <span class="keyword">in</span> sccNode
 					joinedNode.innerNames.push innerNode.name
 					joinedNode.count += innerNode.count
 					
 					sccNodesMap[innerNode.name] = joinedNode
-					
+				
 				joinedNode.radius = Math.log(joinedNode.count)*<span class="number">1.5</span>
 				
 				nodes.push joinedNode

@@ -41,6 +41,8 @@
 		<span class="string">"pageviews"</span>:	<span class="string">"showPageviews"</span>
 		<span class="string">"pageviews/chart"</span>: <span class="string">"showPageviewsChart"</span>
 		<span class="string">"pageviews/*category"</span>:	<span class="string">"showPageviewsDetails"</span>
+		<span class="string">"validator"</span>:	<span class="string">"showValidator"</span>
+		<span class="string">"validator/*page"</span>:	<span class="string">"showValidatorDetails"</span>
 		<span class="string">"*notFound"</span>:	<span class="string">"e404"</span></pre></div></div>
             
         </li>
@@ -274,6 +276,54 @@
 		<span class="property">@views</span>.pageviews.displayAction <span class="string">'viewDetails'</span>,
 			model: <span class="property">@collections</span>.pageviews
 			category: category</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p><strong>showValidator</strong> - shows <em>validator</em> section and <em>viewBasic</em> action</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showValidator: -&gt;
+		<span class="keyword">unless</span> <span class="property">@models</span>.domain.has <span class="string">'domain'</span>
+			<span class="keyword">return</span> <span class="property">@_navigateToDomain</span>()
+		
+		<span class="property">@setTitle</span> <span class="string">'Validator'</span>
+		<span class="property">@views</span>.main.showSection <span class="string">'validator'</span>
+		<span class="property">@views</span>.validator.displayAction <span class="string">'viewBasic'</span>
+			model: <span class="property">@collections</span>.pageviews</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p><strong>showValidatorDetails</strong> - shows <em>validator</em> section and <em>viewDetails</em> action</p>
+<ul>
+<li><code>page</code> - which <em>page</em> must be validated</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	showValidatorDetails: (page) -&gt;
+		<span class="keyword">unless</span> <span class="property">@models</span>.domain.has <span class="string">'domain'</span>
+			<span class="keyword">return</span> <span class="property">@_navigateToDomain</span>()
+		
+		<span class="property">@setTitle</span> <span class="string">'Validator - details'</span>
+		<span class="property">@views</span>.main.showSection <span class="string">'validator'</span>
+		<span class="property">@views</span>.validator.displayAction <span class="string">'viewDetails'</span>,
+			model: <span class="property">@collections</span>.validations
+			page: page</pre></div></div>
             
         </li>
         

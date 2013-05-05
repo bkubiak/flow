@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Pageflows.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="Pageflows.html">
+                Pageflows.coffee
+              </a>
+            
+              
+              <a class="source" href="Pageviews.html">
+                Pageviews.coffee
+              </a>
+            
+              
+              <a class="source" href="Validations.html">
+                Validations.coffee
+              </a>
+            
+              
+              <a class="source" href="domain.html">
+                domain.coffee
+              </a>
+            
+              
+              <a class="source" href="graph.html">
+                graph.coffee
+              </a>
+            
+              
+              <a class="source" href="menu.html">
+                menu.coffee
+              </a>
+            
+              
+              <a class="source" href="pageflow.html">
+                pageflow.coffee
+              </a>
+            
+              
+              <a class="source" href="pageview.html">
+                pageview.coffee
+              </a>
+            
+              
+              <a class="source" href="validation.html">
+                validation.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Pageflows.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p><strong>Pageflows</strong> collection class storing all pageflow models</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Klass.collections.Pageflows = Backbone.Collection.extend
+
+	model: Klass.models.Pageflow
+	fetched: <span class="literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p><strong>url</strong> - builds api url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	url: -&gt;
+		<span class="string">"/api/pageflows/<span class="subst">#{@domain.get('domain')}</span>"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><strong>initialize</strong> - class constructor</p>
+<ul>
+<li><code>attrs</code> - initial attributes</li>
+<li><code>domain</code> - domain model</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	initialize: (attrs, <span class="property">@domain</span>) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><strong>comparator</strong> - used to sort models</p>
+<ul>
+<li><code>pageflow</code> - pageflow model</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	comparator: (pageflow) -&gt;
+		pageflow.get <span class="string">'count'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><strong>fetch</strong> - gets data from api</p>
+<ul>
+<li><code>opts</code> - optional param containing <em>success</em> callback</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	fetch: (opts) -&gt;
+		opts = opts || {}
+		
+		<span class="keyword">if</span> <span class="property">@fetched</span> <span class="keyword">is</span> <span class="property">@domain</span>.get(<span class="string">'domain'</span>)
+			<span class="keyword">if</span> opts.success?
+				opts.success()
+		<span class="keyword">else</span>
+			success = opts.success
+			opts.<span class="function"><span class="title">success</span></span> = =&gt;
+				<span class="property">@fetched</span> = <span class="property">@domain</span>.get <span class="string">'domain'</span>
+				success()
+			Backbone.Collection.prototype.fetch.call @, opts</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p><strong>getPageflowsCategory</strong> - gets pageflows category basing on lower and upper bound</p>
+<ul>
+<li><code>lowerBound</code> - lower bound of the category</li>
+<li><code>upperBound</code> - upper bound of the category</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	getPageflowsCategory: (lowerBound, upperBound) -&gt;
+		<span class="property">@filter</span> (pageflow) =&gt;
+			<span class="keyword">if</span> upperBound?
+				pageflow.get(<span class="string">'count'</span>) &gt;= lowerBound &amp;&amp; pageflow.get(<span class="string">'count'</span>) &lt;= upperBound
+			<span class="keyword">else</span>
+				pageflow.get(<span class="string">'count'</span>) &gt;= lowerBound</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p><strong>getMaxCount</strong> - gets the biggest count value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	getMaxCount: -&gt;
+		<span class="property">@last</span>().get <span class="string">'count'</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -83,6 +83,21 @@
                 top.coffee
               </a>
             
+              
+              <a class="source" href="validator.html">
+                validator.coffee
+              </a>
+            
+              
+              <a class="source" href="viewBasic.html">
+                viewBasic.coffee
+              </a>
+            
+              
+              <a class="source" href="viewDetails.html">
+                viewDetails.coffee
+              </a>
+            
           </div>
         </li>
       </ul>
@@ -103,13 +118,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p><strong>PageviewsViewBasic</strong> view class responsible for displaying pageviews categories</p>
+              <p><strong>ValidatorViewBasic</strong> view class responsible for displaying a few pages to validate</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Klass.views.PageviewsViewBasic = Backbone.View.extend
+            <div class="content"><div class='highlight'><pre>Klass.views.ValidatorViewBasic = Backbone.View.extend
 	
-	templateName: <span class="string">'pageviewsViewBasic'</span>
+	templateName: <span class="string">'validatorViewBasic'</span>
 	
 	isEmpty: <span class="literal">no</span></pre></div></div>
             
@@ -149,14 +164,14 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>	templateHash: -&gt;
+		pages = <span class="property">@model</span>.getMostPopularPages()
+		pagesDetails = <span class="keyword">for</span> page <span class="keyword">in</span> pages
+			details = page.toJSON()
+			details.encodedUrl = encodeURIComponent details.url
+			details
+		
 		isEmpty: <span class="property">@isEmpty</span>
-		cat1Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">1</span>, <span class="number">5</span>).length
-		cat2Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">6</span>, <span class="number">10</span>).length
-		cat3Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">11</span>, <span class="number">50</span>).length
-		cat4Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">51</span>, <span class="number">100</span>).length
-		cat5Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">101</span>, <span class="number">500</span>).length
-		cat6Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">501</span>, <span class="number">1000</span>).length
-		cat7Count: <span class="property">@model</span>.getPageviewsCategory(<span class="number">1001</span>).length</pre></div></div>
+		pages: pagesDetails</pre></div></div>
             
         </li>
         

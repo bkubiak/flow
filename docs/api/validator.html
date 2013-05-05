@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>api.coffee</title>
+  <title>validator.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -56,7 +56,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>api.coffee</h1>
+                  <h1>validator.coffee</h1>
               </div>
           </li>
         
@@ -71,12 +71,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>domain = require <span class="string">'./domain'</span>
-pageviews = require <span class="string">'./pageviews'</span>
-pageflows = require <span class="string">'./pageflows'</span>
-validator = require <span class="string">'./validator'</span>
-activity = require <span class="string">'./activity'</span>
-crawler = require <span class="string">'./crawler'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>httpLib = require <span class="string">'http'</span></pre></div></div>
             
         </li>
         
@@ -87,26 +82,51 @@ crawler = require <span class="string">'./crawler'</span></pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p><strong>addRoutes</strong> - responsible for routing logic in api</p>
+              <p><strong>validate</strong> - validates specific page againts W3C validator</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>exports.<span class="function"><span class="title">addRoutes</span></span> = (app) -&gt;
+            <div class="content"><div class='highlight'><pre>exports.<span class="function"><span class="title">validate</span></span> = (req, res) -&gt;
+	url = req.params.url
+	<span class="keyword">unless</span> url.length
+		res.json <span class="number">404</span>, {error: <span class="string">'no url'</span>}
+		<span class="keyword">return</span> <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>samples URLs:
+url = &#39;<a href="http://www.livechatinc.com/">http://www.livechatinc.com/</a>&#39;
+url = &#39;<a href="http://validator.w3.org/">http://validator.w3.org/</a>&#39;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	
+	options =
+		host: <span class="string">'validator.w3.org'</span>
+		path: <span class="string">"/check?uri=<span class="subst">#{url}</span>&amp;output=json"</span>
+		headers:
+			<span class="string">"User-Agent"</span>: <span class="string">'flow'</span>
 	
-	app.get <span class="string">'/api/domain'</span>, domain.get
-	app.post <span class="string">'/api/domain'</span>, domain.set
-	app.<span class="keyword">delete</span> <span class="string">'/api/domain'</span>, domain.remove
-	
-	app.get <span class="string">'/api/pageviews/:domain'</span>, pageviews.get
-	app.get <span class="string">'/api/pageflows/:domain'</span>, pageflows.get
-	app.get <span class="string">'/api/validator/:url'</span>, validator.validate
-	
-	app.get <span class="string">'/api/activity'</span>, activity.add
-	
-	app.get <span class="string">'/api/crawler'</span>, crawler.run
-	
-	app.get <span class="string">'/api'</span>, (req, res) -&gt; res.send <span class="string">'Flow API'</span>
-	app.get <span class="string">'/api/*'</span>, (req, res) -&gt; res.send <span class="string">'Flow API'</span></pre></div></div>
+	httpLib.get options, (results) -&gt;
+		
+		json = <span class="string">''</span>
+		results.<span class="literal">on</span> <span class="string">'data'</span>, (chunk) =&gt; json += chunk
+		results.<span class="literal">on</span> <span class="string">'end'</span>, =&gt;
+			json = JSON.parse json
+			messages = []
+			<span class="keyword">if</span> json.messages? <span class="keyword">and</span> json.messages.length &gt; <span class="number">0</span>
+				<span class="keyword">for</span> message <span class="keyword">in</span> json.messages
+					messages.push message.message
+			res.json
+				page: url
+				errors: messages</pre></div></div>
             
         </li>
         

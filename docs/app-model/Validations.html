@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>pageview.coffee</title>
+  <title>Validations.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -71,7 +71,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>pageview.coffee</h1>
+                  <h1>Validations.coffee</h1>
               </div>
           </li>
         
@@ -83,15 +83,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p><strong>Pageview</strong> model class storing single pageview details</p>
+              <p><strong>Validations</strong> collection class storing all validation models</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Klass.models.Pageview = Backbone.Model.extend
-	
-	urlRoot: <span class="string">'/api/pageviews'</span>
-	
-	idAttribute: <span class="string">'url'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>Klass.collections.Validations = Backbone.Collection.extend
+
+	model: Klass.models.Validation</pre></div></div>
             
         </li>
         

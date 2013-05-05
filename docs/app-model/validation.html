@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>pageview.coffee</title>
+  <title>validation.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -71,7 +71,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>pageview.coffee</h1>
+                  <h1>validation.coffee</h1>
               </div>
           </li>
         
@@ -83,15 +83,29 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p><strong>Pageview</strong> model class storing single pageview details</p>
+              <p><strong>Validation</strong> model class storing validation results of specific page</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Klass.models.Pageview = Backbone.Model.extend
+            <div class="content"><div class='highlight'><pre>Klass.models.Validation = Backbone.Model.extend</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p><strong>url</strong> - builds api url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	url: -&gt;
+		<span class="string">'/api/validator/'</span> + encodeURIComponent <span class="property">@get</span> <span class="string">'page'</span>
 	
-	urlRoot: <span class="string">'/api/pageviews'</span>
-	
-	idAttribute: <span class="string">'url'</span></pre></div></div>
+	idAttribute: <span class="string">'page'</span></pre></div></div>
             
         </li>
         
