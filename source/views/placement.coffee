@@ -42,10 +42,11 @@ Klass.views.Placement = Backbone.View.extend
 		
 		@values = d3.map()
 
-		# place homepage in the center
+		# place homepage in the center if there is homepage
 		homepage = "http://#{@domainName}/"
-		@values.set homepage, center
-		keys.splice keys.indexOf(homepage), 1
+		unless keys.indexOf(homepage) is -1
+			@values.set homepage, center
+			keys.splice keys.indexOf(homepage), 1
 		
 		# number of keys to go in first circle
 		firstCircleCount = 360 / increment

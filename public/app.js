@@ -653,9 +653,9 @@
     drawChart: function() {
       var svg;
       this.data = this.model.getData(this.thresholdAlpha, this.thresholdBeta, this.width, this.height);
+      console.log(this.data);
       if (this.scc) {
         this.data = this.model.scc(this.data);
-        console.log(this.data);
       }
       this.$('.nodes-count').html(this.data.nodes.length);
       if (this.force != null) {
@@ -1113,7 +1113,8 @@
       });
     },
     templateHash: function() {
-      var pageflowModel, pageflows, pageflowsModels;
+      var pageflowModel, pageflows, pageflowsModels, upperBound;
+      upperBound = this.bound.upper === null ? "&infin;" : this.bound.upper;
       pageflowsModels = this.model.getPageflowsCategory(this.bound.lower, this.bound.upper);
       pageflows = (function() {
         var _i, _len, _results;
@@ -1126,7 +1127,7 @@
       })();
       return {
         pageflows: pageflows,
-        bounds: "" + this.bound.lower + "-" + this.bound.upper
+        bounds: "" + this.bound.lower + "-" + upperBound
       };
     }
   });
@@ -1307,7 +1308,8 @@
       });
     },
     templateHash: function() {
-      var pageviewModel, pageviews, pageviewsModels;
+      var pageviewModel, pageviews, pageviewsModels, upperBound;
+      upperBound = this.bound.upper === null ? "&infin;" : this.bound.upper;
       pageviewsModels = this.model.getPageviewsCategory(this.bound.lower, this.bound.upper);
       pageviews = (function() {
         var _i, _len, _results;
@@ -1320,7 +1322,7 @@
       })();
       return {
         pageviews: pageviews,
-        bounds: "" + this.bound.lower + "-" + this.bound.upper
+        bounds: "" + this.bound.lower + "-" + upperBound
       };
     }
   });
@@ -1387,8 +1389,10 @@
       this.currentAngle = start;
       this.values = d3.map();
       homepage = "http://" + this.domainName + "/";
-      this.values.set(homepage, center);
-      keys.splice(keys.indexOf(homepage), 1);
+      if (keys.indexOf(homepage) !== -1) {
+        this.values.set(homepage, center);
+        keys.splice(keys.indexOf(homepage), 1);
+      }
       firstCircleCount = 360 / increment;
       if (keys.length < firstCircleCount) {
         increment = 360 / keys.length;

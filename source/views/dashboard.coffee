@@ -110,10 +110,9 @@ Klass.views.Dashboard = Backbone.View.extend
 	# **drawChart** - gets necessary data and draws chart
 	drawChart: ->
 		@data = @model.getData @thresholdAlpha, @thresholdBeta, @width, @height
-		
+		console.log @data
 		if @scc
 			@data = @model.scc @data
-			console.log @data
 		
 		
 		@$('.nodes-count').html @data.nodes.length
@@ -275,7 +274,7 @@ Klass.views.Dashboard = Backbone.View.extend
 		
 		names = for node in @curNodesData
 			node.name
-		
+
 		if @layout is 'radial'
 			@force.charge(-100)
 			@placement.radialPlacement(names, {x: @width / 2, y: @height / 2}, 250, 20, -120)

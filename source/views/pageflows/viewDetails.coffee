@@ -22,8 +22,9 @@ Klass.views.PageflowsViewDetails = Backbone.View.extend
 	
 	# **templateHash** - used to pass variables to template
 	templateHash: ->
+		upperBound = if @bound.upper is null then "&infin;" else @bound.upper
 		pageflowsModels = @model.getPageflowsCategory @bound.lower, @bound.upper
 		pageflows = for pageflowModel in pageflowsModels
 			pageflowModel.toJSON()
 		pageflows: pageflows
-		bounds: "#{@bound.lower}-#{@bound.upper}"
+		bounds: "#{@bound.lower}-#{upperBound}"
