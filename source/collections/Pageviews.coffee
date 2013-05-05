@@ -50,3 +50,8 @@ Klass.collections.Pageviews = Backbone.Collection.extend
 	# **getMaxCount** - gets the biggest count value
 	getMaxCount: ->
 		@last().get 'count'
+	
+	getMostPopularPages: ->
+		pages = @last 5
+		
+		pages.reverse()

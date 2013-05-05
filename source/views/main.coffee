@@ -39,6 +39,9 @@ Klass.views.Main = Backbone.View.extend
 			
 		@views.pageviews = new Klass.views.Pageviews
 			el: @$ '#content'
+		
+		@views.validator = new Klass.views.Validator
+			el: @$ '#content'
 	
 	# **showSection** - shows specific section
 	#

@@ -13,6 +13,8 @@ App.initModels = ->
 	
 	@collections.pageflows = new Klass.collections.Pageflows {}, @models.domain
 	
+	@collections.validations = new Klass.collections.Validations {}
+	
 	@models.graph = new Klass.models.Graph {}, @collections.pageviews, @collections.pageflows
 
 # application initialization

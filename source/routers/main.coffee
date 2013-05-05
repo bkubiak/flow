@@ -9,6 +9,8 @@ Klass.routers.Main = Backbone.Router.extend
 		"pageviews":	"showPageviews"
 		"pageviews/chart": "showPageviewsChart"
 		"pageviews/*category":	"showPageviewsDetails"
+		"validator":	"showValidator"
+		"validator/*page":	"showValidatorDetails"
 		"*notFound":	"e404"
 
 	# **initialize** - class constructor
@@ -107,3 +109,26 @@ Klass.routers.Main = Backbone.Router.extend
 		@views.pageviews.displayAction 'viewDetails',
 			model: @collections.pageviews
 			category: category
+	
+	# **showValidator** - shows *validator* section and *viewBasic* action
+	showValidator: ->
+		unless @models.domain.has 'domain'
+			return @_navigateToDomain()
+		
+		@setTitle 'Validator'
+		@views.main.showSection 'validator'
+		@views.validator.displayAction 'viewBasic'
+			model: @collections.pageviews
+	
+	# **showValidatorDetails** - shows *validator* section and *viewDetails* action
+	#
+	# * `page` - which *page* must be validated
+	showValidatorDetails: (page) ->
+		unless @models.domain.has 'domain'
+			return @_navigateToDomain()
+		
+		@setTitle 'Validator - details'
+		@views.main.showSection 'validator'
+		@views.validator.displayAction 'viewDetails',
+			model: @collections.validations
+			page: page

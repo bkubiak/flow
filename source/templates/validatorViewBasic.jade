@@ -1,0 +1,11 @@
+.validator-basic
+	if isEmpty
+		p There are no records
+	else
+		p Validate most popular pages
+		ol
+			each page in pages
+				li
+					p
+						a(href='/validator/#{page.encodedUrl}') #{page.url} 
+						| (#{page.count} views)

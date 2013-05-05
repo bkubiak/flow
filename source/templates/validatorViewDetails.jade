@@ -1,0 +1,20 @@
+.validator-details
+	if fetched
+		p #{page}
+		if errorsLength
+			p
+				| The page 
+				span.red did not pass validation 
+				| against W3C Markup Validator).
+			p Found #{errorsLength} errors:
+			ul
+				each error in errors
+					li
+						p #{error}
+		else
+			p
+				| The page 
+				span.green passed validation 
+				| against W3C Markup Validator).
+	else
+		p Validating...

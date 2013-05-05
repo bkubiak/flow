@@ -394,3 +394,104 @@ buf.push('</ul><div class="domain"><p>' + escape((interp = domain) == null ? '' 
 }
 return buf.join("");
 }
+jade.templates["validator"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div id="validator" class="section"><h1>W3C Validator</h1><div class="tile"></div><a href="/validator" class="back">back to validator</a></div>');
+}
+return buf.join("");
+}
+jade.templates["validatorViewBasic"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div class="validator-basic">');
+if ( isEmpty)
+{
+buf.push('<p>There are no records</p>');
+}
+else
+{
+buf.push('<p>Validate most popular pages</p><ol>');
+// iterate pages
+;(function(){
+  if ('number' == typeof pages.length) {
+
+    for (var $index = 0, $$l = pages.length; $index < $$l; $index++) {
+      var page = pages[$index];
+
+buf.push('<li><p><a');
+buf.push(attrs({ 'href':('/validator/' + (page.encodedUrl) + '') }, {"href":true}));
+buf.push('>' + escape((interp = page.url) == null ? '' : interp) + ' </a>(' + escape((interp = page.count) == null ? '' : interp) + ' views)</p></li>');
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in pages) {
+      $$l++;      var page = pages[$index];
+
+buf.push('<li><p><a');
+buf.push(attrs({ 'href':('/validator/' + (page.encodedUrl) + '') }, {"href":true}));
+buf.push('>' + escape((interp = page.url) == null ? '' : interp) + ' </a>(' + escape((interp = page.count) == null ? '' : interp) + ' views)</p></li>');
+    }
+
+  }
+}).call(this);
+
+buf.push('</ol>');
+}
+buf.push('</div>');
+}
+return buf.join("");
+}
+jade.templates["validatorViewDetails"] = function(locals, attrs, escape, rethrow, merge) {
+attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<div class="validator-details">');
+if ( fetched)
+{
+buf.push('<p>' + escape((interp = page) == null ? '' : interp) + '</p>');
+if ( errorsLength)
+{
+buf.push('<p>The page <span class="red">did not pass validation </span>against W3C Markup Validator).</p><p>Found ' + escape((interp = errorsLength) == null ? '' : interp) + ' errors:</p><ul>');
+// iterate errors
+;(function(){
+  if ('number' == typeof errors.length) {
+
+    for (var $index = 0, $$l = errors.length; $index < $$l; $index++) {
+      var error = errors[$index];
+
+buf.push('<li><p>' + escape((interp = error) == null ? '' : interp) + '</p></li>');
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in errors) {
+      $$l++;      var error = errors[$index];
+
+buf.push('<li><p>' + escape((interp = error) == null ? '' : interp) + '</p></li>');
+    }
+
+  }
+}).call(this);
+
+buf.push('</ul>');
+}
+else
+{
+buf.push('<p>The page <span class="green">passed validation </span>against W3C Markup Validator).</p>');
+}
+}
+else
+{
+buf.push('<p>Validating...</p>');
+}
+buf.push('</div>');
+}
+return buf.join("");
+}

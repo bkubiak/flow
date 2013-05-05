@@ -10,3 +10,6 @@ Klass.models.Menu = Backbone.Model.extend
 		
 		'pageviews':
 			label: 'Pageviews'
+		
+		'validator':
+			label: 'Validator'

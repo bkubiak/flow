@@ -33,6 +33,8 @@
       "pageviews": "showPageviews",
       "pageviews/chart": "showPageviewsChart",
       "pageviews/*category": "showPageviewsDetails",
+      "validator": "showValidator",
+      "validator/*page": "showValidatorDetails",
       "*notFound": "e404"
     },
     initialize: function(views, models, collections) {
@@ -127,6 +129,27 @@
       return this.views.pageviews.displayAction('viewDetails', {
         model: this.collections.pageviews,
         category: category
+      });
+    },
+    showValidator: function() {
+      if (!this.models.domain.has('domain')) {
+        return this._navigateToDomain();
+      }
+      this.setTitle('Validator');
+      this.views.main.showSection('validator');
+      return this.views.validator.displayAction('viewBasic', {
+        model: this.collections.pageviews
+      });
+    },
+    showValidatorDetails: function(page) {
+      if (!this.models.domain.has('domain')) {
+        return this._navigateToDomain();
+      }
+      this.setTitle('Validator - details');
+      this.views.main.showSection('validator');
+      return this.views.validator.displayAction('viewDetails', {
+        model: this.collections.validations,
+        page: page
       });
     }
   });
@@ -360,7 +383,8 @@
       }
     },
     setupSccData: function(sccNodes, data) {
-      var innerNode, joinedLink, joinedNode, joinedNodesCount, key, link, links, linksMap, nodes, nodesMap, sccNode, sccNodesMap, _i, _j, _k, _len, _len1, _len2, _ref;
+      var innerNode, joinedLink, joinedNode, joinedNodesCount, key, link, links, linksMap, nodes, nodesMap, sccNode, sccNodesMap, _i, _j, _k, _len, _len1, _len2, _ref,
+        _this = this;
       nodes = [];
       links = [];
       joinedNodesCount = 0;
@@ -380,6 +404,9 @@
             y: sccNode[0].y,
             group: 1
           };
+          sccNode.sort(function(a, b) {
+            return b.count - a.count;
+          });
           for (_j = 0, _len1 = sccNode.length; _j < _len1; _j++) {
             innerNode = sccNode[_j];
             joinedNode.innerNames.push(innerNode.name);
@@ -462,6 +489,9 @@
       },
       'pageviews': {
         label: 'Pageviews'
+      },
+      'validator': {
+        label: 'Validator'
       }
     }
   });
@@ -482,6 +512,17 @@
   Klass.models.Pageview = Backbone.Model.extend({
     urlRoot: '/api/pageviews',
     idAttribute: 'url'
+  });
+
+}).call(this);
+
+(function() {
+
+  Klass.models.Validation = Backbone.Model.extend({
+    url: function() {
+      return '/api/validator/' + encodeURIComponent(this.get('page'));
+    },
+    idAttribute: 'page'
   });
 
 }).call(this);
@@ -901,7 +942,10 @@
       this.views.pageflows = new Klass.views.Pageflows({
         el: this.$('#content')
       });
-      return this.views.pageviews = new Klass.views.Pageviews({
+      this.views.pageviews = new Klass.views.Pageviews({
+        el: this.$('#content')
+      });
+      return this.views.validator = new Klass.views.Validator({
         el: this.$('#content')
       });
     },
@@ -1412,6 +1456,120 @@
 
 (function() {
 
+  Klass.views.ValidatorViewBasic = Backbone.View.extend({
+    templateName: 'validatorViewBasic',
+    isEmpty: false,
+    initialize: function(opts) {
+      var _this = this;
+      return this.model.fetch({
+        success: function() {
+          _this.isEmpty = false;
+          return _this.render();
+        },
+        error: function() {
+          _this.isEmpty = true;
+          return _this.render();
+        }
+      });
+    },
+    templateHash: function() {
+      var details, page, pages, pagesDetails;
+      pages = this.model.getMostPopularPages();
+      pagesDetails = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = pages.length; _i < _len; _i++) {
+          page = pages[_i];
+          details = page.toJSON();
+          details.encodedUrl = encodeURIComponent(details.url);
+          _results.push(details);
+        }
+        return _results;
+      })();
+      return {
+        isEmpty: this.isEmpty,
+        pages: pagesDetails
+      };
+    }
+  });
+
+}).call(this);
+
+(function() {
+
+  Klass.views.ValidatorViewDetails = Backbone.View.extend({
+    templateName: 'validatorViewDetails',
+    initialize: function(opts) {
+      var validationModel,
+        _this = this;
+      this.page = decodeURIComponent(opts.page);
+      if (this.model.get(this.page)) {
+        this.fetched = true;
+        return this.render();
+      } else {
+        this.fetched = false;
+        this.render();
+        validationModel = new Klass.models.Validation({
+          page: this.page
+        });
+        validationModel.fetch({
+          success: function() {
+            _this.fetched = true;
+            return _this.render();
+          }
+        });
+        return this.model.add(validationModel);
+      }
+    },
+    templateHash: function() {
+      var hash, validationDetails, validationModel;
+      hash = {
+        fetched: this.fetched,
+        page: this.page
+      };
+      if (this.fetched) {
+        validationModel = this.model.get(this.page);
+        validationDetails = this.model.get(this.page).toJSON();
+        hash.errors = validationDetails.errors;
+        hash.errorsLength = validationDetails.errors.length;
+      }
+      return hash;
+    }
+  });
+
+}).call(this);
+
+(function() {
+
+  Klass.views.Validator = Backbone.View.extend({
+    templateName: 'validator',
+    action: null,
+    initialize: function(opts) {
+      this.render();
+      return this.views = {};
+    },
+    displayAction: function(action, opts) {
+      var cls;
+      if (this.views[this.action] != null) {
+        this.views[this.action].remove();
+      }
+      this.action = action;
+      if (this.action === 'viewDetails') {
+        this.$('.back').show();
+      } else {
+        this.$('.back').hide();
+      }
+      opts = opts || {};
+      opts.el = this.$('.tile');
+      cls = action.substr(0, 1).toUpperCase() + action.substr(1);
+      return this.views[action] = new Klass.views["Validator" + cls](opts);
+    }
+  });
+
+}).call(this);
+
+(function() {
+
   Klass.collections.Pageflows = Backbone.Collection.extend({
     model: Klass.models.Pageflow,
     fetched: null,
@@ -1501,7 +1659,20 @@
     },
     getMaxCount: function() {
       return this.last().get('count');
+    },
+    getMostPopularPages: function() {
+      var pages;
+      pages = this.last(5);
+      return pages.reverse();
     }
+  });
+
+}).call(this);
+
+(function() {
+
+  Klass.collections.Validations = Backbone.Collection.extend({
+    model: Klass.models.Validation
   });
 
 }).call(this);
@@ -1517,6 +1688,7 @@
     this.models.menu = new Klass.models.Menu({});
     this.collections.pageviews = new Klass.collections.Pageviews({}, this.models.domain);
     this.collections.pageflows = new Klass.collections.Pageflows({}, this.models.domain);
+    this.collections.validations = new Klass.collections.Validations({});
     return this.models.graph = new Klass.models.Graph({}, this.collections.pageviews, this.collections.pageflows);
   };
 

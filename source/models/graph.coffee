@@ -219,13 +219,16 @@ Klass.models.Graph = Backbone.Model.extend
 					x: sccNode[0].x
 					y: sccNode[0].y
 					group: 1
+				
+				sccNode.sort (a, b) =>
+					b.count - a.count
 					
 				for innerNode in sccNode
 					joinedNode.innerNames.push innerNode.name
 					joinedNode.count += innerNode.count
 					
 					sccNodesMap[innerNode.name] = joinedNode
-					
+				
 				joinedNode.radius = Math.log(joinedNode.count)*1.5
 				
 				nodes.push joinedNode

@@ -1,6 +1,7 @@
 domain = require './domain'
 pageviews = require './pageviews'
 pageflows = require './pageflows'
+validator = require './validator'
 activity = require './activity'
 crawler = require './crawler'
 
@@ -14,6 +15,7 @@ exports.addRoutes = (app) ->
 	
 	app.get '/api/pageviews/:domain', pageviews.get
 	app.get '/api/pageflows/:domain', pageflows.get
+	app.get '/api/validator/:url', validator.validate
 	
 	app.get '/api/activity', activity.add
 	
