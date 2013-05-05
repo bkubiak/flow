@@ -33,8 +33,6 @@
       "pageviews": "showPageviews",
       "pageviews/chart": "showPageviewsChart",
       "pageviews/*category": "showPageviewsDetails",
-      "pagelinks": "showPagelinks",
-      "pagelinks/*baseUrl": "showPagelinksDetails",
       "*notFound": "e404"
     },
     initialize: function(views, models, collections) {
@@ -129,27 +127,6 @@
       return this.views.pageviews.displayAction('viewDetails', {
         model: this.collections.pageviews,
         category: category
-      });
-    },
-    showPagelinks: function() {
-      if (!this.models.domain.has('domain')) {
-        return this._navigateToDomain();
-      }
-      this.setTitle('Pagelinks');
-      this.views.main.showSection('pagelinks');
-      return this.views.pagelinks.displayAction('viewBasic', {
-        model: this.collections.pagelinks
-      });
-    },
-    showPagelinksDetails: function(baseUrl) {
-      if (!this.models.domain.has('domain')) {
-        return this._navigateToDomain();
-      }
-      this.setTitle('Pagelinks - details');
-      this.views.main.showSection('pagelinks');
-      return this.views.pagelinks.displayAction('viewDetails', {
-        model: this.collections.pagelinks,
-        baseUrl: baseUrl
       });
     }
   });
@@ -485,9 +462,6 @@
       },
       'pageviews': {
         label: 'Pageviews'
-      },
-      'pagelinks': {
-        label: 'Pagelinks'
       }
     }
   });
@@ -498,15 +472,6 @@
 
   Klass.models.Pageflow = Backbone.Model.extend({
     urlRoot: '/api/pageflows',
-    idAttribute: 'url'
-  });
-
-}).call(this);
-
-(function() {
-
-  Klass.models.Pagelink = Backbone.Model.extend({
-    urlRoot: '/api/pagelinks/www.restauracja-laura.pl',
     idAttribute: 'url'
   });
 
@@ -725,7 +690,7 @@
       }
       return content;
     },
-    onMouseOver: function(d, i) {
+    onMouseOver: function(d) {
       var _this = this;
       this.tooltip.showTooltip(this.getTooltipContent(d), d3.event);
       if (this.link) {
@@ -752,7 +717,7 @@
         }
       });
     },
-    onMouseOut: function(d, i) {
+    onMouseOut: function(d) {
       this.tooltip.hideTooltip();
       if (this.link) {
         this.link.style("stroke", "#aaa").style("stroke-opacity", 0.5);
@@ -936,14 +901,11 @@
       this.views.pageflows = new Klass.views.Pageflows({
         el: this.$('#content')
       });
-      this.views.pageviews = new Klass.views.Pageviews({
-        el: this.$('#content')
-      });
-      return this.views.pagelinks = new Klass.views.Pagelinks({
+      return this.views.pageviews = new Klass.views.Pageviews({
         el: this.$('#content')
       });
     },
-    showSection: function(section, opts) {
+    showSection: function(section) {
       this.views.domain.hide();
       this._hideAllSections();
       this.$('#top').show();
@@ -1151,84 +1113,6 @@
       opts.el = this.$('.tile');
       cls = action.substr(0, 1).toUpperCase() + action.substr(1);
       return this.views[action] = new Klass.views["Pageflows" + cls](opts);
-    }
-  });
-
-}).call(this);
-
-(function() {
-
-  Klass.views.PagelinksViewBasic = Backbone.View.extend({
-    templateName: 'pagelinksViewBasic',
-    initialize: function(opts) {
-      var _this = this;
-      return this.model.fetch({
-        success: function() {
-          return _this.render();
-        }
-      });
-    }
-  });
-
-}).call(this);
-
-(function() {
-
-  Klass.views.PagelinksViewDetails = Backbone.View.extend({
-    templateName: 'pagelinksViewDetails',
-    initialize: function(opts) {
-      var baseUrl;
-      baseUrl = opts.baseUrl;
-      this.baseUrl = decodeURIComponent(baseUrl);
-      return this.model.fetch({
-        success: _.bind(this.fetch, this)
-      });
-    },
-    fetch: function() {
-      var pagelink,
-        _this = this;
-      pagelink = this.model.get(this.baseUrl);
-      if (!pagelink) {
-        this.navigate('/pagelinks');
-        return;
-      }
-      return pagelink.fetch({
-        success: function() {
-          return _this.render();
-        }
-      });
-    },
-    templateHash: function() {
-      return this.model.get(this.baseUrl).toJSON();
-    }
-  });
-
-}).call(this);
-
-(function() {
-
-  Klass.views.Pagelinks = Backbone.View.extend({
-    templateName: 'pagelinks',
-    action: null,
-    initialize: function(opts) {
-      this.render();
-      return this.views = {};
-    },
-    displayAction: function(action, opts) {
-      var cls;
-      if (this.views[this.action] != null) {
-        this.views[this.action].remove();
-      }
-      this.action = action;
-      if (this.action === 'viewDetails') {
-        this.$('.back').show();
-      } else {
-        this.$('.back').hide();
-      }
-      opts = opts || {};
-      opts.el = this.$('.tile');
-      cls = action.substr(0, 1).toUpperCase() + action.substr(1);
-      return this.views[action] = new Klass.views["Pagelinks" + cls](opts);
     }
   });
 
@@ -1576,33 +1460,6 @@
 
 (function() {
 
-  Klass.collections.Pagelinks = Backbone.Collection.extend({
-    url: '/api/pagelinks/www.restauracja-laura.pl',
-    model: Klass.models.Pagelink,
-    fetched: false,
-    fetch: function(opts) {
-      var success,
-        _this = this;
-      opts = opts || {};
-      if (this.fetched) {
-        if (opts.success != null) {
-          return opts.success();
-        }
-      } else {
-        success = opts.success;
-        opts.success = function() {
-          _this.fetched = true;
-          return success();
-        };
-        return Backbone.Collection.prototype.fetch.call(this, opts);
-      }
-    }
-  });
-
-}).call(this);
-
-(function() {
-
   Klass.collections.Pageviews = Backbone.Collection.extend({
     model: Klass.models.Pageview,
     fetched: null,
@@ -1658,7 +1515,6 @@
   App.initModels = function() {
     this.models.domain = new Klass.models.Domain();
     this.models.menu = new Klass.models.Menu({});
-    this.collections.pagelinks = new Klass.collections.Pagelinks();
     this.collections.pageviews = new Klass.collections.Pageviews({}, this.models.domain);
     this.collections.pageflows = new Klass.collections.Pageflows({}, this.models.domain);
     return this.models.graph = new Klass.models.Graph({}, this.collections.pageviews, this.collections.pageflows);

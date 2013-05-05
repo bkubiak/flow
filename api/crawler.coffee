@@ -1,7 +1,6 @@
 httpLib = require 'http'
 urlLib = require 'url'
 asyncLib = require 'async'
-pagelinksLib = require './pagelinks'
 
 regexes =
 	url: /^((http:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/i
@@ -59,7 +58,7 @@ getLinksQueue = asyncLib.queue (baseUrl, callback) ->
 			
 			pagelinks = buildPagelinks baseUrl, links
 			
-			pagelinksLib.add pagelinks
+			# add pagelinks to DB
 			
 			
 			for pagelink in pagelinks
